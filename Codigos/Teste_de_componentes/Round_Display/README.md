@@ -1,190 +1,220 @@
-# Teste do Round Display (GC9A01) com ESP32-C6
+# Round Display - Seeed Studio XIAO Round Display
 
-Este projeto testa o **Seeed Studio Round Display** (tela redonda de 1.28" com 240x240 pixels) usando ESP-IDF com ESP32-C6.
+Display circular TFT de 240x240 pixels com touchscreen para XIAO ESP32-C6.
 
-## Hardware Necessário
+## Especificações
 
-- **ESP32-C6** (ou qualquer placa XIAO ESP32-C6)
-- **Seeed Studio Round Display for XIAO**
-- Cabo USB-C
+- **Display:** GC9A01 (1.28" redondo)
+- **Resolução:** 240x240 pixels
+- **Interface Display:** SPI
+- **Touchscreen:** CHSC6X capacitivo
+- **Interface Touch:** I²C
+- **Tensão:** 3.3V
+- **Backlight:** PWM controlável
 
-## Especificações do Display
+## Hardware
 
-- **Tela:** 1.28" redonda, 240×240 pixels, 65K cores
-- **Driver:** GC9A01
-- **Interface:** SPI
-- **Touch:** Capacitivo (não implementado neste teste básico)
-- **Extras:** RTC, slot para cartão TF, carregador de bateria
+### Controladores
 
-## Pinout XIAO ESP32-C6 ↔ Round Display
+- **Display:** GC9A01A (driver TFT)
+- **Touch:** CHSC6X (controlador capacitivo I²C)
 
-```
-XIAO ESP32-C6    →    Round Display Function
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-D10 (GPIO18)     →    MOSI (SPI - compartilhado)
-D8  (GPIO19)     →    SCK (SPI - compartilhado)
-D1  (GPIO1)      →    CS (LCD_CS)
-D3  (GPIO21)     →    DC (LCD_DC)
-D0  (GPIO0)      →    RST
-D6  (GPIO6)      →    BL (Backlight)
-GND              →    GND
-3.3V             →    VCC
-```
+### Pinout XIAO ESP32-C6 → Round Display
 
-> **Nota:** O display compartilha o barramento SPI com o SD Card (pinos D8, D9, D10), mas usa CS próprio (D1).
+| Função    | GPIO | Pino XIAO | Componente   |
+| --------- | ---- | --------- | ------------ |
+| SPI MOSI  | 18   | D10       | Display + SD |
+| SPI SCK   | 19   | D8        | Display + SD |
+| LCD CS    | 1    | D1        | Display      |
+| LCD DC    | 21   | D3        | Display      |
+| LCD RST   | 0    | D0        | Display      |
+| LCD BL    | 6    | D6        | Backlight    |
+| Touch SDA | 22   | D4        | Touch I²C    |
+| Touch SCL | 23   | D5        | Touch I²C    |
+| Touch INT | 17   | D7        | Touch IRQ    |
 
-> **Nota:** Se você estiver usando o módulo XIAO ESP32-C6 diretamente conectado ao Round Display, basta encaixar - os pinos já estão alinhados corretamente!
+**Nota:** RST é compartilhado entre display e touch.
 
-## Como Compilar e Flashear
-
-### 1. Configure o ambiente ESP-IDF
-
-```bash
-# Entre no diretório do projeto
-cd /home/hexagon/Documents/TCC/Codigos/Teste_de_componentes/Round_Display
-
-# Configure para ESP32-C6
-idf.py set-target esp32c6
-```
-
-### 2. Compile o projeto
-
-```bash
-idf.py build
-```
-
-### 3. Flasheie no ESP32-C6
-
-```bash
-idf.py -p /dev/ttyACM0 flash monitor
-```
-
-> **Dica:** Substitua `/dev/ttyACM0` pela porta serial correta do seu ESP32-C6.
-
-## O que o Teste Faz
-
-Este programa executa uma sequência de testes visuais:
-
-### **Teste 1: Cores Sólidas**
-Preenche a tela inteira com 8 cores diferentes:
-- 🔴 Vermelho
-- 🟢 Verde  
-- 🔵 Azul
-- 🟡 Amarelo
-- 🔵 Ciano
-- 🟣 Magenta
-- ⚪ Branco
-- ⚫ Preto
-
-### **Teste 2: Círculos Concêntricos**
-Desenha círculos coloridos do centro para fora, criando um padrão de arco-íris.
-
-### **Teste 3: Grade de Retângulos**
-Desenha uma grade de retângulos com gradiente de cores.
-
-### **Teste 4: Animação de Círculo Pulsante**
-Um círculo que cresce e diminui (efeito "breathing"), alternando cores ciano e magenta.
-
-### **Teste 5: Gradiente Radial**
-Cria um gradiente circular do centro para as bordas.
-
-### **Teste 6: Teste de Backlight**
-Liga e desliga o backlight 5 vezes para verificar o controle.
-
-## Estrutura do Projeto
+## Arquitetura do Projeto
 
 ```
 Round_Display/
-├── CMakeLists.txt                    # Build principal
-├── README.md                         # Este arquivo
+├── main/
+│   ├── main.c              # Aplicação principal
+│   └── CMakeLists.txt
 ├── components/
-│   └── gc9a01/                       # Driver do display
-│       ├── CMakeLists.txt
-│       ├── gc9a01.c                  # Implementação
-│       └── include/
-│           └── gc9a01.h              # Interface pública
-└── main/
-    ├── CMakeLists.txt
-    └── main.c                        # Código de teste
+│   └── gc9a01/             # Driver display customizado
+│       ├── gc9a01.c
+│       ├── gc9a01.h
+│       └── CMakeLists.txt
+├── CMakeLists.txt
+└── sdkconfig
 ```
 
-## API do Driver GC9A01
+### Funcionalidades Implementadas
 
-### Inicialização
+- ✅ Inicialização completa do display
+- ✅ Controle de backlight
+- ✅ Primitivas gráficas:
+  - `gc9a01_fill_screen()` - Preencher tela
+  - `gc9a01_draw_pixel()` - Desenhar pixel
+  - `gc9a01_fill_rect()` - Retângulo preenchido
+  - `gc9a01_draw_circle()` - Círculo vazado
+  - `gc9a01_fill_circle()` - Círculo preenchido
+- ✅ Suporte a cores RGB565
+- ✅ SPI otimizado com DMA
+
+### Cores Predefinidas
 
 ```c
+GC9A01_BLACK       // 0x0000
+GC9A01_WHITE       // 0xFFFF
+GC9A01_RED         // 0xF800
+GC9A01_GREEN       // 0x07E0
+GC9A01_BLUE        // 0x001F
+GC9A01_CYAN        // 0x07FF
+GC9A01_MAGENTA     // 0xF81F
+GC9A01_YELLOW      // 0xFFE0
+GC9A01_ORANGE      // 0xFD20
+```
+
+### Exemplo de Uso
+
+```c
+#include "gc9a01.h"
+
+// Configuração
 gc9a01_config_t config = {
-    .pin_dc = PIN_DC,
-    .pin_rst = PIN_RST,
-    .pin_bl = PIN_BL,
+    .pin_dc = 21,
+    .pin_rst = 0,
+    .pin_bl = 6,
     .spi_host = SPI2_HOST,
     .max_transfer_sz = 4096,
 };
 
 gc9a01_handle_t display;
 gc9a01_init(&config, &display);
+
+// Desenhar
+gc9a01_fill_screen(display, GC9A01_BLACK);
+gc9a01_fill_circle(display, 120, 120, 50, GC9A01_RED);
+gc9a01_fill_rect(display, 60, 60, 120, 120, GC9A01_BLUE);
 ```
 
-### Funções Disponíveis
+## Integração com LVGL (Próximos Passos)
 
-- `gc9a01_fill_screen()` - Preenche tela com cor sólida
-- `gc9a01_draw_pixel()` - Desenha um pixel
-- `gc9a01_fill_rect()` - Desenha retângulo preenchido
-- `gc9a01_draw_circle()` - Desenha contorno de círculo
-- `gc9a01_fill_circle()` - Desenha círculo preenchido
-- `gc9a01_set_backlight()` - Liga/desliga backlight
-- `gc9a01_rgb565()` - Converte RGB888 para RGB565
+Para criar interfaces gráficas profissionais com **SquareLine Studio**:
 
-### Cores Predefinidas
-
-```c
-GC9A01_BLACK, GC9A01_WHITE, GC9A01_RED, 
-GC9A01_GREEN, GC9A01_BLUE, GC9A01_CYAN,
-GC9A01_MAGENTA, GC9A01_YELLOW, GC9A01_ORANGE
-```
-
-## Próximos Passos
-
-Para expandir este projeto, você pode:
-
-1. **Adicionar suporte ao touch screen** (controlador CST816S via I2C)
-2. **Implementar RTC** (PCF8563 via I2C) para relógio
-3. **Adicionar suporte a cartão SD** para armazenar imagens
-4. **Criar uma biblioteca de fontes** para exibir texto
-5. **Implementar gráficos usando LVGL** para interfaces mais complexas
-6. **Adicionar leitura de bateria** via ADC
-
-## Troubleshooting
-
-### Display não liga / tela branca
-
-1. Verifique se o **switch do Round Display está em ON**
-2. Confirme as conexões dos pinos
-3. Verifique se o ESP32-C6 está encaixado corretamente (Type-C para fora)
-4. Pressione o botão RESET após o flash
-
-### Cores estranhas ou distorcidas
-
-- Pode ser problema de velocidade SPI (tente reduzir de 40MHz para 20MHz)
-- Verifique a alimentação (use cabo USB de boa qualidade)
-
-### Erro de compilação
+### 1. Adicionar LVGL como Componente
 
 ```bash
-# Limpe o build e tente novamente
-idf.py fullclean
+cd components
+git clone -b release/v8.3 https://github.com/lvgl/lvgl.git
+```
+
+### 2. Criar Driver de Integração
+
+Criar `components/lvgl_port/` que conecta LVGL ao driver GC9A01.
+
+### 3. Usar SquareLine Studio
+
+- Design visual de telas (drag & drop)
+- Exportar código C puro
+- Importar no projeto ESP-IDF
+- Compilar sem Arduino
+
+**Vantagens:**
+
+- 100% ESP-IDF (sem Arduino)
+- Interface visual profissional
+- Widgets prontos (gráficos, botões, medidores)
+- Aprovado academicamente
+
+## Como Compilar e Testar
+
+### 1. Configurar Target
+
+```bash
+cd Round_Display
+idf.py set-target esp32c6
+```
+
+### 2. Build
+
+```bash
 idf.py build
 ```
 
+### 3. Flash e Monitor
+
+```bash
+idf.py -p COM5 flash monitor
+```
+
+## Saída Esperada
+
+```
+I (xxx) ROUND_DISPLAY_TEST: Inicializando SPI bus...
+I (xxx) ROUND_DISPLAY_TEST: Inicializando display GC9A01...
+I (xxx) GC9A01: Display GC9A01 inicializado com sucesso
+I (xxx) ROUND_DISPLAY_TEST: Display pronto!
+I (xxx) ROUND_DISPLAY_TEST: Testando formas geométricas...
+```
+
+O display deve mostrar:
+
+- Círculos coloridos
+- Retângulos
+- Animações simples
+
+## Touchscreen (Em Desenvolvimento)
+
+O código atual inclui inicialização I²C do CHSC6X, mas a leitura de coordenadas ainda está em teste.
+
+### Status Atual
+
+- ✅ Barramento I²C configurado
+- ✅ Scanner I²C detecta dispositivo
+- ⚠️ Leitura de coordenadas em desenvolvimento
+- ⏳ Calibração pendente
+
+### Próximos Passos
+
+1. Implementar leitura do protocolo CHSC6X
+2. Calibração de coordenadas
+3. Detecção de gestos
+4. Integração com LVGL Input Device
+
+## Troubleshooting
+
+### Display não liga
+
+**Verificar:**
+
+- ❌ Backlight (GPIO6) - deve estar HIGH
+- ❌ Alimentação 3.3V estável
+- ❌ Conexões SPI soltas
+
+### Display mostra cores erradas
+
+**Causa:** Byte order RGB565.
+
+**Solução:** Já implementado swap de bytes no driver.
+
+### Touch não responde
+
+**Status:** Funcionalidade em desenvolvimento.
+
 ## Referências
 
-- [Seeed Studio Round Display Wiki](https://wiki.seeedstudio.com/get_start_round_display/)
-- [GC9A01 Datasheet](https://files.seeedstudio.com/wiki/round_display_for_xiao/GJX0128A4-15HY_Datasheet.pdf)
-- [ESP-IDF Documentation](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c6/)
+- [GC9A01 Datasheet](https://github.com/Seeed-Studio/Seeed_Arduino_RoundDisplay/blob/master/doc/GC9A01%20DataSheet.pdf)
+- [Seeed Round Display Schematic](https://files.seeedstudio.com/wiki/round_display_for_xiao/Round-Display-for-XIAO-v1.0.pdf)
+- [ESP-IDF SPI Master](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/spi_master.html)
+- [LVGL Documentation](https://docs.lvgl.io/)
 
-## Licença
+---
 
-Este código é fornecido como exemplo educacional. Use livremente para seus projetos!
+[← Voltar para Teste de Componentes](../README.md)
 
 ---
 

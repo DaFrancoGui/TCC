@@ -1,14 +1,29 @@
 # Teste de Componentes - ESP32
 
-Este diretório contém os testes individuais de cada componente utilizado no projeto de TCC.
+Este diretório contém os testes individuais de cada componente utilizado no projeto de TCC, implementados em **ESP-IDF**.
+
+## Componentes Disponíveis
+
+| Componente        | Interface | Documentação                         |
+| ----------------- | --------- | ------------------------------------ |
+| **DS18B20**       | 1-Wire    | [📄 README](DS18B20/README.md)       |
+| **ADXL345**       | I²C       | [📄 README](ADXL345/README.md)       |
+| **Round Display** | SPI + I²C | [📄 README](Round_Display/README.md) |
+
+Cada componente possui seu próprio README com:
+
+- ✅ Especificações técnicas
+- ✅ Pinout e conexões
+- ✅ Instruções de compilação
+- ✅ Troubleshooting específico
+- ✅ Exemplos de código
 
 ## Índice
 
 - [Preparação do Ambiente](#preparação-do-ambiente)
 - [Estrutura dos Projetos](#estrutura-dos-projetos)
 - [Comandos Básicos](#comandos-básicos)
-- [Componentes Testados](#componentes-testados)
-- [Troubleshooting](#troubleshooting)
+- [Troubleshooting Geral](#troubleshooting-geral)
 
 ---
 
@@ -155,93 +170,24 @@ idf.py fullclean
 
 ---
 
-## Componentes Testados
+## Início Rápido
 
-### DS18B20 - Sensor de Temperatura
-
-**Interface:** 1-Wire  
-**Tensão:** 3.3V
-
-#### Conexões
-
-| DS18B20 | ESP32 |
-| ------- | ----- |
-| GND     | GND   |
-| VDD     | 3.3V  |
-| DATA    | GPIO4 |
-
-⚠️ **Resistor obrigatório:** 4.7 kΩ entre DATA e 3.3V
-
-#### Dependências
+### Exemplo: Testar DS18B20
 
 ```bash
 cd DS18B20
-idf.py add-dependency "espressif/onewire_bus^1.0.0"
-idf.py add-dependency "espressif/ds18b20^0.1.0"
-```
-
-#### Testar
-
-```bash
-idf.py build
-idf.py -p COM5 flash monitor
-```
-
-**Saída esperada:**
-
-```
-I (xxx) DS18B20: Temperatura: 24.87 °C
-```
-
----
-
-### ADXL345 - Acelerômetro
-
-**Interface:** I²C  
-**Tensão:** 3.3V  
-**Endereço I²C:** 0x53 (SDO = GND) ou 0x1D (SDO = VCC)
-
-#### Conexões
-
-| ADXL345 | ESP32  |
-| ------- | ------ |
-| VCC     | 3.3V   |
-| GND     | GND    |
-| SDA     | GPIO21 |
-| SCL     | GPIO22 |
-| CS      | 3.3V   |
-| SDO     | GND    |
-
-**Notas técnicas:**
-
-- CS em 3.3V → força modo I²C
-- SDO em GND → endereço 0x53
-- Pull-ups I²C geralmente já existem no módulo
-
-#### Dependências
-
-Nenhuma externa. Usa driver I²C nativo do ESP-IDF.
-
-#### Testar
-
-```bash
-cd ADXL345
 idf.py set-target esp32
 idf.py build
 idf.py -p COM5 flash monitor
 ```
 
-**Saída esperada:**
-
-```
-I (xxx) ADXL345: X=12  Y=-34  Z=256
-```
-
-Os valores mudam ao movimentar o sensor.
+Para instruções detalhadas de cada componente, consulte o README específico na tabela acima.
 
 ---
 
-## Troubleshooting
+## Troubleshooting Geral
+
+## Troubleshooting Geral
 
 ### Build Errors
 
@@ -279,27 +225,6 @@ idf.py build
 - Feche o monitor serial antes de dar flash
 - Desconecte outros programas que usam a porta (Arduino IDE, PuTTY, etc.)
 
-### Sensor Errors
-
-#### DS18B20: Leitura sempre 85°C ou erro
-
-- Falta o resistor de 4.7 kΩ (pull-up)
-- DATA conectado no GPIO errado
-- Sensor com defeito
-
-#### ADXL345: I²C timeout
-
-- SDA/SCL invertidos
-- CS não está em 3.3V (modo I²C)
-- Endereço errado (0x53 vs 0x1D)
-- Falta pull-up (verifique se o módulo tem)
-
-#### ADXL345: Valores sempre zero
-
-- Sensor não foi inicializado (POWER_CTL)
-- Está em modo standby
-- Verifique o código de inicialização
-
 ### Monitor não mostra nada
 
 #### Baud rate errado
@@ -318,6 +243,12 @@ idf.py -p COM5 monitor
 
 - Pressione o botão RESET após abrir o monitor
 - Ou reconecte o cabo USB
+
+**Para problemas específicos de sensores e displays, consulte o README de cada componente:**
+
+- [DS18B20 Troubleshooting](DS18B20/README.md#troubleshooting)
+- [ADXL345 Troubleshooting](ADXL345/README.md#troubleshooting)
+- [Round Display Troubleshooting](Round_Display/README.md#troubleshooting)
 
 ---
 
