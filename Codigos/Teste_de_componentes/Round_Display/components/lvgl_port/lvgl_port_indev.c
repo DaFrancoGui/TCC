@@ -20,8 +20,15 @@ static const char *TAG = "LVGL_TOUCH";
 #define PIN_TP_INT 17 // D7
 #define I2C_FREQ_HZ 100000
 
-// Registradores e formato de dados CHSC6X
+// Registradores e formato de dados CHSC6X (retorna 5 bytes)
 #define CHSC6X_READ_LEN 5
+
+// Ajustes de calibração/rotação do touch (igual ao teste que funcionou)
+#define TOUCH_ROTATION 1      // 0,1,2,3 (multiplica 90°). 1 = 90°
+#define TOUCH_INVERT_X 1      // 0/1 inverte eixo X após rotação
+#define TOUCH_INVERT_Y 1      // 0/1 inverte eixo Y após rotação
+#define TOUCH_OFFSET_X 0      // ajuste fino em pixels se notar deslocamento
+#define TOUCH_OFFSET_Y 0      // ajuste fino em pixels se notar deslocamento
 typedef struct
 {
     uint8_t status;  // [0] Status do toque
@@ -76,6 +83,24 @@ static esp_err_t init_i2c_bus(void)
 }
 
 /**
+ * @brief Converte coordenadas baseado na rotação (igual Arduino)
+ */
+static void chsc6x_convert_xy(uint8_t *x, uint8_t *y, uint8_t rotation)
+{
+    uint8_t x_tmp, y_tmp, _end;
+    
+    // Aplica rotação iterativamente (0, 1, 2 ou 3 vezes para 0°, 90°, 180°, 270°)
+    for (int i = 1; i <= rotation; i++)
+    {
+        x_tmp = *x;
+        y_tmp = *y;
+        _end = (i % 2) ? 240 : 240; // SCREEN_WIDTH/HEIGHT são iguais (240)
+        *x = y_tmp;
+        *y = _end - x_tmp;
+    }
+}
+
+/**
  * @brief Verifica se tela está sendo tocada (via pino de interrupção)
  */
 static bool chsc6x_is_pressed(void)
@@ -96,20 +121,41 @@ static esp_err_t chsc6x_read_coordinates(uint16_t *x, uint16_t *y)
         return ret;
     }
 
+    ESP_LOGI(TAG, "Raw touch data: 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X",
+             data[0], data[1], data[2], data[3], data[4]);
+
     // Verifica se há toque válido
     if (data[0] == 0x01)
     {
-        // Extrai coordenadas do formato CHSC6X
-        // X: bits [2] e [4] MSB
-        // Y: bits [4] LSB e [5]  (ordem pode variar conforme fabricante)
-        *x = data[2];
-        *y = data[4];
+        uint8_t raw_x = data[2];
+        uint8_t raw_y = data[4];
+        
+        ESP_LOGI(TAG, "Valid touch: raw_x=%d, raw_y=%d", raw_x, raw_y);
+        
+        // Aplica conversão de rotação
+        chsc6x_convert_xy(&raw_x, &raw_y, TOUCH_ROTATION);
 
-        // Limita às dimensões do display
-        if (*x > 240)
-            *x = 240;
-        if (*y > 240)
-            *y = 240;
+        int32_t cx = (int32_t)raw_x + TOUCH_OFFSET_X;
+        int32_t cy = (int32_t)raw_y + TOUCH_OFFSET_Y;
+
+        if (TOUCH_INVERT_X)
+        {
+            cx = 239 - cx;
+        }
+        if (TOUCH_INVERT_Y)
+        {
+            cy = 239 - cy;
+        }
+
+        if (cx < 0) cx = 0;
+        if (cx > 239) cx = 239;
+        if (cy < 0) cy = 0;
+        if (cy > 239) cy = 239;
+
+        *x = (uint16_t)cx;
+        *y = (uint16_t)cy;
+        
+        ESP_LOGI(TAG, "Converted: x=%d, y=%d", *x, *y);
 
         return ESP_OK;
     }

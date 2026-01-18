@@ -14,6 +14,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "esp_timer.h"
+#include "esp_task_wdt.h"
 #include "lvgl.h"
 #include "lvgl_port.h"
 
@@ -23,6 +25,13 @@ static const char *TAG = "LVGL_SIMPLE";
 static lv_obj_t *label_value = NULL;
 static lv_obj_t *label_status = NULL;
 static lv_obj_t *led = NULL;
+static uint32_t click_count = 0;
+
+static void lv_tick_cb(void *arg)
+{
+    (void)arg;
+    lv_tick_inc(1);
+}
 
 /**
  * @brief Callback do botão
@@ -33,8 +42,12 @@ static void button_event_cb(lv_event_t *e)
 
     if (code == LV_EVENT_CLICKED)
     {
-        ESP_LOGI(TAG, "Botão clicado!");
-        lv_label_set_text(label_status, "Botao clicado!");
+        click_count++;
+        ESP_LOGI(TAG, "Botão clicado. Total: %lu", (unsigned long)click_count);
+
+        char status_buf[32];
+        snprintf(status_buf, sizeof(status_buf), "Clicks: %lu", (unsigned long)click_count);
+        lv_label_set_text(label_status, status_buf);
 
         // Toggle LED visual
         static bool led_on = false;
@@ -75,7 +88,7 @@ static void create_ui(void)
 
     // ========== TÍTULO ==========
     lv_obj_t *title = lv_label_create(lv_scr_act());
-    lv_label_set_text(title, "LVGL Demo");
+    lv_label_set_text(title, "AGORA VAI");
     lv_obj_set_style_text_color(title, lv_color_white(), 0);
     lv_obj_set_style_text_font(title, &lv_font_montserrat_20, 0);
     lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 15);
@@ -109,7 +122,7 @@ static void create_ui(void)
     label_value = lv_label_create(lv_scr_act());
     lv_label_set_text(label_value, "Valor: 50");
     lv_obj_set_style_text_color(label_value, lv_color_make(0, 200, 255), 0);
-    lv_obj_align(label_value, LV_ALIGN_CENTER, 0, 90);
+    lv_obj_align(label_value, LV_ALIGN_CENTER, 0, 82);
 
     // ========== STATUS ==========
     label_status = lv_label_create(lv_scr_act());
@@ -145,9 +158,23 @@ void app_main(void)
     ESP_LOGI(TAG, "  100%% ESP-IDF (sem Arduino)");
     ESP_LOGI(TAG, "======================================");
 
+    // Desabilita Task Watchdog para evitar reset durante flush lento
+    esp_task_wdt_deinit();
+
     // Inicializa LVGL
     ESP_LOGI(TAG, "Inicializando LVGL...");
     lv_init();
+
+    // Timer de tick do LVGL (1 ms)
+    const esp_timer_create_args_t lv_tick_timer_args = {
+        .callback = &lv_tick_cb,
+        .name = "lvgl_tick"
+    };
+    esp_timer_handle_t lv_tick_timer = NULL;
+    if (esp_timer_create(&lv_tick_timer_args, &lv_tick_timer) == ESP_OK)
+    {
+        esp_timer_start_periodic(lv_tick_timer, 1000);
+    }
 
     // Inicializa display e touch
     esp_err_t ret = lvgl_port_init();

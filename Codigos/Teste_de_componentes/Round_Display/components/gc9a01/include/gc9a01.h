@@ -71,6 +71,11 @@ esp_err_t gc9a01_draw_pixel(gc9a01_handle_t handle, int16_t x, int16_t y, uint16
 esp_err_t gc9a01_fill_rect(gc9a01_handle_t handle, int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
 
 /**
+ * @brief Desenha um bitmap RGB565 (big-endian) na tela
+ */
+esp_err_t gc9a01_draw_bitmap(gc9a01_handle_t handle, int16_t x, int16_t y, int16_t w, int16_t h, const uint16_t *data);
+
+/**
  * @brief Desenha um círculo
  */
 esp_err_t gc9a01_draw_circle(gc9a01_handle_t handle, int16_t x0, int16_t y0, int16_t r, uint16_t color);

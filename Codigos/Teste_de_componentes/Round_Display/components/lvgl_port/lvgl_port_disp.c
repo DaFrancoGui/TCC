@@ -22,8 +22,8 @@ static const char *TAG = "LVGL_DISP";
 #define PIN_RST 0   // D0
 #define PIN_BL 6    // D6
 
-// Buffer LVGL
-#define LVGL_BUFFER_LINES 10
+// Buffer LVGL (mais linhas melhora desempenho)
+#define LVGL_BUFFER_LINES 20
 #define LVGL_BUFFER_SIZE (240 * LVGL_BUFFER_LINES)
 
 static gc9a01_handle_t display = NULL;
@@ -56,20 +56,8 @@ static void lvgl_flush_cb(lv_disp_drv_t *drv, const lv_area_t *area, lv_color_t 
         pixels[i] = (pixel >> 8) | (pixel << 8);
     }
 
-    // Envia para display usando driver nativo
-    // Implementação otimizada: envia região diretamente
-    gc9a01_fill_rect(display, x1, y1, w, h, 0); // Placeholder
-
-    // TODO: Implementar gc9a01_draw_bitmap() para envio direto do buffer
-    // Por enquanto usa pixel a pixel (lento, mas funcional)
-    uint32_t idx = 0;
-    for (int16_t y = y1; y <= y2; y++)
-    {
-        for (int16_t x = x1; x <= x2; x++)
-        {
-            gc9a01_draw_pixel(display, x, y, pixels[idx++]);
-        }
-    }
+    // Envia para display usando bitmap (rápido)
+    gc9a01_draw_bitmap(display, x1, y1, w, h, pixels);
 
     lv_disp_flush_ready(drv);
 }
@@ -110,7 +98,7 @@ static esp_err_t init_gc9a01(void)
         .pin_rst = PIN_RST,
         .pin_bl = PIN_BL,
         .spi_host = SPI2_HOST,
-        .max_transfer_sz = 4096,
+        .max_transfer_sz = LVGL_BUFFER_SIZE * 2 + 8,
     };
 
     return gc9a01_init(&config, &display);
@@ -150,6 +138,7 @@ esp_err_t lvgl_port_display_init(void)
     disp_drv.ver_res = 240;
     disp_drv.flush_cb = lvgl_flush_cb;
     disp_drv.draw_buf = &disp_buf;
+    disp_drv.rotated = LV_DISP_ROT_NONE;
 
     lv_disp_drv_register(&disp_drv);
 

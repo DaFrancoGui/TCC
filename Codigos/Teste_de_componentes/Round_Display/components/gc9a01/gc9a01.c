@@ -171,7 +171,8 @@ esp_err_t gc9a01_init(const gc9a01_config_t *config, gc9a01_handle_t *out_handle
     gc9a01_write_cmd_data(handle, 0xB6, (uint8_t[]){0x00, 0x00}, 2);
 
     // MADCTL - Memory Access Control
-    gc9a01_write_cmd_data(handle, GC9A01_MADCTL, (uint8_t[]){0x08}, 1);
+    // 0x70 = MY | MX | MV - Rotação 0° com orientação correta
+    gc9a01_write_cmd_data(handle, GC9A01_MADCTL, (uint8_t[]){0x70}, 1);
 
     // COLMOD - Pixel Format Set (16-bit RGB565)
     gc9a01_write_cmd_data(handle, GC9A01_COLMOD, (uint8_t[]){0x05}, 1);
@@ -318,7 +319,6 @@ esp_err_t gc9a01_fill_rect(gc9a01_handle_t handle, int16_t x, int16_t y, int16_t
     gc9a01_write_cmd(handle, GC9A01_RAMWR);
 
     // Prepara buffer de linha
-    uint32_t pixels = w * h;
     uint16_t *line_buf = malloc(w * 2);
     if (!line_buf)
     {
@@ -344,6 +344,52 @@ esp_err_t gc9a01_fill_rect(gc9a01_handle_t handle, int16_t x, int16_t y, int16_t
 
     free(line_buf);
     return ESP_OK;
+}
+
+esp_err_t gc9a01_draw_bitmap(gc9a01_handle_t handle, int16_t x, int16_t y, int16_t w, int16_t h, const uint16_t *data)
+{
+    if (!handle || !data)
+    {
+        return ESP_ERR_INVALID_ARG;
+    }
+    if (x >= GC9A01_WIDTH || y >= GC9A01_HEIGHT || w <= 0 || h <= 0)
+    {
+        return ESP_OK;
+    }
+
+    // Ajusta dimensões para não ultrapassar os limites
+    if (x < 0)
+    {
+        w += x;
+        data -= x;
+        x = 0;
+    }
+    if (y < 0)
+    {
+        h += y;
+        data -= y * w;
+        y = 0;
+    }
+    if (x + w > GC9A01_WIDTH)
+    {
+        w = GC9A01_WIDTH - x;
+    }
+    if (y + h > GC9A01_HEIGHT)
+    {
+        h = GC9A01_HEIGHT - y;
+    }
+
+    gc9a01_set_window(handle, x, y, x + w - 1, y + h - 1);
+    gc9a01_write_cmd(handle, GC9A01_RAMWR);
+
+    gpio_set_level(handle->pin_dc, 1);
+
+    spi_transaction_t t = {
+        .length = w * h * 16,
+        .tx_buffer = data,
+    };
+
+    return spi_device_polling_transmit(handle->spi, &t);
 }
 
 esp_err_t gc9a01_draw_circle(gc9a01_handle_t handle, int16_t x0, int16_t y0, int16_t r, uint16_t color)
