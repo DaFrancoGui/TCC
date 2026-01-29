@@ -90,11 +90,22 @@ static esp_err_t chsc6x_read_data(esp_lcd_touch_handle_t tp)
 {
     uint8_t data[CHSC6X_READ_LEN];
     
+    //// Verifica pino INT primeiro - só lê se estiver LOW (touch ativo) -> solução para o flood de mensagens do I2C porém deixa a resposta do touch da barra pior
+    //if (tp->config.int_gpio_num != GPIO_NUM_NC) {
+    //    if (gpio_get_level(tp->config.int_gpio_num) != 0) {
+    //        // Sem toque - não precisa ler I2C
+    //        portENTER_CRITICAL(&tp->data.lock);
+    //        tp->data.points = 0;
+    //        portEXIT_CRITICAL(&tp->data.lock);
+    //        return ESP_OK;
+    //    }
+    //}
+    
     // Lê 5 bytes do CHSC6X (sem enviar endereço de registro)
     esp_err_t ret = i2c_master_receive(s_i2c_dev, data, CHSC6X_READ_LEN, 50);
     
     if (ret != ESP_OK) {
-        // Touch não pressionado - isso é normal
+        // Falha na leitura - sem toque
         portENTER_CRITICAL(&tp->data.lock);
         tp->data.points = 0;
         portEXIT_CRITICAL(&tp->data.lock);
