@@ -9,7 +9,7 @@
 #include "esp_check.h"
 #include "gc9a01.h"
 
-static const char *TAG = "TOUCH_CLONE";
+static const char *TAG = "TOUCH";
 
 // Display pins (XIAO ESP32-C6 Round Display)
 #define PIN_MOSI 18 // D10
