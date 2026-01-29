@@ -100,9 +100,10 @@ static esp_err_t init_lcd(void)
 
     ESP_LOGI(TAG, "Inicializando GC9A01 panel...");
     
+    // Driver custom usa MADCTL 0x70 com BGR=0 (RGB order)
     esp_lcd_panel_dev_config_t panel_cfg = {
         .reset_gpio_num = PIN_RST,
-        .rgb_endian = LCD_RGB_ENDIAN_RGB,
+        .rgb_endian = LCD_RGB_ENDIAN_RGB,  // MADCTL tem BGR=0
         .bits_per_pixel = 16,
     };
     ESP_ERROR_CHECK(esp_lcd_new_panel_gc9a01(lcd_io, &panel_cfg, &lcd_panel));
@@ -110,8 +111,9 @@ static esp_err_t init_lcd(void)
     // Inicialização do panel
     ESP_ERROR_CHECK(esp_lcd_panel_reset(lcd_panel));
     ESP_ERROR_CHECK(esp_lcd_panel_init(lcd_panel));
+    // Inversão de cor - o driver custom usa INVON
     ESP_ERROR_CHECK(esp_lcd_panel_invert_color(lcd_panel, true));
-    ESP_ERROR_CHECK(esp_lcd_panel_mirror(lcd_panel, false, false));
+    // Rotação será aplicada pelo LVGL
     ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(lcd_panel, true));
 
     ESP_LOGI(TAG, "LCD GC9A01 inicializado!");
@@ -143,7 +145,8 @@ static esp_err_t init_touch(void)
         .int_gpio_num = PIN_TP_INT,
         .x_max = LCD_H_RES,
         .y_max = LCD_V_RES,
-        .swap_xy = true,
+        // Transformações já aplicadas internamente no driver (igual CODES-A)
+        .swap_xy = false,
         .mirror_x = false,
         .mirror_y = false,
     };
@@ -183,9 +186,9 @@ static esp_err_t init_lvgl(void)
         .vres = LCD_V_RES,
         .monochrome = false,
         .rotation = {
-            .swap_xy = false,
-            .mirror_x = false,
-            .mirror_y = false,
+            .swap_xy = true,
+            .mirror_x = true,
+            .mirror_y = true,
         },
         .flags = {
             .buff_dma = true,
@@ -217,11 +220,11 @@ static void button_event_cb(lv_event_t *e)
     
     if (code == LV_EVENT_CLICKED) {
         click_count++;
-        ESP_LOGI(TAG, "Botão clicado! Total: %lu", (unsigned long)click_count);
+        ESP_LOGI(TAG, "Botão clicado. Total: %lu", (unsigned long)click_count);
         
-        char buf[32];
-        snprintf(buf, sizeof(buf), "Clicks: %lu", (unsigned long)click_count);
-        lv_label_set_text(label_status, buf);
+        char status_buf[32];
+        snprintf(status_buf, sizeof(status_buf), "Clicks: %lu", (unsigned long)click_count);
+        lv_label_set_text(label_status, status_buf);
         
         // Toggle LED visual
         static bool led_on = false;
@@ -239,8 +242,8 @@ static void slider_event_cb(lv_event_t *e)
     lv_obj_t *slider = lv_event_get_target(e);
     int32_t value = lv_slider_get_value(slider);
     
-    char buf[16];
-    snprintf(buf, sizeof(buf), "%ld%%", (long)value);
+    char buf[32];
+    snprintf(buf, sizeof(buf), "Valor: %ld", (long)value);
     lv_label_set_text(label_value, buf);
 }
 
@@ -251,55 +254,57 @@ static void create_demo_ui(void)
     
     lv_obj_t *scr = lv_scr_act();
     
-    // Limpa fundo com cor escura
-    lv_obj_set_style_bg_color(scr, lv_color_hex(0x1a1a2e), 0);
+    // Fundo escuro
+    lv_obj_set_style_bg_color(scr, lv_color_hex(0x1a1a1a), 0);
     
-    // Título
+    // ========== TÍTULO ==========
     lv_obj_t *title = lv_label_create(scr);
-    lv_label_set_text(title, "XIAO C6 + Round");
-    lv_obj_set_style_text_color(title, lv_color_hex(0x00ffff), 0);
+    lv_label_set_text(title, "Teste LVGL");
+    lv_obj_set_style_text_color(title, lv_color_make(0, 200, 255), 0);
+    lv_obj_set_style_text_font(title, &lv_font_montserrat_14, 0);
     lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 15);
     
-    // LED visual
+    // ========== LED ==========
     led_obj = lv_led_create(scr);
     lv_obj_set_size(led_obj, 30, 30);
-    lv_obj_align(led_obj, LV_ALIGN_TOP_MID, 0, 40);
-    lv_led_set_color(led_obj, lv_color_hex(0x00ff00));
+    lv_obj_align(led_obj, LV_ALIGN_CENTER, 0, -60);
+    lv_led_set_color(led_obj, lv_color_make(0, 255, 0));
     lv_led_off(led_obj);
     
-    // Slider
-    lv_obj_t *slider = lv_slider_create(scr);
-    lv_obj_set_width(slider, 140);
-    lv_slider_set_range(slider, 0, 100);
-    lv_slider_set_value(slider, 50, LV_ANIM_OFF);
-    lv_obj_align(slider, LV_ALIGN_CENTER, 0, -10);
-    lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
-    
-    // Label do slider
-    label_value = lv_label_create(scr);
-    lv_label_set_text(label_value, "50%");
-    lv_obj_align(label_value, LV_ALIGN_CENTER, 0, 20);
-    
-    // Botão
+    // ========== BOTÃO ==========
     lv_obj_t *btn = lv_btn_create(scr);
-    lv_obj_set_size(btn, 100, 40);
-    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, -50);
+    lv_obj_set_size(btn, 120, 50);
+    lv_obj_align(btn, LV_ALIGN_CENTER, 0, -10);
     lv_obj_add_event_cb(btn, button_event_cb, LV_EVENT_CLICKED, NULL);
     
     lv_obj_t *btn_label = lv_label_create(btn);
-    lv_label_set_text(btn_label, "Click!");
+    lv_label_set_text(btn_label, "Clique");
     lv_obj_center(btn_label);
     
-    // Status
+    // ========== SLIDER ==========
+    lv_obj_t *slider = lv_slider_create(scr);
+    lv_obj_set_width(slider, 160);
+    lv_obj_align(slider, LV_ALIGN_CENTER, 0, 50);
+    lv_slider_set_range(slider, 0, 100);
+    lv_slider_set_value(slider, 50, LV_ANIM_OFF);
+    lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
+    
+    // ========== LABEL VALOR ==========
+    label_value = lv_label_create(scr);
+    lv_label_set_text(label_value, "Valor: 50");
+    lv_obj_set_style_text_color(label_value, lv_color_make(0, 200, 255), 0);
+    lv_obj_align(label_value, LV_ALIGN_CENTER, 0, 82);
+    
+    // ========== STATUS ==========
     label_status = lv_label_create(scr);
-    lv_label_set_text(label_status, "Clicks: 0");
-    lv_obj_set_style_text_color(label_status, lv_color_hex(0xaaaaaa), 0);
-    lv_obj_align(label_status, LV_ALIGN_BOTTOM_MID, 0, -20);
+    lv_label_set_text(label_status, "Pronto!");
+    lv_obj_set_style_text_color(label_status, lv_color_make(150, 150, 150), 0);
+    lv_obj_align(label_status, LV_ALIGN_BOTTOM_MID, 0, -15);
     
     // Unlock LVGL
     lvgl_port_unlock();
     
-    ESP_LOGI(TAG, "Demo UI criada!");
+    ESP_LOGI(TAG, "Interface criada!");
 }
 
 // ============ Main ============

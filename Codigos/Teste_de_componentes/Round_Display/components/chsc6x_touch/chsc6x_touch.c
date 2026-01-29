@@ -103,31 +103,22 @@ static esp_err_t chsc6x_read_data(esp_lcd_touch_handle_t tp)
 
     // Formato CHSC6X:
     // data[0]: status (0x01 = toque ativo)
-    // data[1]: x_low
-    // data[2]: x_high (apenas bits 0-3)
-    // data[3]: y_low  
-    // data[4]: y_high (apenas bits 0-3)
+    // data[2]: x (byte simples, 0-239)
+    // data[4]: y (byte simples, 0-239)
     
     uint8_t status = data[0];
     
     portENTER_CRITICAL(&tp->data.lock);
     
     if (status == 0x01) {
-        uint16_t x = data[1] | ((data[2] & 0x0F) << 8);
-        uint16_t y = data[3] | ((data[4] & 0x0F) << 8);
+        // Coordenadas brutas do sensor (8-bit cada)
+        uint16_t raw_x = data[2];
+        uint16_t raw_y = data[4];
         
-        // Aplica transformações
-        if (tp->config.flags.swap_xy) {
-            uint16_t tmp = x;
-            x = y;
-            y = tmp;
-        }
-        if (tp->config.flags.mirror_x) {
-            x = tp->config.x_max - x;
-        }
-        if (tp->config.flags.mirror_y) {
-            y = tp->config.y_max - y;
-        }
+        // Display está rotacionado: swap_xy=true, mirror_x=true, mirror_y=true
+        // Trocar x<->y e inverter ambos
+        uint16_t x = 239 - raw_y;
+        uint16_t y = raw_x;
         
         tp->data.points = 1;
         tp->data.coords[0].x = x;
