@@ -1,2 +1,12 @@
 ﻿dependencies:
+  # LVGL v8
   lvgl/lvgl: ^8.3.0
+  
+  # Driver oficial GC9A01
+  espressif/esp_lcd_gc9a01: "^2.0.0"
+  
+  # Framework touch (base para driver CHSC6X customizado)
+  espressif/esp_lcd_touch: "^1.0.0"
+  
+  # Integração LVGL oficial
+  espressif/esp_lvgl_port: "^2.0.0"
