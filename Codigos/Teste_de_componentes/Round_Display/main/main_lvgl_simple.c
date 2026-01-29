@@ -2,8 +2,6 @@
  * @file main_lvgl.c
  * @brief Exemplo simples LVGL - Slider e Botão
  *
- * Demonstração básica de LVGL com Round Display
- * 100% ESP-IDF - sem Arduino
  *
  * Hardware:
  * - XIAO ESP32-C6
@@ -155,7 +153,6 @@ void app_main(void)
 {
     ESP_LOGI(TAG, "======================================");
     ESP_LOGI(TAG, "  LVGL Simples - Slider e Botao");
-    ESP_LOGI(TAG, "  100%% ESP-IDF (sem Arduino)");
     ESP_LOGI(TAG, "======================================");
 
     // Desabilita Task Watchdog para evitar reset durante flush lento

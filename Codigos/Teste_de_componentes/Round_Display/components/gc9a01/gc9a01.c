@@ -318,31 +318,52 @@ esp_err_t gc9a01_fill_rect(gc9a01_handle_t handle, int16_t x, int16_t y, int16_t
     gc9a01_set_window(handle, x, y, x + w - 1, y + h - 1);
     gc9a01_write_cmd(handle, GC9A01_RAMWR);
 
-    // Prepara buffer de linha
-    uint16_t *line_buf = malloc(w * 2);
-    if (!line_buf)
+    uint16_t swapped = (color >> 8) | (color << 8); // Swap bytes para big-endian
+    gpio_set_level(handle->pin_dc, 1);
+
+    // Caso especial: linhas finas (evita malloc para círculos)
+    if (w * h <= 240)
+    {
+        uint16_t small_buf[240];
+        for (int i = 0; i < w * h; i++)
+        {
+            small_buf[i] = swapped;
+        }
+        spi_transaction_t t = {
+            .length = w * h * 16,
+            .tx_buffer = small_buf,
+        };
+        return spi_device_polling_transmit(handle->spi, &t);
+    }
+
+    // Envia em chunks de múltiplas linhas (max 32KB = ~68 linhas)
+    #define CHUNK_LINES 60
+    int chunk_h = (h < CHUNK_LINES) ? h : CHUNK_LINES;
+    uint16_t *chunk_buf = malloc(w * chunk_h * 2);
+    if (!chunk_buf)
     {
         return ESP_ERR_NO_MEM;
     }
 
-    for (int i = 0; i < w; i++)
+    for (int i = 0; i < w * chunk_h; i++)
     {
-        line_buf[i] = (color >> 8) | (color << 8); // Swap bytes para big-endian
+        chunk_buf[i] = swapped;
     }
 
-    gpio_set_level(handle->pin_dc, 1);
-
-    // Envia dados linha por linha
-    for (int i = 0; i < h; i++)
+    // Envia chunks
+    int lines_sent = 0;
+    while (lines_sent < h)
     {
+        int lines_to_send = (h - lines_sent < chunk_h) ? (h - lines_sent) : chunk_h;
         spi_transaction_t t = {
-            .length = w * 16,
-            .tx_buffer = line_buf,
+            .length = w * lines_to_send * 16,
+            .tx_buffer = chunk_buf,
         };
         spi_device_polling_transmit(handle->spi, &t);
+        lines_sent += lines_to_send;
     }
 
-    free(line_buf);
+    free(chunk_buf);
     return ESP_OK;
 }
 

@@ -81,7 +81,7 @@ static esp_err_t init_display(void)
         .pin_rst = PIN_RST,
         .pin_bl = PIN_BL,
         .spi_host = SPI2_HOST,
-        .max_transfer_sz = 4096,
+        .max_transfer_sz = 32768,
     };
 
     return gc9a01_init(&config, &display);
@@ -416,7 +416,6 @@ void app_main(void)
         test_rectangles();
         test_pulsing_circle();
         test_radial_gradient();
-        test_touch();
 
         ESP_LOGI(TAG, "\n=== Reiniciando sequência de testes em 3 segundos ===\n");
         vTaskDelay(pdMS_TO_TICKS(3000));
