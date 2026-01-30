@@ -293,6 +293,8 @@ static void slider_event_cb(lv_event_t *e)
  * - Abaixo do slider: Label mostrando valor
  * - Rodapé: Status com contador de clicks
  */
+static void create_demo_ui(void)
+{
     // Lock LVGL antes de modificar UI
     lvgl_port_lock(0);
     
