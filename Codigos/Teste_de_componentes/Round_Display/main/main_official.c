@@ -1,12 +1,22 @@
 /**
  * @file main_official.c
- * @brief XIAO ESP32-C6 + Seeed Round Display usando drivers OFICIAIS
+ * @brief XIAO ESP32-C6 + Seeed Round Display usando drivers OFICIAIS do ESP Component Registry
  * 
- * Componentes usados:
- * - espressif/esp_lcd_gc9a01       - Driver LCD
- * - espressif/esp_lcd_touch_cst816s - Driver Touch (compatível com CHSC6X)
- * - espressif/esp_lvgl_port         - Integração LVGL
- * - lvgl/lvgl                        - LVGL 8.3
+ * Este projeto demonstra a integração completa de display GC9A01 e touch CHSC6X
+ * usando componentes oficiais da Espressif, garantindo melhor manutenibilidade
+ * e compatibilidade com futuras versões do ESP-IDF.
+ * 
+ * Componentes do ESP Component Registry usados:
+ * - espressif/esp_lcd_gc9a01  ^2.0.0  - Driver oficial para display GC9A01
+ * - espressif/esp_lvgl_port   ^2.0.0  - Camada de integração LVGL/ESP-IDF
+ * - lvgl/lvgl                 ^8.3.0  - Biblioteca gráfica LVGL
+ * 
+ * Componente customizado:
+ * - chsc6x_touch - Driver compatível com esp_lcd_touch para touchscreen CHSC6X
+ *                  (CST816S oficial não é compatível com este hardware)
+ * 
+ * Configurações importantes no sdkconfig:
+ * - CONFIG_LV_COLOR_16_SWAP=y  - Swap de bytes RGB565 (ESP32 little-endian → display big-endian)
  */
 
 #include <stdio.h>
@@ -32,27 +42,28 @@
 
 static const char *TAG = "ROUND_DISPLAY";
 
-// ============ Configuração de Hardware - XIAO ESP32-C6 ============
-// SPI (Display)
-#define PIN_MOSI        GPIO_NUM_18     // D10
-#define PIN_SCLK        GPIO_NUM_19     // D8
-#define PIN_CS          GPIO_NUM_1      // D1
-#define PIN_DC          GPIO_NUM_21     // D3
-#define PIN_RST         GPIO_NUM_NC     // Sem reset GPIO (usa SWRESET)
-#define PIN_BL          GPIO_NUM_NC     // Sem backlight GPIO (chave HW)
+// ============ Configuração de Hardware - XIAO ESP32-C6 + Seeed Round Display ============
+
+// Pinos SPI (Display GC9A01)
+#define PIN_MOSI        GPIO_NUM_18     // D10 - Master Out Slave In
+#define PIN_SCLK        GPIO_NUM_19     // D8  - Clock SPI
+#define PIN_CS          GPIO_NUM_1      // D1  - Chip Select (controlado manualmente)
+#define PIN_DC          GPIO_NUM_21     // D3  - Data/Command
+#define PIN_RST         GPIO_NUM_NC     // Reset via software (SWRESET)
+#define PIN_BL          GPIO_NUM_NC     // Backlight controlado por chave física
 #define SPI_HOST_ID     SPI2_HOST
 
-// I2C (Touch)
-#define PIN_SDA         GPIO_NUM_22     // D4
-#define PIN_SCL         GPIO_NUM_23     // D5
-#define PIN_TP_INT      GPIO_NUM_17     // D7
+// Pinos I2C (Touch CHSC6X)
+#define PIN_SDA         GPIO_NUM_22     // D4 - Serial Data
+#define PIN_SCL         GPIO_NUM_23     // D5 - Serial Clock
+#define PIN_TP_INT      GPIO_NUM_17     // D7 - Interrupt (active LOW quando tocado)
 
-// Display
-#define LCD_H_RES       240
-#define LCD_V_RES       240
-#define LCD_PIXEL_CLK   (40 * 1000 * 1000)  // 40 MHz
+// Parâmetros do Display
+#define LCD_H_RES       240             // Resolução horizontal
+#define LCD_V_RES       240             // Resolução vertical (display redondo 240x240)
+#define LCD_PIXEL_CLK   (40 * 1000 * 1000)  // 40 MHz - Clock SPI
 
-// LVGL Buffer
+// Buffer LVGL (60 linhas = 14.4KB por buffer)
 #define LVGL_BUFFER_LINES   60
 #define LVGL_BUFFER_SIZE    (LCD_H_RES * LVGL_BUFFER_LINES)
 
@@ -62,90 +73,97 @@ static esp_lcd_panel_io_handle_t lcd_io = NULL;
 static esp_lcd_touch_handle_t touch_handle = NULL;
 static lv_disp_t *lvgl_disp = NULL;
 
-// ============ Inicialização SPI + LCD ============
+// ============ Inicialização do Display LCD ============
 static esp_err_t init_lcd(void)
 {
     ESP_LOGI(TAG, "Inicializando SPI bus...");
     
+    // Configuração do barramento SPI2
     spi_bus_config_t bus_cfg = {
         .mosi_io_num = PIN_MOSI,
-        .miso_io_num = -1,
+        .miso_io_num = -1,              // Display não envia dados de volta
         .sclk_io_num = PIN_SCLK,
         .quadwp_io_num = -1,
         .quadhd_io_num = -1,
-        .max_transfer_sz = LVGL_BUFFER_SIZE * sizeof(uint16_t),
+        .max_transfer_sz = LVGL_BUFFER_SIZE * sizeof(uint16_t),  // Buffer máximo = 28.8KB
     };
     ESP_ERROR_CHECK(spi_bus_initialize(SPI_HOST_ID, &bus_cfg, SPI_DMA_CH_AUTO));
 
-    // Configura CS manualmente (sempre ativo)
+    // CS controlado manualmente (sempre LOW) para evitar problemas de timing
     gpio_config_t cs_cfg = {
         .mode = GPIO_MODE_OUTPUT,
         .pin_bit_mask = (1ULL << PIN_CS),
     };
     gpio_config(&cs_cfg);
-    gpio_set_level(PIN_CS, 0);
+    gpio_set_level(PIN_CS, 0);  // CS ativo (LOW)
 
     ESP_LOGI(TAG, "Inicializando LCD IO (SPI)...");
     
+    // Camada de I/O do LCD (abstração SPI)
     esp_lcd_panel_io_spi_config_t io_cfg = {
-        .cs_gpio_num = -1,  // CS controlado manualmente
-        .dc_gpio_num = PIN_DC,
-        .spi_mode = 0,
-        .pclk_hz = LCD_PIXEL_CLK,
-        .trans_queue_depth = 10,
-        .lcd_cmd_bits = 8,
-        .lcd_param_bits = 8,
+        .cs_gpio_num = -1,              // CS já configurado manualmente
+        .dc_gpio_num = PIN_DC,          // D/C: LOW=comando, HIGH=dados
+        .spi_mode = 0,                  // CPOL=0, CPHA=0
+        .pclk_hz = LCD_PIXEL_CLK,       // 40 MHz
+        .trans_queue_depth = 10,        // Fila de transações
+        .lcd_cmd_bits = 8,              // Comandos de 8 bits
+        .lcd_param_bits = 8,            // Parâmetros de 8 bits
     };
     ESP_ERROR_CHECK(esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)SPI_HOST_ID, &io_cfg, &lcd_io));
 
     ESP_LOGI(TAG, "Inicializando GC9A01 panel...");
     
-    // Driver custom usa MADCTL 0x70 com BGR=0 (RGB order)
+    // Configuração do painel GC9A01
+    // IMPORTANTE: rgb_endian=RGB porque MADCTL BGR bit está em 0 (driver interno usa RGB)
+    //             CONFIG_LV_COLOR_16_SWAP=y faz o swap de bytes little→big endian
     esp_lcd_panel_dev_config_t panel_cfg = {
         .reset_gpio_num = PIN_RST,
-        .rgb_endian = LCD_RGB_ENDIAN_RGB,  // MADCTL tem BGR=0
-        .bits_per_pixel = 16,
+        .rgb_endian = LCD_RGB_ENDIAN_RGB,   // Ordem RGB (não BGR)
+        .bits_per_pixel = 16,               // RGB565
     };
     ESP_ERROR_CHECK(esp_lcd_new_panel_gc9a01(lcd_io, &panel_cfg, &lcd_panel));
 
-    // Inicialização do panel
+    // Sequência de inicialização do display
     ESP_ERROR_CHECK(esp_lcd_panel_reset(lcd_panel));
-    ESP_ERROR_CHECK(esp_lcd_panel_init(lcd_panel));
-    // Inversão de cor - o driver custom usa INVON
-    ESP_ERROR_CHECK(esp_lcd_panel_invert_color(lcd_panel, true));
-    // Rotação será aplicada pelo LVGL
-    ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(lcd_panel, true));
+    ESP_ERROR_CHECK(esp_lcd_panel_init(lcd_panel));           // Envia comandos de inicialização
+    ESP_ERROR_CHECK(esp_lcd_panel_invert_color(lcd_panel, true));  // INVON - necessário para cores corretas
+    // Rotação aplicada pelo LVGL (swap_xy + mirror_x + mirror_y)
+    ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(lcd_panel, true));   // Liga o display
 
     ESP_LOGI(TAG, "LCD GC9A01 inicializado!");
     return ESP_OK;
 }
 
-// ============ Inicialização I2C + Touch ============
+// ============ Inicialização do Touchscreen ============
 static i2c_master_bus_handle_t i2c_bus = NULL;
 
 static esp_err_t init_touch(void)
 {
     ESP_LOGI(TAG, "Inicializando I2C bus...");
     
+    // Configuração do barramento I2C master
     i2c_master_bus_config_t i2c_cfg = {
         .i2c_port = I2C_NUM_0,
         .sda_io_num = PIN_SDA,
         .scl_io_num = PIN_SCL,
         .clk_source = I2C_CLK_SRC_DEFAULT,
-        .glitch_ignore_cnt = 7,
-        .flags.enable_internal_pullup = true,
+        .glitch_ignore_cnt = 7,                         // Filtro anti-ruído
+        .flags.enable_internal_pullup = true,           // Pull-ups internos
     };
     
     ESP_ERROR_CHECK(i2c_new_master_bus(&i2c_cfg, &i2c_bus));
 
     ESP_LOGI(TAG, "Inicializando touch CHSC6X...");
     
+    // Configuração do driver de touch customizado
+    // CHSC6X usa endereço I2C 0x2E e protocolo diferente do CST816S
     chsc6x_touch_config_t touch_cfg = {
         .i2c_bus = i2c_bus,
-        .int_gpio_num = PIN_TP_INT,
+        .int_gpio_num = PIN_TP_INT,         // Pino de interrupção (LOW quando tocado)
         .x_max = LCD_H_RES,
         .y_max = LCD_V_RES,
-        // Transformações já aplicadas internamente no driver (igual CODES-A)
+        // Transformações aplicadas internamente no driver chsc6x_touch
+        // (swap_xy + inversão de X/Y para alinhar com rotação do display)
         .swap_xy = false,
         .mirror_x = false,
         .mirror_y = false,
@@ -161,43 +179,48 @@ static esp_err_t init_touch(void)
     return ESP_OK;
 }
 
-// ============ Inicialização LVGL ============
+// ============ Inicialização do LVGL ============
 static esp_err_t init_lvgl(void)
 {
     ESP_LOGI(TAG, "Inicializando LVGL...");
     
+    // Configuração do LVGL port (task handler do LVGL)
     const lvgl_port_cfg_t lvgl_cfg = {
-        .task_priority = 4,
-        .task_stack = 6144,
-        .task_affinity = -1,
-        .task_max_sleep_ms = 500,
-        .timer_period_ms = 5,
+        .task_priority = 4,             // Prioridade da task LVGL
+        .task_stack = 6144,             // Stack de 6KB para task LVGL
+        .task_affinity = -1,            // Sem afinidade de CPU (qualquer core)
+        .task_max_sleep_ms = 500,       // Sleep máximo entre processamentos
+        .timer_period_ms = 5,           // Período do timer LVGL (tick de 5ms)
     };
     ESP_ERROR_CHECK(lvgl_port_init(&lvgl_cfg));
 
     ESP_LOGI(TAG, "Adicionando display ao LVGL...");
     
+    // Configuração do display para LVGL
     const lvgl_port_display_cfg_t disp_cfg = {
         .io_handle = lcd_io,
         .panel_handle = lcd_panel,
-        .buffer_size = LVGL_BUFFER_SIZE,
-        .double_buffer = true,
+        .buffer_size = LVGL_BUFFER_SIZE,    // 60 linhas = 14.4KB
+        .double_buffer = true,              // Double buffering para evitar tearing
         .hres = LCD_H_RES,
         .vres = LCD_V_RES,
         .monochrome = false,
+        // Rotação 90° anti-horário: swap_xy + mirror em ambos os eixos
+        // Isso alinha o conteúdo do LVGL com a orientação física do display
         .rotation = {
-            .swap_xy = true,
-            .mirror_x = true,
-            .mirror_y = true,
+            .swap_xy = true,    // Troca X↔Y (rotação 90°)
+            .mirror_x = true,   // Espelha horizontalmente
+            .mirror_y = true,   // Espelha verticalmente
         },
         .flags = {
-            .buff_dma = true,
+            .buff_dma = true,   // Usa DMA para transferências SPI (melhor performance)
         },
     };
     lvgl_disp = lvgl_port_add_disp(&disp_cfg);
 
     ESP_LOGI(TAG, "Adicionando touch ao LVGL...");
     
+    // Registra o touchscreen no LVGL
     const lvgl_port_touch_cfg_t touch_cfg = {
         .disp = lvgl_disp,
         .handle = touch_handle,
@@ -208,11 +231,18 @@ static esp_err_t init_lvgl(void)
     return ESP_OK;
 }
 
-// ============ Interface de Demonstração ============
-static lv_obj_t *label_value = NULL;
-static lv_obj_t *label_status = NULL;
-static lv_obj_t *led_obj = NULL;
-static uint32_t click_count = 0;
+// ============ Interface LVGL de Demonstração ============
+// Widgets globais
+static lv_obj_t *label_value = NULL;   // Label mostrando valor do slider
+static lv_obj_t *label_status = NULL;  // Label mostrando contador de clicks
+static lv_obj_t *led_obj = NULL;       // LED visual que pisca ao clicar
+static uint32_t click_count = 0;       // Contador de clicks
+
+/**
+ * @brief Callback do botão
+ * 
+ * Incrementa contador de clicks e alterna estado do LED
+ */
 
 static void button_event_cb(lv_event_t *e)
 {
@@ -237,6 +267,11 @@ static void button_event_cb(lv_event_t *e)
     }
 }
 
+/**
+ * @brief Callback do slider
+ * 
+ * Atualiza label com valor atual do slider (0-100)
+ */
 static void slider_event_cb(lv_event_t *e)
 {
     lv_obj_t *slider = lv_event_get_target(e);
@@ -247,8 +282,17 @@ static void slider_event_cb(lv_event_t *e)
     lv_label_set_text(label_value, buf);
 }
 
-static void create_demo_ui(void)
-{
+/**
+ * @brief Cria a interface gráfica de demonstração
+ * 
+ * Layout:
+ * - Topo: Título "AGORA VAI"
+ * - Centro superior: LED verde (pisca ao clicar no botão)
+ * - Centro: Botão "Clique"
+ * - Centro inferior: Slider horizontal (0-100)
+ * - Abaixo do slider: Label mostrando valor
+ * - Rodapé: Status com contador de clicks
+ */
     // Lock LVGL antes de modificar UI
     lvgl_port_lock(0);
     
@@ -307,24 +351,24 @@ static void create_demo_ui(void)
     ESP_LOGI(TAG, "Interface criada!");
 }
 
-// ============ Main ============
+// ============ Função Principal ============
 void app_main(void)
 {
     ESP_LOGI(TAG, "=== XIAO ESP32-C6 Round Display (Componentes Oficiais) ===");
     
-    // Inicializa hardware
+    // Inicializa hardware (SPI + LCD, I2C + Touch)
     ESP_ERROR_CHECK(init_lcd());
     ESP_ERROR_CHECK(init_touch());
     
-    // Inicializa LVGL
+    // Inicializa LVGL e registra display/touch
     ESP_ERROR_CHECK(init_lvgl());
     
-    // Cria interface demo
+    // Cria interface de demonstração
     create_demo_ui();
     
     ESP_LOGI(TAG, "Sistema pronto! LVGL task rodando em background.");
     
-    // Loop principal (apenas log de status)
+    // Loop principal - apenas monitora heap (LVGL roda em task separada)
     while (1) {
         vTaskDelay(pdMS_TO_TICKS(5000));
         ESP_LOGI(TAG, "Heap livre: %lu bytes", (unsigned long)esp_get_free_heap_size());
