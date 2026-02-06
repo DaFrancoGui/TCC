@@ -4,19 +4,19 @@ Este diretório contém os testes individuais de cada componente utilizado no pr
 
 ## Componentes Disponíveis
 
-| Componente        | Interface | Documentação                         |
-| ----------------- | --------- | ------------------------------------ |
-| **DS18B20**       | 1-Wire    | [📄 README](DS18B20/README.md)       |
-| **ADXL345**       | I²C       | [📄 README](ADXL345/README.md)       |
-| **Round Display** | SPI + I²C | [📄 README](Round_Display/README.md) |
+| Componente        | Interface | Documentação                      |
+| ----------------- | --------- | --------------------------------- |
+| **DS18B20**       | 1-Wire    | [README](DS18B20/README.md)       |
+| **ADXL345**       | I²C       | [README](ADXL345/README.md)       |
+| **Round Display** | SPI + I²C | [README](Round_Display/README.md) |
 
 Cada componente possui seu próprio README com:
 
-- ✅ Especificações técnicas
-- ✅ Pinout e conexões
-- ✅ Instruções de compilação
-- ✅ Troubleshooting específico
-- ✅ Exemplos de código
+- Especificações técnicas
+- Pinout e conexões
+- Instruções de compilação
+- Troubleshooting específico
+- Exemplos de código
 
 ## Índice
 
@@ -38,7 +38,7 @@ Instalar na seguinte ordem:
 1. **VS Code** - [Download](https://code.visualstudio.com/)
 2. **Git for Windows** - [Download](https://git-scm.com/download/win)
 3. **Python 3.8–3.11** - [Download](https://www.python.org/)
-   - ⚠️ **IMPORTANTE**: Marcar "Add Python to PATH" durante instalação
+   - **IMPORTANTE**: Marcar "Add Python to PATH" durante instalação
 
 **Reinicie o Windows após instalar tudo.**
 
@@ -122,7 +122,7 @@ cd NOME_DO_COMPONENTE
 idf.py set-target esp32
 ```
 
-⚠️ **Sempre execute isso antes de buildar pela primeira vez.**
+**Sempre execute isso antes de buildar pela primeira vez.**
 
 ### Build
 

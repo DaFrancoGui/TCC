@@ -92,11 +92,11 @@ I (xxx) ADXL345: X: +0.008g  Y: -0.041g  Z: +0.983g
 
 **Causas possíveis:**
 
-- ❌ SDA e SCL invertidos
-- ❌ CS não está conectado em 3.3V (modo SPI ativo)
-- ❌ Endereço I²C errado (0x53 vs 0x1D)
-- ❌ Alimentação insuficiente
-- ❌ Falta pull-up (raro em módulos prontos)
+- SDA e SCL invertidos
+- CS não está conectado em 3.3V (modo SPI ativo)
+- Endereço I²C errado (0x53 vs 0x1D)
+- Alimentação insuficiente
+- Falta pull-up (raro em módulos prontos)
 
 **Solução:**
 
@@ -128,8 +128,8 @@ for (uint8_t addr = 0x01; addr < 0x7F; addr++) {
 
 **Causas:**
 
-- ❌ Sensor não foi ativado (modo standby)
-- ❌ Registro POWER_CTL não configurado
+- Sensor não foi ativado (modo standby)
+- Registro POWER_CTL não configurado
 
 **Solução:**
 Verificar inicialização:
@@ -190,4 +190,4 @@ uint8_t rate = 0x0B;  // 200 Hz
 
 ---
 
-[← Voltar para Teste de Componentes](../README.md)
+[Voltar para Teste de Componentes](../README.md)

@@ -18,7 +18,7 @@ Teste do sensor de temperatura digital DS18B20 usando ESP-IDF.
 | VDD     | 3.3V  |
 | DATA    | GPIO4 |
 
-### ⚠️ Resistor Pull-up Obrigatório
+### Resistor Pull-up Obrigatório
 
 **4.7 kΩ entre DATA e 3.3V**
 
@@ -86,10 +86,10 @@ A leitura é feita a cada 2 segundos.
 
 **Causas possíveis:**
 
-- ❌ Falta resistor pull-up de 4.7 kΩ
-- ❌ DATA conectado ao GPIO errado
-- ❌ Sensor com defeito ou mal contato
-- ❌ VDD não está em 3.3V
+- Falta resistor pull-up de 4.7 kΩ
+- DATA conectado ao GPIO errado
+- Sensor com defeito ou mal contato
+- VDD não está em 3.3V
 
 **Solução:**
 
@@ -162,4 +162,4 @@ ds18b20_get_temperature(device, &temperature);
 
 ---
 
-[← Voltar para Teste de Componentes](../README.md)
+[Voltar para Teste de Componentes](../README.md)

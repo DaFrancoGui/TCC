@@ -1,10 +1,10 @@
 # Round Display com LVGL - ESP-IDF Puro
 
-## 📁 Arquivos do Projeto
+## Arquivos do Projeto
 
 ### Aplicações
 
-- **`main_lvgl.c`** ← **Ativo**: Demo LVGL com interface de sensores
+- **`main_lvgl.c`** **Ativo**: Demo LVGL com interface de sensores
 - **`main_gc9a01_test.c`**: Teste original do driver GC9A01 (primitivas gráficas)
 
 Para alternar entre eles, edite `CMakeLists.txt`:
@@ -17,7 +17,7 @@ idf_component_register(SRCS "main_lvgl.c" ...)
 idf_component_register(SRCS "main_gc9a01_test.c" ...)
 ```
 
-## 🚀 Compilar e Executar
+## Compilar e Executar
 
 ### 1. Verificar configuração
 
@@ -37,7 +37,7 @@ idf.py build
 idf.py -p COM5 flash monitor
 ```
 
-## 🎨 main_lvgl.c - Demo LVGL
+## main_lvgl.c - Demo LVGL
 
 Interface circular mostrando:
 
@@ -48,11 +48,11 @@ Interface circular mostrando:
 
 ### Recursos LVGL Utilizados:
 
-- ✅ Labels com fontes Montserrat (12/16/20/24)
-- ✅ Cores customizadas RGB565
-- ✅ Layout responsivo (align)
-- ✅ Atualização dinâmica (1Hz)
-- ✅ Touch suportado (CHSC6X)
+- Labels com fontes Montserrat (12/16/20/24)
+- Cores customizadas RGB565
+- Layout responsivo (align)
+- Atualização dinâmica (1Hz)
+- Touch suportado (CHSC6X)
 
 ### Próximos Passos:
 
@@ -61,7 +61,7 @@ Interface circular mostrando:
 3. Adicionar medidor analógico (Meter widget)
 4. Exportar UI do SquareLine Studio
 
-## 🧪 main_gc9a01_test.c - Teste Primitivas
+## main_gc9a01_test.c - Teste Primitivas
 
 Teste original do driver GC9A01:
 
@@ -70,7 +70,7 @@ Teste original do driver GC9A01:
 - Testa backlight
 - **Não usa LVGL**
 
-## 📦 Componentes
+## Componentes
 
 ```
 components/
@@ -80,7 +80,7 @@ components/
     └── lvgl_port_indev.c   # Touch CHSC6X → LVGL
 ```
 
-## ⚙️ Configuração LVGL
+## Configuração LVGL
 
 Ver [lv_conf.h](lv_conf.h) para:
 
@@ -89,7 +89,7 @@ Ver [lv_conf.h](lv_conf.h) para:
 - Widgets habilitados: Chart, Meter, Label, etc.
 - Fontes: Montserrat 12/14/16/20/24
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Erro: "lvgl/lvgl.h not found"
 
@@ -114,4 +114,4 @@ Interface funciona normalmente sem touch.
 
 ---
 
-**100% ESP-IDF | 0% Arduino | Aprovação Garantida** 🎓
+**100% ESP-IDF | 0% Arduino | Aprovação Garantida**
