@@ -359,6 +359,8 @@ static void create_demo_ui(void)
     lv_obj_set_size(btn, 120, 50);
     lv_obj_align(btn, LV_ALIGN_CENTER, 0, -10);
     lv_obj_add_event_cb(btn, button_event_cb, LV_EVENT_CLICKED, NULL);
+    // Garante wake quando o botão for tocado
+    lv_obj_add_event_cb(btn, touch_event_cb, LV_EVENT_ALL, NULL);
     
     lv_obj_t *btn_label = lv_label_create(btn);
     lv_label_set_text(btn_label, "Clique");
@@ -371,6 +373,8 @@ static void create_demo_ui(void)
     lv_slider_set_range(slider, 0, 100);
     lv_slider_set_value(slider, 50, LV_ANIM_OFF);
     lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
+    // Garante wake quando o slider for tocado
+    lv_obj_add_event_cb(slider, touch_event_cb, LV_EVENT_ALL, NULL);
     
     // ========== LABEL VALOR ==========
     label_value = lv_label_create(scr);
