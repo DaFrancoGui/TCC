@@ -8,6 +8,8 @@
 
 #include "esp_lcd_touch.h"
 #include "driver/i2c_master.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,6 +26,7 @@ typedef struct {
     bool swap_xy;                        ///< Trocar X e Y
     bool mirror_x;                       ///< Espelhar X
     bool mirror_y;                       ///< Espelhar Y
+    SemaphoreHandle_t i2c_mutex;         ///< Mutex para proteger barramento I2C compartilhado (opcional)
 } chsc6x_touch_config_t;
 
 /**

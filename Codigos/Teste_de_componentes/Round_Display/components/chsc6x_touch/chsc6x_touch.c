@@ -21,6 +21,7 @@ static const char *TAG = "CHSC6X";
 
 // Handle I2C global (precisamos armazenar em algum lugar)
 static i2c_master_dev_handle_t s_i2c_dev = NULL;
+static SemaphoreHandle_t s_i2c_mutex = NULL;
 
 static esp_err_t chsc6x_read_data(esp_lcd_touch_handle_t tp);
 static bool chsc6x_get_xy(esp_lcd_touch_handle_t tp, uint16_t *x, uint16_t *y, 
@@ -65,6 +66,9 @@ esp_err_t chsc6x_touch_new(const chsc6x_touch_config_t *config, esp_lcd_touch_ha
 
     // Inicializa mutex
     tp->data.lock.owner = portMUX_FREE_VAL;
+    
+    // Armazena mutex I2C (se fornecido)
+    s_i2c_mutex = config->i2c_mutex;
 
     // Copia configuração
     tp->config.x_max = config->x_max;
@@ -102,7 +106,21 @@ static esp_err_t chsc6x_read_data(esp_lcd_touch_handle_t tp)
     //}
     
     // Lê 5 bytes do CHSC6X (sem enviar endereço de registro)
-    esp_err_t ret = i2c_master_receive(s_i2c_dev, data, CHSC6X_READ_LEN, 50);
+    esp_err_t ret;
+    
+    if (s_i2c_mutex != NULL) {
+        // Usar mutex se disponível (timeout curto para não travar LVGL)
+        if (xSemaphoreTake(s_i2c_mutex, pdMS_TO_TICKS(5)) == pdTRUE) {
+            ret = i2c_master_receive(s_i2c_dev, data, CHSC6X_READ_LEN, 50);
+            xSemaphoreGive(s_i2c_mutex);
+        } else {
+            // Timeout - assumir sem toque
+            ret = ESP_ERR_TIMEOUT;
+        }
+    } else {
+        // Sem mutex - leitura direta
+        ret = i2c_master_receive(s_i2c_dev, data, CHSC6X_READ_LEN, 50);
+    }
     
     if (ret != ESP_OK) {
         // Falha na leitura - sem toque
