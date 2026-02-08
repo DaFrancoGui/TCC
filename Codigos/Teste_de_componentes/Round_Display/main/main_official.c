@@ -42,6 +42,9 @@
 
 static const char *TAG = "ROUND_DISPLAY";
 
+// Inatividade antes de dormir o display (ms)
+#define INACTIVITY_TIMEOUT_MS   5000
+
 // ============ Configuração de Hardware - XIAO ESP32-C6 + Seeed Round Display ============
 
 // Pinos SPI (Display GC9A01)
@@ -72,6 +75,8 @@ static esp_lcd_panel_handle_t lcd_panel = NULL;
 static esp_lcd_panel_io_handle_t lcd_io = NULL;
 static esp_lcd_touch_handle_t touch_handle = NULL;
 static lv_disp_t *lvgl_disp = NULL;
+static TickType_t last_touch_ticks = 0;
+static bool sleep_mode = false;
 
 // ============ Inicialização do Display LCD ============
 static esp_err_t init_lcd(void)
@@ -231,6 +236,35 @@ static esp_err_t init_lvgl(void)
     return ESP_OK;
 }
 
+// ============ Controle de atividade/sleep ============
+static void register_touch_activity(void)
+{
+    last_touch_ticks = xTaskGetTickCount();
+    if (sleep_mode) {
+        // Acorda o display: comando 0x11 (Sleep Out), espera 120ms, liga display
+        esp_lcd_panel_io_tx_param(lcd_io, 0x11, NULL, 0);
+        vTaskDelay(pdMS_TO_TICKS(120));
+        esp_lcd_panel_io_tx_param(lcd_io, 0x29, NULL, 0); // Display ON
+        esp_lcd_panel_disp_on_off(lcd_panel, true);
+        // Força redesenho completo para evitar tela preta após sleep
+        lv_obj_invalidate(lv_scr_act());
+        lv_disp_t *d = lv_disp_get_default();
+        if (d) {
+            lv_refr_now(d);
+        }
+        sleep_mode = false;
+        ESP_LOGI(TAG, "Sleep out por toque");
+    }
+}
+
+static void touch_event_cb(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code == LV_EVENT_PRESSED || code == LV_EVENT_PRESSING || code == LV_EVENT_CLICKED) {
+        register_touch_activity();
+    }
+}
+
 // ============ Interface LVGL de Demonstração ============
 // Widgets globais
 static lv_obj_t *label_value = NULL;   // Label mostrando valor do slider
@@ -299,6 +333,9 @@ static void create_demo_ui(void)
     lvgl_port_lock(0);
     
     lv_obj_t *scr = lv_scr_act();
+
+    // Monitora qualquer toque para controlar sleep/awake
+    lv_obj_add_event_cb(scr, touch_event_cb, LV_EVENT_ALL, NULL);
     
     // Fundo escuro
     lv_obj_set_style_bg_color(scr, lv_color_hex(0x1a1a1a), 0);
@@ -367,12 +404,30 @@ void app_main(void)
     
     // Cria interface de demonstração
     create_demo_ui();
+
+    // Inicia controle de inatividade
+    last_touch_ticks = xTaskGetTickCount();
     
     ESP_LOGI(TAG, "Sistema pronto! LVGL task rodando em background.");
     
-    // Loop principal - apenas monitora heap (LVGL roda em task separada)
+    // Loop principal - monitora inatividade e heap
+    TickType_t log_counter = 0;
     while (1) {
-        vTaskDelay(pdMS_TO_TICKS(5000));
-        ESP_LOGI(TAG, "Heap livre: %lu bytes", (unsigned long)esp_get_free_heap_size());
+        vTaskDelay(pdMS_TO_TICKS(200));
+
+        TickType_t now = xTaskGetTickCount();
+        if (!sleep_mode && (now - last_touch_ticks) > pdMS_TO_TICKS(INACTIVITY_TIMEOUT_MS)) {
+            // Desliga display e entra em sleep (comando 0x10)
+            esp_lcd_panel_disp_on_off(lcd_panel, false);
+            esp_lcd_panel_io_tx_param(lcd_io, 0x10, NULL, 0); // Sleep In
+            sleep_mode = true;
+            ESP_LOGI(TAG, "Sleep in por inatividade");
+        }
+
+        log_counter += pdMS_TO_TICKS(200);
+        if (log_counter >= pdMS_TO_TICKS(5000)) {
+            log_counter = 0;
+            ESP_LOGI(TAG, "Heap livre: %lu bytes", (unsigned long)esp_get_free_heap_size());
+        }
     }
 }

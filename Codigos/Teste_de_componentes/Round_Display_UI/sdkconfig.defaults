@@ -1,6 +1,0 @@
-# Placeholder para sdkconfig
-# Este arquivo será gerado automaticamente quando você executar 'idf.py menuconfig'
-# ou 'idf.py build' pela primeira vez
-
-# Configurações padrão serão aplicadas
-# Você pode personalizar depois com: idf.py menuconfig
