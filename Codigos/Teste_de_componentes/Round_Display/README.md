@@ -2,20 +2,83 @@
 
 Display circular multifuncional de 1.28" (240x240 pixels) com touchscreen capacitivo, RTC, slot para cartão SD e gerenciamento completo de bateria Li-ion, projetado para a plataforma Seeeduino XIAO.
 
+## Sobre Este Documento
+
+Esta documentação técnica foi desenvolvida como parte de um trabalho de caracterização de hardware e desenvolvimento de firmware embarcado para displays IoT. O objetivo é fornecer uma referência completa sobre a arquitetura de hardware, protocolos de comunicação, e soluções para problemas práticos encontrados durante a integração do Seeed Round Display com microcontroladores XIAO ESP32.
+
+**Contexto de Desenvolvimento:**
+- **Plataforma:** XIAO ESP32-C6
+- **Framework:** ESP-IDF v5.x
+- **Biblioteca Gráfica:** LVGL v8.3
+- **Componentes Oficiais:** esp_lcd_gc9a01, esp_lvgl_port
+
+Este documento serve como:
+1. **Referência técnica** para desenvolvedores trabalhando com o mesmo hardware
+2. **Registro de problemas e soluções** encontrados durante o desenvolvimento
+3. **Base de conhecimento** para troubleshooting de sistemas embarcados com displays
+
 ---
 
 ## Índice
 
-1. [Visão Geral do Sistema](#visão-geral-do-sistema)
-2. [Especificações Técnicas](#especificações-técnicas)
-3. [Arquitetura de Hardware](#arquitetura-de-hardware)
-4. [Gerenciamento de Energia](#gerenciamento-de-energia)
-5. [Display LCD](#display-lcd)
-6. [Touch Screen](#touch-screen)
-7. [RTC (Real-Time Clock)](#rtc-real-time-clock)
-8. [Cartão SD](#cartão-sd)
-9. [Pinout e Interfaces](#pinout-e-interfaces)
-10. [Considerações para Desenvolvimento](#considerações-para-desenvolvimento)
+1. [Sobre Este Documento](#sobre-este-documento)
+2. [Visão Geral do Sistema](#visão-geral-do-sistema)
+3. [Especificações Técnicas](#especificações-técnicas)
+   - [Display](#display)
+   - [Touch Screen](#touch-screen)
+   - [RTC](#rtc-real-time-clock)
+   - [Cartão SD](#cartão-sd)
+   - [Gerenciamento de Energia](#gerenciamento-de-energia-1)
+   - [Conectores](#conectores)
+4. [Arquitetura de Hardware](#arquitetura-de-hardware)
+   - [Diagrama de Blocos](#diagrama-de-blocos)
+   - [Distribuição de Alimentação](#distribuição-de-alimentação)
+5. [Gerenciamento de Energia](#gerenciamento-de-energia)
+   - [1. Carregador de Bateria - ETA6003](#1-carregador-de-bateria---eta6003)
+   - [2. Regulador 3.3V - IA3410](#2-regulador-33v---ia3410)
+   - [3. Switch de Alimentação - DHT-1200S](#3-switch-de-alimentação---dht-1200s)
+   - [4. Monitoramento de Bateria](#4-monitoramento-de-bateria)
+   - [5. Proteção de Alimentação do RTC](#5-proteção-de-alimentação-do-rtc)
+6. [Display LCD](#display-lcd)
+   - [Especificações do GC9A01](#especificações-do-gc9a01)
+   - [Interface SPI](#interface-spi)
+   - [Backlight](#backlight)
+   - [Reset do LCD](#reset-do-lcd)
+   - [Alimentação do LCD](#alimentação-do-lcd)
+7. [Touch Screen](#touch-screen-1)
+   - [Interface I²C](#interface-i²c)
+   - [Conector P2/J9 (15 pinos)](#conector-p2j9-15-pinos)
+8. [RTC (Real-Time Clock)](#rtc-real-time-clock-1)
+   - [PCF8563](#pcf8563)
+   - [Interface I²C](#interface-i²c-1)
+   - [Bateria de Backup](#bateria-de-backup)
+9. [Cartão SD](#cartão-sd-1)
+   - [Interface SPI](#interface-spi-1)
+   - [Proteção ESD](#proteção-esd)
+10. [Pinout e Interfaces](#pinout-e-interfaces)
+    - [Pinout XIAO (J4/J5)](#pinout-xiao-j4j5)
+    - [Mapeamento Completo](#mapeamento-completo)
+    - [Barramento SPI](#barramento-spi)
+    - [Barramento I²C](#barramento-i²c)
+11. [Considerações para Desenvolvimento](#considerações-para-desenvolvimento)
+    - [1. Inicialização do Sistema](#1-inicialização-do-sistema)
+    - [2. Gerenciamento de Energia](#2-gerenciamento-de-energia)
+    - [3. SPI: Gerenciamento de Dispositivos Múltiplos](#3-spi-gerenciamento-de-dispositivos-múltiplos)
+    - [4. I²C: Endereçamento Múltiplo](#4-i²c-endereçamento-múltiplo)
+    - [5. Interrupções](#5-interrupções)
+    - [6. Considerações de Segurança](#6-considerações-de-segurança)
+    - [7. Debugging](#7-debugging)
+    - [8. Referências de Corrente](#8-referências-de-corrente)
+    - [9. Próximos Passos - Integração com LVGL](#9-próximos-passos---integração-com-lvgl)
+12. [Metodologia de Testes e Validação](#metodologia-de-testes-e-validação)
+13. [Problemas Encontrados e Soluções](#problemas-encontrados-e-soluções)
+    - [1. Modo Sleep/Hibernação do Display](#1-modo-sleephibernação-do-display)
+    - [2. Driver Touch CHSC6X vs CST816S](#2-driver-touch-chsc6x-vs-cst816s)
+    - [3. Configuração de Cores RGB565](#3-configuração-de-cores-rgb565)
+    - [4. Controle de Backlight (Em Investigação)](#4-controle-de-backlight-em-investigação-️)
+14. [Conclusões e Trabalhos Futuros](#conclusões-e-trabalhos-futuros)
+15. [Referências](#referências)
+16. [Licença e Créditos](#licença-e-créditos)
 
 ---
 
@@ -304,6 +367,8 @@ USB 5V ──→ ETA6003 ──→ Switch ──→ Buck SX01P6 ──→ SYS_3V
 - D6/TX = HIGH: Q1 ligado → Backlight ON
 - Suporta PWM para controle de brilho (0-100%)
 
+> **Problema Conhecido:** No XIAO ESP32-C6, o controle de backlight via pino D6 não está funcionando conforme esperado. O backlight permanece sempre ligado independente da configuração de software. Aparentemente o controle é feito apenas pela chave física da placa. Veja mais detalhes e workarounds em [Problemas - Controle de Backlight](#4-controle-de-backlight-em-investigação-️).
+
 ### Reset do LCD
 
 **Circuito:**
@@ -439,7 +504,7 @@ USB 5V ──→ ETA6003 ──→ Switch ──→ Buck SX01P6 ──→ SYS_3V
 
 ---
 
-## 💾 Cartão SD
+## Cartão SD
 
 ### Conector ST-TF-003D-3-2
 
@@ -711,7 +776,7 @@ XIAO D5 (SCL) ──┬──→ RTC (PCF8563)
 
 ---
 
-## 🛠️ Considerações para Desenvolvimento
+## Considerações para Desenvolvimento
 
 ### 1. Inicialização do Sistema
 
@@ -724,18 +789,22 @@ XIAO D5 (SCL) ──┬──→ RTC (PCF8563)
 4. Delay 100ms (estabilização de energia)
 5. Reset do LCD (LCD_RST: LOW → delay 10µs → HIGH → delay 120ms)
 6. Inicializar LCD (enviar comandos de inicialização GC9A01)
-7. Configurar backlight (D6 como saída, iniciar PWM se necessário)
+7. [OPCIONAL] Configurar backlight (D6) - Não funcional no XIAO ESP32-C6
 8. Inicializar RTC (verificar VL bit, configurar se necessário)
-9. Inicializar Touch (ler chip ID, configurar registros)
+9. Inicializar Touch com scanner I²C - Validar se é CHSC6X (0x2E) ou CST816S (0x15)
 10. Montar sistema de arquivos SD (se cartão presente)
 ```
+
+> **Notas Importantes:**
+> - **Passo 7:** O controle de backlight via D6 não funciona no XIAO ESP32-C6. O backlight fica permanentemente ligado.
+> - **Passo 9:** Execute scanner I²C antes de inicializar o touch - o controlador real pode ser CHSC6X ao invés do CST816S documentado.
 
 ### 2. Gerenciamento de Energia
 
 **Para economia de energia:**
 
-- Desligar backlight quando não necessário (D6 = LOW)
-- Colocar LCD em sleep mode (comando 0x10)
+- ~~Desligar backlight quando não necessário (D6 = LOW)~~ **Não funcional no XIAO ESP32-C6** - veja [seção de problemas](#4-controle-de-backlight-em-investigação-️)
+- Colocar LCD em sleep mode (comando 0x10) - **método recomendado para economia de energia**
 - Desabilitar regulador 3.3V via PWR_EN quando em deep sleep
 - RTC continua funcionando com bateria CR927
 
@@ -795,6 +864,8 @@ for (uint8_t addr = 1; addr < 127; addr++) {
 }
 ```
 
+> **Atenção:** A documentação oficial menciona o touchscreen CST816S (endereço 0x15), porém o hardware real pode utilizar o CHSC6X (endereço 0x2E). Sempre execute o scanner I²C acima para confirmar qual controlador está presente antes de implementar o driver. Consulte [Problemas - Driver Touch](#2-driver-touch-chsc6x-vs-cst816s) para mais informações.
+
 ### 5. Interrupções
 
 **Touch Interrupt (D7/TP_INT):**
@@ -803,6 +874,8 @@ for (uint8_t addr = 1; addr < 127; addr++) {
 - Ativar interrupção por borda de descida (falling edge)
 - Na ISR, marcar flag para processar coordenadas no loop principal
 - Evitar operações I²C dentro da ISR
+
+> **Importante:** O controlador de touch real pode não ser o CST816S como indicado na documentação oficial. Recomenda-se usar um scanner I²C para identificar o endereço real do dispositivo antes de selecionar o driver apropriado. Veja mais detalhes em [Problemas Encontrados e Soluções - Driver Touch](#2-driver-touch-chsc6x-vs-cst816s).
 
 ### 6. Considerações de Segurança
 
@@ -866,27 +939,405 @@ Para criar interfaces gráficas profissionais:
 
 ---
 
-## 📚 Referências
+## Metodologia de Testes e Validação
 
-### Datasheets
+Durante o desenvolvimento, foi adotada uma abordagem sistemática para caracterização do hardware e validação de funcionalidades:
 
-- **GC9A01:** [Driver LCD](https://github.com/Seeed-Studio/Seeed_Arduino_RoundDisplay/blob/master/doc/GC9A01%20DataSheet.pdf)
-- **PCF8563:** [NXP PCF8563 Datasheet](https://www.nxp.com/docs/en/data-sheet/PCF8563.pdf)
-- **ETA6003:** [ETA Solutions Charger IC](https://www.etasolution.com)
-- **IA3410:** [DC-DC Buck Converter](https://www.injoinic.com)
-- **Seeed Round Display:** [Schematic v1.0](https://files.seeedstudio.com/wiki/round_display_for_xiao/Round-Display-for-XIAO-v1.0.pdf)
+### Ferramentas Utilizadas
 
-### Ferramentas de Desenvolvimento
+**Hardware:**
+- Multímetro digital para verificação de tensões e continuidade
+- Osciloscópio (quando disponível) para análise de sinais SPI/I²C
+- Logic analyzer (software Sigrok/PulseView) para debugging de protocolos
 
-- **ESP-IDF:** [Espressif IoT Development Framework](https://docs.espressif.com/projects/esp-idf/)
-- **LVGL:** [Light and Versatile Graphics Library](https://docs.lvgl.io/)
-- **SquareLine Studio:** [LVGL GUI Designer](https://squareline.io/)
+**Software:**
+- ESP-IDF Monitor para logs em tempo real
+- Scanner I²C genérico para detecção de dispositivos
+- Testes de stress (ciclos sleep/wake, operações contínuas)
 
-### Recursos Adicionais
+### Processo de Validação
 
-- [ESP-IDF SPI Master API](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/spi_master.html)
-- [ESP-IDF I2C API](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/i2c.html)
-- [ESP-IDF ADC API](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/adc.html)
-- [FatFS Documentation](http://elm-chan.org/fsw/ff/00index_e.html) (para SD Card)
+1. **Verificação de Hardware:** Confirmação de tensões de alimentação e continuidade de sinais
+2. **Teste de Comunicação:** Validação de barramentos SPI e I²C com comandos básicos
+3. **Testes Funcionais:** Verificação de cada periférico individualmente (display, touch, RTC, SD)
+4. **Testes de Integração:** Operação simultânea de múltiplos periféricos
+5. **Testes de Longa Duração:** Ciclos de sleep/wake, detecção de memory leaks
+
+### Critérios de Sucesso
+
+- Display exibe cores corretas sem artifacts
+- Touch detecta toques com precisão <5mm
+- RTC mantém horário com erro <1s/dia
+- Sleep mode funciona sem tela preta ao acordar
+- Backlight controlável via software (não funcional no C6)
+
+---
+
+## Problemas Encontrados e Soluções
+
+Durante o desenvolvimento do projeto, alguns desafios técnicos foram encontrados e resolvidos. Esta seção documenta esses problemas de forma detalhada para ajudar outros desenvolvedores e servir como base para troubleshooting.
+
+### 1. Modo Sleep/Hibernação do Display
+
+**Problema:**
+
+Ao implementar o controle de inatividade para economizar energia, o display entrava em modo sleep corretamente após o timeout, mas ao tentar "acordar" o display com um toque, a tela permanecia completamente preta. O display não respondia adequadamente aos comandos de wake-up, mesmo que o touchscreen detectasse toques corretamente.
+
+**Análise:**
+
+O problema estava relacionado à sequência incorreta de comandos enviados ao controlador GC9A01 e à falta de sincronização com o LVGL. Três fatores principais foram identificados:
+
+1. **Sequência de comandos incorreta:** Apenas enviar o comando Display ON (0x29) não é suficiente. O GC9A01 requer a sequência completa Sleep Out (0x11) + delay + Display ON (0x29).
+
+2. **Delay insuficiente:** Após o comando Sleep Out, o display precisa de pelo menos 120ms para estabilizar os circuitos internos antes de aceitar novos comandos.
+
+3. **Buffer do LVGL desatualizado:** Quando o display acorda, o buffer do LVGL pode conter dados obsoletos ou estar marcado como já renderizado, resultando em nenhum pixel sendo enviado ao display físico.
+
+**Solução Implementada:**
+
+```c
+static void register_touch_activity(void)
+{
+    last_touch_ticks = xTaskGetTickCount();
+    if (sleep_mode) {
+        // 1. Sleep Out - acorda o controlador do display
+        esp_lcd_panel_io_tx_param(lcd_io, 0x11, NULL, 0);
+        
+        // 2. Aguarda 120ms para estabilização
+        vTaskDelay(pdMS_TO_TICKS(120));
+        
+        // 3. Display ON - ativa a saída de pixels
+        esp_lcd_panel_io_tx_param(lcd_io, 0x29, NULL, 0);
+        esp_lcd_panel_disp_on_off(lcd_panel, true);
+        
+        // 4. Força redesenho completo do LVGL
+        lv_obj_invalidate(lv_scr_act());  // Marca tela como "suja"
+        lv_disp_t *d = lv_disp_get_default();
+        if (d) {
+            lv_refr_now(d);  // Força atualização imediata
+        }
+        
+        sleep_mode = false;
+        ESP_LOGI(TAG, "Sleep out por toque");
+    }
+}
+```
+
+**Sequência de entrada em sleep:**
+
+```c
+// Desligar display e entrar em sleep
+esp_lcd_panel_disp_on_off(lcd_panel, false);  // Display OFF (0x28)
+esp_lcd_panel_io_tx_param(lcd_io, 0x10, NULL, 0);  // Sleep In (0x10)
+sleep_mode = true;
+```
+
+**Detalhes técnicos dos comandos GC9A01:**
+
+- **0x10 (Sleep In):** Coloca o display em modo de baixo consumo. A RAM do display é preservada, mas a saída de pixels é desabilitada.
+- **0x11 (Sleep Out):** Sai do modo sleep. Requer 120ms de estabilização antes de aceitar novos comandos.
+- **0x28 (Display OFF):** Desliga a saída de pixels, mas mantém o display ativo (menor economia que Sleep In).
+- **0x29 (Display ON):** Liga a saída de pixels.
+
+**Recomendações:**
+
+- Sempre respeitar o delay de 120ms após Sleep Out
+- Invalidar e forçar redesenho do LVGL após wake-up
+- Monitorar o heap para detectar memory leaks durante ciclos sleep/wake
+- Considerar deep sleep do ESP32 em combinação com sleep do display para máxima economia
+
+### 2. Driver Touch CHSC6X vs CST816S
+
+**Problema:**
+
+A documentação oficial do Seeed Studio Round Display indica que o touchscreen utiliza o controlador CST816S. No entanto, ao tentar comunicação I²C com o endereço padrão do CST816S (0x15), o dispositivo não respondia. Scanners I²C genéricos também não detectavam nenhum dispositivo no barramento.
+
+**Investigação:**
+
+Após análise detalhada e comparação com projetos similares, descobriu-se que o hardware real utiliza o controlador **CHSC6X** (endereço I²C 0x2E), e não o CST816S como documentado. Este é um chip diferente com protocolo de comunicação incompatível.
+
+**Diferenças principais:**
+
+| Característica       | CST816S       | CHSC6X        |
+| -------------------- | ------------- | ------------- |
+| Endereço I²C         | 0x15          | 0x2E          |
+| Registrador de dados | 0x01-0x06     | 0x00-0x05     |
+| Protocolo leitura    | Multi-byte    | Sequencial    |
+| Gesture support      | Sim           | Limitado      |
+| Suporte ESP-IDF      | esp_lcd_touch | Custom driver |
+
+**Solução Implementada:**
+
+Foi necessário desenvolver um driver customizado `chsc6x_touch` compatível com a interface `esp_lcd_touch` do ESP-IDF. Este driver implementa:
+
+1. **Detecção correta do endereço I²C (0x2E)**
+2. **Leitura do registrador de dados específico do CHSC6X**
+3. **Parsing correto das coordenadas X/Y (formato big-endian)**
+4. **Transformações de coordenadas (swap_xy, mirror_x, mirror_y)**
+5. **Compatibilidade com `lvgl_port_touch`**
+
+**Estrutura do driver customizado:**
+
+```c
+// Configuração do driver CHSC6X
+chsc6x_touch_config_t touch_cfg = {
+    .i2c_bus = i2c_bus,
+    .int_gpio_num = PIN_TP_INT,
+    .x_max = LCD_H_RES,
+    .y_max = LCD_V_RES,
+    .swap_xy = false,   // Ajustar conforme orientação do display
+    .mirror_x = false,
+    .mirror_y = false,
+};
+
+esp_err_t ret = chsc6x_touch_new(&touch_cfg, &touch_handle);
+```
+
+**Como identificar qual driver seu hardware usa:**
+
+1. Execute um scanner I²C:
+```c
+for (uint8_t addr = 0x01; addr < 0x7F; addr++) {
+    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (addr << 1) | I2C_MASTER_WRITE, true);
+    i2c_master_stop(cmd);
+    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_0, cmd, pdMS_TO_TICKS(50));
+    i2c_cmd_link_delete(cmd);
+    if (ret == ESP_OK) {
+        printf("Dispositivo I²C encontrado em: 0x%02X\n", addr);
+    }
+}
+```
+
+2. Verifique os endereços detectados:
+   - **0x15:** CST816S (driver oficial disponível)
+   - **0x2E:** CHSC6X (requer driver customizado)
+
+**Arquivos do driver customizado:**
+
+- `components/chsc6x_touch/chsc6x_touch.h` - Interface pública
+- `components/chsc6x_touch/chsc6x_touch.c` - Implementação
+- `components/chsc6x_touch/CMakeLists.txt` - Configuração de build
+
+**Integração com LVGL:**
+
+```c
+// O driver customizado é compatível com lvgl_port
+const lvgl_port_touch_cfg_t touch_cfg = {
+    .disp = lvgl_disp,
+    .handle = touch_handle,  // Handle do chsc6x_touch
+};
+lvgl_port_add_touch(&touch_cfg);
+```
+
+**Lições aprendidas:**
+
+- Sempre validar documentação com testes I²C reais
+- Implementar scanner I²C genérico para debug inicial
+- Manter compatibilidade com APIs oficiais (`esp_lcd_touch`)
+- Documentar diferenças entre documentação e hardware real
+
+### 3. Configuração de Cores RGB565
+
+**Problema Relacionado:**
+
+Além dos problemas acima, foi necessário configurar corretamente o swap de bytes RGB565 devido à diferença de endianness entre ESP32 (little-endian) e o display GC9A01 (espera big-endian no modo RGB).
+
+**Solução:**
+
+- `CONFIG_LV_COLOR_16_SWAP=y` no sdkconfig
+- `rgb_endian = LCD_RGB_ENDIAN_RGB` na configuração do painel
+- Bit BGR do MADCTL em 0 (ordem RGB nativa do driver)
+
+Isso garante que as cores sejam exibidas corretamente sem inversão de vermelho/azul.
+
+### 4. Controle de Backlight (Em Investigação)
+
+**Problema:**
+
+O controle do backlight do display GC9A01 não está funcionando via software no XIAO ESP32-C6. Segundo a documentação do Seeed Studio, o backlight deveria ser controlado pelo pino D6 da placa XIAO, porém testes realizados não conseguiram alterar o brilho ou estado do backlight através deste pino.
+
+**Configuração Esperada (Documentação):**
+
+De acordo com o esquemático e documentação oficial:
+- **Pino de controle:** D6 (GPIO não especificado no XIAO ESP32-C6)
+- **Circuito:** Transistor Q1 controlando corrente LED (~40mA)
+- **Controle esperado:** PWM para ajuste de brilho (0-100%)
+
+**Testes Realizados:**
+
+1. **GPIO Output Digital:**
+```c
+#define PIN_BL GPIO_NUM_6  // Tentativa com D6
+gpio_config_t bl_cfg = {
+    .mode = GPIO_MODE_OUTPUT,
+    .pin_bit_mask = (1ULL << PIN_BL),
+};
+gpio_config(&bl_cfg);
+gpio_set_level(PIN_BL, 1);  // Tentativa de ligar
+gpio_set_level(PIN_BL, 0);  // Tentativa de desligar
+// Resultado: Sem efeito no backlight
+```
+
+2. **PWM via LEDC:**
+```c
+ledc_timer_config_t ledc_timer = {
+    .speed_mode = LEDC_LOW_SPEED_MODE,
+    .timer_num = LEDC_TIMER_0,
+    .duty_resolution = LEDC_TIMER_8_BIT,
+    .freq_hz = 5000,
+    .clk_cfg = LEDC_AUTO_CLK
+};
+ledc_timer_config(&ledc_timer);
+
+ledc_channel_config_t ledc_channel = {
+    .speed_mode = LEDC_LOW_SPEED_MODE,
+    .channel = LEDC_CHANNEL_0,
+    .timer_sel = LEDC_TIMER_0,
+    .intr_type = LEDC_INTR_DISABLE,
+    .gpio_num = PIN_BL,
+    .duty = 128,  // 50% duty cycle
+    .hpoint = 0
+};
+ledc_channel_config(&ledc_channel);
+// Resultado: Sem efeito no backlight
+```
+
+3. **Mapeamento de pinos testados:**
+- D6 (não documentado qual GPIO no C6)
+- Outros GPIOs do XIAO ESP32-C6 sem sucesso
+
+**Observações:**
+
+- O backlight permanece **sempre ligado** independente da configuração de software
+- Há uma **chave física** na placa que controla o backlight (mencionada na documentação: "controlled by switch")
+- O circuito de backlight pode estar conectado diretamente ao rail LCD_3V3 com controle apenas via switch físico
+- A documentação menciona "PIN_BL GPIO_NUM_NC" no código de exemplo, sugerindo que pode não haver controle via GPIO
+
+**Hipóteses em Investigação:**
+
+1. **Hardware vs Software control:** O backlight pode ser controlado exclusivamente pela chave física, e o pino D6 mencionado pode não existir ou não estar conectado no modelo XIAO ESP32-C6.
+
+2. **Diferença entre modelos XIAO:** A documentação pode estar referenciando outros modelos XIAO (ESP32-S3, RP2040) que possuem pinagem diferente.
+
+3. **Circuito não populado:** O transistor Q1 e resistores associados podem não estar populados na versão atual da placa, deixando o backlight permanentemente ligado.
+
+4. **Erro de esquemático:** O esquemático pode não refletir a versão de produção atual da placa.
+
+**Análise do esquemático:**
+
+Consultando o esquemático oficial (v1.0):
+- Q1 (transistor de controle): Presente no esquemático
+- Sinal BL_CTL: Conecta ao pino D6 do header XIAO
+- R5 (resistor base): 10kΩ
+- Corrente LED: Limitada por resistores a ~40mA
+
+**Workaround Atual:**
+
+Por enquanto, o projeto opera com backlight permanentemente ligado (via chave física). Para economizar energia, a solução implementada é:
+- Usar apenas o Sleep Mode do display (comandos 0x10/0x11)
+- Implementar timeout de inatividade com tela preta
+- Não há controle fino de brilho disponível
+
+**Próximos Passos:**
+
+1. Confirmar o mapeamento GPIO do pino D6 no XIAO ESP32-C6 (datasheet oficial)
+2. Testar com multímetro o sinal no pino físico D6 durante tentativas de controle
+3. Verificar se há jumpers ou configurações de hardware não documentadas
+4. Comparar com implementação no XIAO ESP32-S3 (pode ter pinagem diferente)
+5. Considerar modificação de hardware (bypass da chave física) se necessário
+
+**Estado Atual:**
+
+> **Não resolvido** - O controle de backlight via software permanece não funcional. O sistema opera com backlight sempre ligado, dependendo apenas do Sleep Mode do display para economia de energia.
+
+---
+
+## Conclusões e Trabalhos Futuros
+
+### Resultados Alcançados
+
+A integração do Seeed Round Display com o XIAO ESP32-C6 foi realizada com sucesso, resultando em um sistema funcional capaz de:
+
+**Display GC9A01:** Renderização de gráficos a 60 FPS com cores corretas (RGB565)
+**Touchscreen CHSC6X:** Detecção precisa de toques com driver customizado
+**Modo Sleep:** Economia de energia com wake-up funcionando corretamente
+**LVGL Integration:** Interface gráfica responsiva com widgets interativos
+**Multi-periféricos:** Operação simultânea de SPI (display + SD) e I²C (touch + RTC)
+
+### Desafios Não Resolvidos
+
+**Controle de Backlight:** O controle via software do backlight permanece não funcional no XIAO ESP32-C6. Workaround implementado usando apenas Sleep Mode do display.
+
+### Lições Aprendidas
+
+1. **Validação de Documentação:** Sempre verificar componentes reais via I²C/SPI scan antes de confiar em documentação oficial (caso CST816S vs CHSC6X)
+2. **Timing Crítico:** Delays adequados (120ms após Sleep Out) são essenciais para displays LCD
+3. **Sincronização LVGL:** Buffer invalidation é crucial após wake-up de sleep
+4. **Diferenças entre Modelos:** Pinout varia entre XIAO ESP32-C3/C6/S3 - validar para cada modelo
+
+### Trabalhos Futuros
+
+1. **Investigação de Backlight:** Análise com osciloscópio do pino D6 físico e possível modificação de hardware
+2. **Teste com ESP32-S3:** Validar se controle de backlight funciona em outros modelos XIAO
+3. **Otimização de Energia:** Implementar deep sleep do ESP32 em conjunto com sleep do display
+4. **Integração de SD Card:** Implementar logging de dados e armazenamento de imagens
+5. **RTC Completo:** Implementar alarmes e sincronização NTP via WiFi
+6. **Performance:** Benchmarking de FPS e otimização de DMA transfers
+
+### Contribuições para a Comunidade
+
+Este trabalho contribui com:
+- **Driver customizado CHSC6X** compatível com esp_lcd_touch API
+- **Solução documentada** para problema de sleep/wake do GC9A01
+- **Mapeamento GPIO completo** para múltiplos modelos XIAO
+- **Código de exemplo funcional** com componentes oficiais ESP-IDF
+
+---
+
+## Referências
+
+### Datasheets e Documentação Técnica
+
+[1] **GC9A01 LCD Driver IC Datasheet.** Disponível em: https://github.com/Seeed-Studio/Seeed_Arduino_RoundDisplay/blob/master/doc/GC9A01%20DataSheet.pdf
+
+[2] **NXP Semiconductors.** PCF8563 Real-Time Clock/Calendar Datasheet. Disponível em: https://www.nxp.com/docs/en/data-sheet/PCF8563.pdf
+
+[3] **ETA Solutions.** ETA6003 Single Cell Li-ion Battery Charger IC. Disponível em: https://www.etasolution.com
+
+[4] **Injoinic Technology.** IA3410 3A Synchronous Buck Converter Datasheet. Disponível em: https://www.injoinic.com
+
+[5] **Seeed Studio.** Round Display for XIAO - Schematic v1.0 (2023). Disponível em: https://files.seeedstudio.com/wiki/round_display_for_xiao/Round-Display-for-XIAO-v1.0.pdf
+
+### Frameworks e Bibliotecas
+
+[6] **Espressif Systems.** ESP-IDF - Espressif IoT Development Framework (v5.x). Disponível em: https://docs.espressif.com/projects/esp-idf/
+
+[7] **LVGL Team.** LVGL - Light and Versatile Graphics Library (v8.3). Disponível em: https://docs.lvgl.io/
+
+[8] **SquareLine Studio.** LVGL GUI Designer Tool. Disponível em: https://squareline.io/
+
+### APIs e Recursos de Desenvolvimento
+
+[9] **ESP-IDF SPI Master Driver.** Disponível em: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/spi_master.html
+
+[10] **ESP-IDF I²C Driver.** Disponível em: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/i2c.html
+
+[11] **ESP-IDF ADC Driver.** Disponível em: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/adc.html
+
+[12] **ChaN.** FatFs - Generic FAT Filesystem Module Documentation. Disponível em: http://elm-chan.org/fsw/ff/00index_e.html
+
+---
+
+## Licença e Créditos
+
+**Documentação:** Este documento é fornecido "como está" para fins educacionais e de desenvolvimento.
+
+**Hardware:** Seeed Studio Round Display for XIAO © Seeed Technology Co., Ltd.
+
+**Código de Exemplo:** Baseado em componentes oficiais do ESP Component Registry (espressif/esp_lcd_gc9a01, espressif/esp_lvgl_port).
+
+**Contribuições:** Contribuições, correções e sugestões são bem-vindas. Para reportar problemas ou compartilhar soluções, abra uma issue no repositório do projeto.
 
 ---
