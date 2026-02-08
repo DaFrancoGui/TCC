@@ -24,6 +24,11 @@
 #include <sys/time.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_freertos_hooks.h"
+#include "esp_system.h"
+#include "esp_clk_tree.h"
+#include "soc/clk_tree_defs.h"
+#include "esp_heap_caps.h"
 #include "freertos/semphr.h"
 #include "esp_log.h"
 #include "esp_err.h"
@@ -98,6 +103,18 @@ static SemaphoreHandle_t i2c_mutex = NULL;
 static lv_obj_t *label_time = NULL;
 static lv_obj_t *label_date = NULL;
 static lv_obj_t *label_status = NULL;
+static lv_obj_t *label_perf_cpu = NULL;
+static lv_obj_t *label_perf_heap = NULL;
+
+// Contador de ciclos ociosos para estimar uso de CPU
+static volatile uint32_t idle_counter = 0;
+
+// Hook de idle: chamado quando a CPU não tem trabalho; usado para medir carga
+static bool idle_hook_cb(void)
+{
+    idle_counter++;
+    return false; // manter hook ativo
+}
 
 // Tela de configuração
 static lv_obj_t *scr_clock = NULL;
@@ -484,6 +501,19 @@ static void create_clock_ui(void)
     lv_obj_set_style_text_color(title, lv_color_hex(0x00C8FF), 0);
     lv_obj_set_style_text_font(title, &lv_font_montserrat_14, 0);
     lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 20);
+
+    // Indicadores de performance (CPU / Heap)
+    label_perf_cpu = lv_label_create(scr_clock);
+    lv_label_set_text(label_perf_cpu, "CPU: 0%");
+    lv_obj_set_style_text_color(label_perf_cpu, lv_color_hex(0xA0A0A0), 0);
+    lv_obj_set_style_text_font(label_perf_cpu, &lv_font_montserrat_12, 0);
+    lv_obj_align(label_perf_cpu, LV_ALIGN_TOP_MID, 0, 40);
+
+    label_perf_heap = lv_label_create(scr_clock);
+    lv_label_set_text(label_perf_heap, "RAM: 0% usado (livre 000 KB)");
+    lv_obj_set_style_text_color(label_perf_heap, lv_color_hex(0xA0A0A0), 0);
+    lv_obj_set_style_text_font(label_perf_heap, &lv_font_montserrat_12, 0);
+    lv_obj_align(label_perf_heap, LV_ALIGN_TOP_MID, 0, 55);
     
     // ========== HORA (GRANDE) ==========
     label_time = lv_label_create(scr_clock);
@@ -494,7 +524,7 @@ static void create_clock_ui(void)
     
     // ========== DATA ==========
     label_date = lv_label_create(scr_clock);
-    lv_label_set_text(label_date, "Domingo, 09/02/2026");
+    lv_label_set_text(label_date, "Domingo, 01/02/2026");
     lv_obj_set_style_text_color(label_date, lv_color_hex(0xC0C0C0), 0);
     lv_obj_set_style_text_font(label_date, &lv_font_montserrat_14, 0);
     lv_obj_align(label_date, LV_ALIGN_CENTER, 0, 45);
@@ -656,6 +686,40 @@ static void update_clock_display(void)
         lvgl_port_lock(0);
         lv_label_set_text(label_time, time_str);
         lv_label_set_text(label_date, date_str);
+
+        // Indicadores de performance
+        static uint32_t last_idle = 0;
+        static uint32_t idle_baseline = 0;
+        uint32_t idle_now = idle_counter;
+        uint32_t idle_delta = idle_now - last_idle;
+        last_idle = idle_now;
+
+        if (idle_baseline == 0 && idle_delta > 0) {
+            idle_baseline = idle_delta; // calibração: 100% idle
+        }
+        // Atualiza baseline se encontrarmos um período mais ocioso (evita travar em baseline alto)
+        if (idle_delta > idle_baseline) {
+            idle_baseline = idle_delta;
+        }
+
+        int idle_pct = 0;
+        if (idle_baseline > 0) {
+            idle_pct = (int)((idle_delta * 100ULL) / idle_baseline);
+            if (idle_pct > 100) idle_pct = 100;
+            if (idle_pct < 0) idle_pct = 0;
+        }
+        int cpu_load = 100 - idle_pct;
+        if (cpu_load < 0) cpu_load = 0;
+        if (cpu_load > 100) cpu_load = 100;
+
+        size_t heap_total = heap_caps_get_total_size(MALLOC_CAP_DEFAULT) / 1024;
+        size_t heap_free = esp_get_free_heap_size() / 1024;
+        size_t heap_used = (heap_total > heap_free) ? (heap_total - heap_free) : 0;
+        int heap_used_pct = (heap_total > 0) ? (int)((heap_used * 100ULL) / heap_total) : 0;
+
+        lv_label_set_text_fmt(label_perf_cpu, "CPU: %d%%", cpu_load);
+        lv_label_set_text_fmt(label_perf_heap, "RAM: %d%% usado (livre %u KB)", heap_used_pct, (unsigned)heap_free);
+
         lvgl_port_unlock();
         
         // Log a cada minuto
@@ -678,6 +742,9 @@ void app_main(void)
 {
     ESP_LOGI(TAG, "=== Relogio Digital - XIAO ESP32-C6 Round Display ===");
     
+    // Registrar hook de idle para medir carga de CPU
+    ESP_ERROR_CHECK(esp_register_freertos_idle_hook_for_cpu(idle_hook_cb, 0));
+
     // Inicializa hardware
     ESP_ERROR_CHECK(init_lcd());
     ESP_ERROR_CHECK(init_touch());
