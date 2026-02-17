@@ -4,11 +4,13 @@ Este diretório contém os testes individuais de cada componente utilizado no pr
 
 ## Componentes Disponíveis
 
-| Componente        | Interface | Documentação                      |
-| ----------------- | --------- | --------------------------------- |
-| **DS18B20**       | 1-Wire    | [README](DS18B20/README.md)       |
-| **ADXL345**       | I²C       | [README](ADXL345/README.md)       |
-| **Round Display** | SPI + I²C | [README](Round_Display/README.md) |
+| Componente        | Interface | Descrição                                          | Documentação                      |
+| ----------------- | --------- | ---------------------------------------------------| --------------------------------- |
+| **DS18B20**       | 1-Wire    | Sensor de temperatura à prova d'água               | [README](DS18B20/README.md)       |
+| **ADXL345**       | I²C       | Acelerômetro triaxial                              | [README](ADXL345/README.md)       |
+| **MPU9250**       | I²C       | IMU 9-DOF (acelerômetro, giroscópio, magnetômetro) | [README](MPU9250/README.md)       |
+| **MAX30102**      | I²C       | Sensor de frequência cardíaca e SpO2               | [README](MAX30100/README.md)      |
+| **Round Display** | SPI + I²C | Display circular Seeed (GC9A01 + CST816S)          | [README](Round_Display/README.md) |
 
 Cada componente possui seu próprio README com:
 
@@ -87,9 +89,13 @@ Cada componente tem seu próprio projeto ESP-IDF:
 
 ```
 Teste_de_componentes/
-├── DS18B20/          # Sensor de temperatura
+├── DS18B20/          # Sensor de temperatura (1-Wire)
 ├── ADXL345/          # Acelerômetro I²C
-└── [outros]/         # Adicionar conforme necessário
+├── MPU9250/          # IMU 9-DOF (Bússola, Gestos)
+│   ├── Bussola/      # Bússola digital (magnetômetro AK8963)
+│   └── Gestos/       # Reconhecimento de gestos (acelerômetro + giroscópio)
+├── MAX30100/         # Monitor cardíaco MAX30102 (HR + SpO2)
+└── Round_Display/    # Display circular Seeed
 ```
 
 Cada projeto segue a estrutura padrão do ESP-IDF:
@@ -108,10 +114,28 @@ componente/
 
 ## Comandos Básicos
 
+### Carregar Ambiente ESP-IDF (Linux/macOS)
+
+Antes de usar qualquer comando `idf.py` no terminal, é necessário carregar o ambiente do ESP-IDF:
+
+```bash
+source $HOME/esp/esp-idf/export.sh
+```
+
+**Dica:** Para não precisar digitar isso toda vez, adicione um alias ao seu `~/.bashrc` ou `~/.zshrc`:
+
+```bash
+alias esp="source $HOME/esp/esp-idf/export.sh"
+```
+
+Depois basta rodar `esp` antes de começar a trabalhar.
+
+> **Nota:** No Windows, use o terminal **ESP-IDF Terminal** do VS Code, que já carrega o ambiente automaticamente.
+
 ### Criar Novo Projeto
 
 ```bash
-cd C:\Users\Guilherme Franco\Desktop\TCC\Codigos\Teste_de_componentes
+cd ~/Documents/TCC/Codigos/Teste_de_componentes
 idf.py create-project NOME_DO_COMPONENTE
 cd NOME_DO_COMPONENTE
 ```
@@ -119,7 +143,7 @@ cd NOME_DO_COMPONENTE
 ### Definir Target
 
 ```bash
-idf.py set-target esp32
+idf.py set-target esp32c6 #ou qualquer outro microcontrolador compatível que esteja em uso
 ```
 
 **Sempre execute isso antes de buildar pela primeira vez.**
@@ -248,6 +272,8 @@ idf.py -p COM5 monitor
 
 - [DS18B20 Troubleshooting](DS18B20/README.md#troubleshooting)
 - [ADXL345 Troubleshooting](ADXL345/README.md#troubleshooting)
+- [MPU9250 Troubleshooting](MPU9250/README.md)
+- [MAX30102 Troubleshooting](MAX30100/README.md#troubleshooting)
 - [Round Display Troubleshooting](Round_Display/README.md#troubleshooting)
 
 ---
@@ -258,6 +284,9 @@ idf.py -p COM5 monitor
 - [ESP-IDF VS Code Extension](https://github.com/espressif/vscode-esp-idf-extension)
 - [DS18B20 Datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/DS18B20.pdf)
 - [ADXL345 Datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL345.pdf)
+- [MPU-9250 Product Specification](https://invensense.tdk.com/wp-content/uploads/2015/02/PS-MPU-9250A-01-v1.1.pdf)
+- [AK8963 Datasheet](https://www.alldatasheet.com/datasheet-pdf/pdf/535561/AKM/AK8963.html)
+- [MAX30102 Datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/MAX30102.pdf)
 
 ---
 
@@ -272,5 +301,5 @@ idf.py -p COM5 monitor
 ---
 
 **Autor:** Guilherme Franco  
-**Data:** Dezembro 2025  
+**Data:** Fevereiro 2026  
 **Versão ESP-IDF:** v5.5.1
