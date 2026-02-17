@@ -13,7 +13,7 @@ Este Trabalho de Conclusão de Curso apresenta o desenvolvimento de um relógio 
 O sistema oferece as seguintes capacidades de monitoramento:
 
 - **Temperatura Ambiente**: Medição através do sensor DS18B20 à prova d'água
-- **Aceleração Triaxial**: Detecção de passos, quedas e atividade física via ADXL345
+- **Aceleração Triaxial**: Detecção de passos, quedas e atividade física via MPU-9250
 - **Frequência Cardíaca e SpO2**: Monitoramento cardiovascular com sensor óptico MAX30102
 - **Radiação UV e Luz Ambiente**: Medição de índice UV e luminosidade com LTR390-UV
 - **Interface Gráfica**: Display circular Seeed para visualização de dados
