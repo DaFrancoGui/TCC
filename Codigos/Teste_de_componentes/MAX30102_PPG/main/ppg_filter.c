@@ -45,8 +45,14 @@
 #include "ppg_filter.h"
 #include <string.h>
 
-/* DC removal smoothing factor */
-#define DC_ALPHA  0.005f
+/* DC removal smoothing factors.
+ * During settling (first 300 samples = 3s), use fast alpha so the DC
+ * estimate converges in ~0.3s instead of ~10s.  This eliminates the
+ * massive AC transient that was corrupting HR and SpO2.
+ */
+#define DC_ALPHA_FAST   0.1f
+#define DC_ALPHA_SLOW   0.005f
+#define DC_SETTLE_COUNT 300
 
 /* Butterworth LPF 5 Hz @ 100 Hz — precomputed */
 #define B0  0.02008336f
@@ -63,8 +69,11 @@ void ppg_filter_process(ppg_channel_t *ch, uint32_t raw, float *out_ac, float *o
     if (!ch->dc_initialised) {
         ch->dc = x;
         ch->dc_initialised = 1;
+        ch->sample_count = 1;
     } else {
-        ch->dc += DC_ALPHA * (x - ch->dc);
+        float alpha = (ch->sample_count < DC_SETTLE_COUNT) ? DC_ALPHA_FAST : DC_ALPHA_SLOW;
+        ch->dc += alpha * (x - ch->dc);
+        if (ch->sample_count < DC_SETTLE_COUNT) ch->sample_count++;
     }
     float ac = x - ch->dc;
 

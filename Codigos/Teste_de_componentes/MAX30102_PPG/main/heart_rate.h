@@ -53,6 +53,13 @@ typedef struct {
     uint8_t bpm;                    /* most recent stable BPM            */
     bool    beat_detected;          /* set for 1 sample on each beat     */
     float   beat_amplitude;         /* AC amplitude of the last beat     */
+
+    /* Peak tracking (rising phase) */
+    float   rising_max;             /* max ir_ac during current rise     */
+
+    /* Debug counters (reset externally each reporting period) */
+    uint16_t dbg_zc_count;          /* derivative zero-crossings         */
+    uint16_t dbg_beat_count;        /* accepted beats                    */
 } heart_rate_t;
 
 /** Zero-initialise before first use. */

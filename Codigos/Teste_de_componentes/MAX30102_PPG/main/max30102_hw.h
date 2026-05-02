@@ -75,16 +75,18 @@ extern "C" {
 
 /*
  * SPO2_CONFIG (0x0A):
- *   [6:5] SPO2_ADC_RGE = 01 → 4096 nA full scale
+ *   [6:5] SPO2_ADC_RGE = 11 → 16384 nA full scale
  *   [4:2] SPO2_SR      = 001 → 100 samples/sec
  *   [1:0] LED_PW       = 11  → 411 µs → 18-bit resolution
  *
- *   Value: 0x27
+ *   Value: 0x67
  *
- *   WHY: 18-bit resolution maximizes SNR. 100 Hz provides adequate
- *   bandwidth for the cardiac signal (0.5–5 Hz) with margin.
+ *   WHY: 4096 nA range (0x27) caused ADC saturation at 14 mA LED current.
+ *   16384 nA gives 4× headroom.  Signal drops to ~25% of range, but
+ *   18-bit resolution still provides >65k usable counts for the pulsatile
+ *   component.  This is the maximum ADC range available.
  */
-#define CFG_SPO2_CONFIG     0x27
+#define CFG_SPO2_CONFIG     0x67
 
 /*
  * LED currents (0x0C, 0x0D):
@@ -119,6 +121,12 @@ esp_err_t max30102_read_fifo(max30102_sample_t *buf, uint8_t buf_len, uint8_t *o
 
 /** Read die temperature (blocking, ~50 ms). */
 esp_err_t max30102_read_temperature(float *temperature);
+
+/** Debug: read FIFO pointers and MODE register. */
+void max30102_debug_read_ptrs(uint8_t *wr, uint8_t *rd, uint8_t *ovf, uint8_t *mode);
+
+/** Clear FIFO pointers and overflow counter (call before starting reads). */
+esp_err_t max30102_fifo_clear(void);
 
 #ifdef __cplusplus
 }

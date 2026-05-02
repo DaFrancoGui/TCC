@@ -112,16 +112,38 @@ void app_main(void)
 
     ESP_LOGI(TAG, "Pipeline ready — place finger on sensor\n");
 
+    /* Flush any samples accumulated during init delays */
+    max30102_fifo_clear();
+
+    uint32_t loop_count = 0;
+
+    /* Diagnostic: 10 Hz waveform snapshot + AC range tracking */
+    float wf_buf[10] = {0};
+    uint8_t wf_idx = 0;
+    float ac_ir_min = 1e18f, ac_ir_max = -1e18f;
+    float ac_red_min = 1e18f, ac_red_max = -1e18f;
+
     while (1) {
         /* ── Drain FIFO: read all available samples ── */
         max30102_sample_t samples[32];
         uint8_t n_read = 0;
         esp_err_t ret = max30102_read_fifo(samples, 32, &n_read);
 
+        /* Debug: print FIFO status every ~2s if no data */
+        loop_count++;
+        if (n_read == 0 && (loop_count % 200) == 0) {
+            ESP_LOGW(TAG, "FIFO empty for %lu loops (ret=%d). Reading ptrs directly...", loop_count, ret);
+            /* Read pointers and a raw sample for debug */
+            uint8_t dbg_wr = 0, dbg_rd = 0, dbg_ovf = 0, dbg_mode = 0;
+            max30102_debug_read_ptrs(&dbg_wr, &dbg_rd, &dbg_ovf, &dbg_mode);
+            ESP_LOGW(TAG, "  WR=%u RD=%u OVF=%u MODE=0x%02X", dbg_wr, dbg_rd, dbg_ovf, dbg_mode);
+        }
+
         if (ret != ESP_OK || n_read == 0) {
             vTaskDelay(pdMS_TO_TICKS(10));
             continue;
         }
+        loop_count = 0; /* reset when we get data */
 
         /* ── Process each sample through the pipeline ── */
         for (uint8_t i = 0; i < n_read; i++) {
@@ -137,6 +159,9 @@ void app_main(void)
                 ppg_filter_reset(&ch_red);
                 hr_reset(&hr);
                 spo2_reset(&sp);
+                ac_ir_min = 1e18f; ac_ir_max = -1e18f;
+                ac_red_min = 1e18f; ac_red_max = -1e18f;
+                wf_idx = 0;
                 ESP_LOGI(TAG, "Finger removed — state reset");
             }
             /* On finger arrival → reset for clean start */
@@ -145,12 +170,25 @@ void app_main(void)
                 ppg_filter_reset(&ch_red);
                 hr_reset(&hr);
                 spo2_reset(&sp);
+                ac_ir_min = 1e18f; ac_ir_max = -1e18f;
+                ac_red_min = 1e18f; ac_red_max = -1e18f;
+                wf_idx = 0;
                 ESP_LOGI(TAG, "Finger detected — starting acquisition");
             }
             was_present = present;
+            total_samples++;
+
+            /* ── Periodic diagnostic (always, even without finger) ── */
+            if (total_samples % 100 == 0) {
+                printf("\n--- %lu s ---\n", total_samples / 100);
+                printf("IR: %6lu  Red: %6lu  (raw)\n", ir_raw, red_raw);
+                printf("Finger: %s  (base=%lu thr_up=%lu)\n",
+                       present ? "YES" : "NO",
+                       (unsigned long)finger.baseline,
+                       (unsigned long)(finger.baseline + FINGER_OFFSET_UP));
+            }
 
             if (!present) {
-                total_samples++;
                 continue;
             }
 
@@ -162,22 +200,45 @@ void app_main(void)
             /* ── Stage 4: Heart rate (on IR channel) ── */
             uint8_t bpm = hr_process(&hr, ir_ac);
 
-            /* ── Stage 5: SpO2 accumulation (every sample) ── */
-            spo2_accumulate(&sp, ir_ac, ir_dc, red_ac, red_dc);
-
-            /* If a beat was just detected, trigger SpO2 computation */
-            if (hr.beat_detected) {
-                spo2_on_beat(&sp);
+            /* ── Diagnostic: track AC range and 10 Hz waveform ── */
+            if (ir_ac  < ac_ir_min)  ac_ir_min  = ir_ac;
+            if (ir_ac  > ac_ir_max)  ac_ir_max  = ir_ac;
+            if (red_ac < ac_red_min) ac_red_min = red_ac;
+            if (red_ac > ac_red_max) ac_red_max = red_ac;
+            if (total_samples % 10 == 0 && wf_idx < 10) {
+                wf_buf[wf_idx++] = ir_ac;
             }
 
-            total_samples++;
+            /* ── Stage 5: SpO2 — only accumulate AFTER HR init period
+             *    (hr.init_samples tracks how many samples hr_process has seen;
+             *     before 500, all filter outputs are settling-dominated) ── */
+            if (hr.init_samples >= 500) {
+                spo2_accumulate(&sp, ir_ac, ir_dc, red_ac, red_dc);
 
-            /* ── Console output every 1 second ── */
+                if (hr.beat_detected) {
+                    spo2_on_beat(&sp);
+                }
+            }
+
+            /* ── Detailed output every 1 second (when finger present) ── */
             if (total_samples % 100 == 0) {
-                printf("\n--- %lu s ---\n", total_samples / 100);
-                printf("IR: %6lu  Red: %6lu  (raw)\n", ir_raw, red_raw);
                 printf("IR_ac: %8.1f  Red_ac: %8.1f  (filtered)\n", ir_ac, red_ac);
                 printf("IR_dc: %8.0f  Red_dc: %8.0f\n", ir_dc, red_dc);
+                printf("AC_range IR:[%.0f..%.0f] Red:[%.0f..%.0f]\n",
+                       ac_ir_min, ac_ir_max, ac_red_min, ac_red_max);
+
+                /* 10 Hz waveform snapshot of IR AC */
+                printf("WF(10Hz):");
+                for (int w = 0; w < wf_idx; w++) printf(" %6.0f", wf_buf[w]);
+                printf("\n");
+
+                /* Peak detection stats */
+                printf("PeakDet: zc=%u beats=%u thr=%.1f rising=%.1f init=%lu\n",
+                       hr.dbg_zc_count, hr.dbg_beat_count,
+                       hr.thr_amplitude, hr.rising_max,
+                       (unsigned long)hr.init_samples);
+                hr.dbg_zc_count = 0;
+                hr.dbg_beat_count = 0;
 
                 if (bpm > 0) {
                     printf("HR:   %3u BPM\n", bpm);
@@ -185,13 +246,29 @@ void app_main(void)
                     printf("HR:   calculating...\n");
                 }
 
-                if (sp.valid) {
-                    printf("SpO2: %3u %%  (R=%.3f)\n", sp.spo2, sp.last_r);
+                /* Show both R and 1/R to detect possible channel swap */
+                if (sp.last_r > 0.01f) {
+                    float r_inv = 1.0f / sp.last_r;
+                    float spo2_r = -45.060f * sp.last_r * sp.last_r
+                                 + 30.354f * sp.last_r + 94.845f;
+                    float spo2_inv = -45.060f * r_inv * r_inv
+                                   + 30.354f * r_inv + 94.845f;
+                    if (spo2_r > 100.0f) spo2_r = 100.0f;
+                    if (spo2_r < 0.0f)   spo2_r = 0.0f;
+                    if (spo2_inv > 100.0f) spo2_inv = 100.0f;
+                    if (spo2_inv < 0.0f)   spo2_inv = 0.0f;
+                    printf("SpO2: R=%.3f->%.0f%%  1/R=%.3f->%.0f%%\n",
+                           sp.last_r, spo2_r, r_inv, spo2_inv);
                 } else if (sp.spo2 > 0) {
                     printf("SpO2: %3u %%  (settling, R=%.3f)\n", sp.spo2, sp.last_r);
                 } else {
                     printf("SpO2: calculating...\n");
                 }
+
+                /* Reset per-second diagnostics */
+                ac_ir_min = 1e18f;  ac_ir_max = -1e18f;
+                ac_red_min = 1e18f; ac_red_max = -1e18f;
+                wf_idx = 0;
             }
         }
 

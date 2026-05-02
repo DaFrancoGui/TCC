@@ -84,15 +84,37 @@ uint8_t hr_process(heart_rate_t *hr, float ir_ac)
 
     float d = ir_ac - delayed;
 
-    /* ── Refractory countdown ── */
-    if (hr->samples_since_peak <= HR_REFRACTORY_SAMP) {
-        hr->samples_since_peak++;
+    /* Track maximum ir_ac during rising phase (d > 0 = signal ascending).
+     * This captures the true peak amplitude, which occurs BEFORE the
+     * derivative zero-crossing where we actually trigger detection. */
+    if (d > 0.0f && ir_ac > hr->rising_max) {
+        hr->rising_max = ir_ac;
     }
 
-    /* Skip the first 200 samples (2 s) for DC filter settling */
-    if (hr->init_samples < 200) {
+    /* ── Refractory / timeout counter (always increments) ── */
+    hr->samples_since_peak++;
+
+    /* Skip the first 500 samples (5 s) for DC filter settling.
+     * Even with fast-alpha settling (300 samples), the LPF transient
+     * needs another ~200 samples to decay. */
+    if (hr->init_samples < 500) {
         hr->prev_deriv = d;
+        hr->rising_max = 0.0f;  /* discard settling transient */
         return 0;
+    }
+
+    /* Timeout: if no valid beat for 3 seconds, reset BPM */
+    if (hr->bpm > 0 && hr->samples_since_peak > 300) {
+        hr->bpm = 0;
+        hr->interval_count = 0;
+        hr->thr_amplitude = 0.0f;
+    }
+
+    /* Continuous threshold decay: 0.998 per sample ≈ halves in 3.5 s.
+     * This ensures the threshold recovers from motion artifact spikes
+     * even when no beats are being accepted (the main stability fix). */
+    if (hr->thr_amplitude > 100.0f) {
+        hr->thr_amplitude *= 0.998f;
     }
 
     /* ── Zero-crossing: derivative goes from >0 to ≤0 ── */
@@ -101,17 +123,28 @@ uint8_t hr_process(heart_rate_t *hr, float ir_ac)
 
     if (!zc) return hr->bpm;
 
-    /* We have a peak candidate.  Check amplitude. */
-    float amp = ir_ac;  /* at zero-crossing of deriv, ir_ac ≈ local maximum */
-    if (amp < 0.0f) amp = -amp;
+    hr->dbg_zc_count++;
+
+    /* Use the peak tracked during the rising phase, not the
+     * instantaneous value at the crossing (which is past the peak). */
+    float amp = hr->rising_max;
+    hr->rising_max = 0.0f;  /* reset for next rising phase */
+
+    /* POSITIVE peaks only with absolute minimum amplitude.
+     * In transmission PPG, the diastolic peak is a positive excursion
+     * after DC removal.  Requiring amp > 100 rejects noise oscillations
+     * that previously collapsed the adaptive threshold. */
+    if (amp < 100.0f) {
+        return hr->bpm;
+    }
 
     /* Initialise threshold on the first real peak */
-    if (hr->thr_amplitude < 1.0f) {
+    if (hr->thr_amplitude < 100.0f) {
         hr->thr_amplitude = amp;
     }
 
-    /* Amplitude gate: reject if < 40% of running threshold */
-    if (amp < 0.4f * hr->thr_amplitude) {
+    /* Amplitude gate: reject if < 30% of running threshold */
+    if (amp < 0.3f * hr->thr_amplitude) {
         return hr->bpm;
     }
 
@@ -121,11 +154,13 @@ uint8_t hr_process(heart_rate_t *hr, float ir_ac)
     }
 
     /* ── Accept this peak ── */
+    hr->dbg_beat_count++;
     hr->beat_detected = true;
     hr->beat_amplitude = amp;
 
-    /* Update adaptive threshold */
-    hr->thr_amplitude = 0.92f * hr->thr_amplitude + 0.08f * amp;
+    /* Update adaptive threshold (cap jump at 2× to limit artifact damage) */
+    float amp_capped = (amp > 2.0f * hr->thr_amplitude) ? 2.0f * hr->thr_amplitude : amp;
+    hr->thr_amplitude = 0.92f * hr->thr_amplitude + 0.08f * amp_capped;
 
     /* Compute interval (samples since last accepted peak) */
     uint32_t interval = hr->samples_since_peak;

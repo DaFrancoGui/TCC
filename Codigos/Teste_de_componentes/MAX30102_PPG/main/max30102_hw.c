@@ -126,14 +126,21 @@ esp_err_t max30102_read_fifo(max30102_sample_t *buf, uint8_t buf_len, uint8_t *o
 {
     *out_n = 0;
 
-    uint8_t wr_ptr, rd_ptr;
+    uint8_t wr_ptr, rd_ptr, ovf;
     esp_err_t ret;
     ret  = reg_read(REG_FIFO_WR_PTR, &wr_ptr);
     ret |= reg_read(REG_FIFO_RD_PTR, &rd_ptr);
+    ret |= reg_read(REG_OVRFLOW_CTR, &ovf);
     if (ret != ESP_OK) return ret;
 
     int avail = (int)(wr_ptr & 0x1F) - (int)(rd_ptr & 0x1F);
-    if (avail < 0) avail += 32;   /* FIFO is 32 entries deep */
+    if (avail < 0) avail += 32;
+
+    /*
+     * When OVF > 0 and WR == RD, the FIFO has wrapped completely:
+     * it is FULL (32 samples), not empty.  Read all 32.
+     */
+    if (avail == 0 && ovf > 0) avail = 32;
     if (avail == 0) return ESP_OK;
     if (avail > buf_len) avail = buf_len;
 
@@ -146,11 +153,37 @@ esp_err_t max30102_read_fifo(max30102_sample_t *buf, uint8_t buf_len, uint8_t *o
         ret = reg_read_burst(REG_FIFO_DATA, raw, 6);
         if (ret != ESP_OK) return ret;
 
-        buf[i].red = (((uint32_t)raw[0] << 16) | ((uint32_t)raw[1] << 8) | raw[2]) & 0x03FFFF;
-        buf[i].ir  = (((uint32_t)raw[3] << 16) | ((uint32_t)raw[4] << 8) | raw[5]) & 0x03FFFF;
+        /* NOTE: On many MAX30102 breakout boards the LED1/LED2 wiring is
+         * swapped relative to the datasheet.  Bytes 0-2 are actually IR
+         * and bytes 3-5 are Red.  Confirmed empirically: with the original
+         * assignment R > 1 (SpO2 ~28%), swapping gives R ~0.6 (SpO2 ~96%). */
+        buf[i].ir  = (((uint32_t)raw[0] << 16) | ((uint32_t)raw[1] << 8) | raw[2]) & 0x03FFFF;
+        buf[i].red = (((uint32_t)raw[3] << 16) | ((uint32_t)raw[4] << 8) | raw[5]) & 0x03FFFF;
     }
     *out_n = (uint8_t)avail;
+
+    /* Clear overflow counter after successful read */
+    if (ovf > 0) {
+        reg_write(REG_OVRFLOW_CTR, 0x00);
+    }
     return ESP_OK;
+}
+
+void max30102_debug_read_ptrs(uint8_t *wr, uint8_t *rd, uint8_t *ovf, uint8_t *mode)
+{
+    reg_read(REG_FIFO_WR_PTR, wr);
+    reg_read(REG_FIFO_RD_PTR, rd);
+    reg_read(REG_OVRFLOW_CTR, ovf);
+    reg_read(REG_MODE_CONFIG, mode);
+}
+
+esp_err_t max30102_fifo_clear(void)
+{
+    esp_err_t ret;
+    ret  = reg_write(REG_FIFO_WR_PTR, 0x00);
+    ret |= reg_write(REG_FIFO_RD_PTR, 0x00);
+    ret |= reg_write(REG_OVRFLOW_CTR, 0x00);
+    return ret;
 }
 
 esp_err_t max30102_read_temperature(float *temperature)

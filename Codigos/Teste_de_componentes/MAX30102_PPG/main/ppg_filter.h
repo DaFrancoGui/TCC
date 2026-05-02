@@ -27,6 +27,7 @@ typedef struct {
     /* DC estimator state */
     float dc;               /* running DC estimate                      */
     uint8_t dc_initialised; /* set to 1 after first sample              */
+    uint16_t sample_count;  /* counts up to settle threshold            */
 
     /* 2nd-order IIR (Butterworth LPF 5 Hz @ 100 Hz) — Direct Form II */
     float w1, w2;           /* delay elements                           */
