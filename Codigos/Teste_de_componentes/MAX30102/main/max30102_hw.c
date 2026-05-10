@@ -1,6 +1,6 @@
 /**
  * @file max30102_hw.c
- * @brief MAX30102 I2C driver and sensor initialisation for ESP-IDF 5.x.
+ * @brief Driver I2C do MAX30102 e inicializacao do sensor para ESP-IDF 5.x.
  */
 
 #include "max30102_hw.h"
@@ -12,7 +12,7 @@
 
 static const char *TAG = "MAX30102_HW";
 
-/* ───────── Low-level I2C helpers ───────── */
+/* ───────── Auxiliares I2C de baixo nivel ───────── */
 
 static esp_err_t reg_write(uint8_t reg, uint8_t val)
 {
@@ -45,13 +45,13 @@ static esp_err_t reg_read_retry(uint8_t reg, uint8_t *val, int attempts)
     return ESP_FAIL;
 }
 
-/* ───────── Public API ───────── */
+/* ───────── API publica ───────── */
 
 esp_err_t max30102_init(void)
 {
     esp_err_t ret;
 
-    /* --- I2C bus init --- */
+    /* --- Inicializacao do barramento I2C --- */
     i2c_config_t i2c_cfg = {
         .mode             = I2C_MODE_MASTER,
         .sda_io_num       = MAX30102_I2C_SDA_IO,
@@ -67,7 +67,7 @@ esp_err_t max30102_init(void)
     ESP_LOGI(TAG, "I2C ok (SDA=%d SCL=%d %d Hz)",
              MAX30102_I2C_SDA_IO, MAX30102_I2C_SCL_IO, MAX30102_I2C_FREQ_HZ);
 
-    /* --- Verify PART_ID --- */
+    /* --- Verificar PART_ID --- */
     uint8_t part_id;
     ret = reg_read_retry(REG_PART_ID, &part_id, 5);
     if (ret != ESP_OK) {
@@ -80,36 +80,36 @@ esp_err_t max30102_init(void)
         ESP_LOGI(TAG, "MAX30102 detected (PART_ID=0x%02X)", part_id);
     }
 
-    /* --- Reset sensor --- */
-    ret = reg_write(REG_MODE_CONFIG, 0x40);          /* RESET bit */
+    /* --- Resetar o sensor --- */
+    ret = reg_write(REG_MODE_CONFIG, 0x40);          /* bit RESET */
     if (ret != ESP_OK) return ret;
     vTaskDelay(pdMS_TO_TICKS(100));
 
-    /* --- Clear FIFO pointers --- */
+    /* --- Limpar ponteiros da FIFO --- */
     ret  = reg_write(REG_FIFO_WR_PTR, 0x00);
     ret |= reg_write(REG_FIFO_RD_PTR, 0x00);
     ret |= reg_write(REG_OVRFLOW_CTR, 0x00);
     if (ret != ESP_OK) return ret;
 
-    /* --- Configure FIFO --- */
+    /* --- Configurar FIFO --- */
     ret = reg_write(REG_FIFO_CONFIG, CFG_FIFO_CONFIG);
     if (ret != ESP_OK) return ret;
 
-    /* --- SpO2 ADC / sample-rate / pulse-width --- */
+    /* --- ADC do SpO2 / taxa de amostragem / largura de pulso --- */
     ret = reg_write(REG_SPO2_CONFIG, CFG_SPO2_CONFIG);
     if (ret != ESP_OK) return ret;
 
-    /* --- LED currents --- */
+    /* --- Correntes dos LEDs --- */
     ret  = reg_write(REG_LED1_PA, CFG_LED_RED_PA);
     ret |= reg_write(REG_LED2_PA, CFG_LED_IR_PA);
     if (ret != ESP_OK) return ret;
 
-    /* --- Activate SpO2 mode LAST (starts sampling) --- */
+    /* --- Ativar modo SpO2 POR ULTIMO (inicia amostragem) --- */
     ret = reg_write(REG_MODE_CONFIG, CFG_MODE_SPO2);
     if (ret != ESP_OK) return ret;
     vTaskDelay(pdMS_TO_TICKS(100));
 
-    /* --- Verify --- */
+    /* --- Verificacao --- */
     uint8_t mode_chk, spo2_chk, fifo_chk, led1_chk, led2_chk;
     reg_read(REG_MODE_CONFIG, &mode_chk);
     reg_read(REG_SPO2_CONFIG, &spo2_chk);
@@ -137,32 +137,32 @@ esp_err_t max30102_read_fifo(max30102_sample_t *buf, uint8_t buf_len, uint8_t *o
     if (avail < 0) avail += 32;
 
     /*
-     * When OVF > 0 and WR == RD, the FIFO has wrapped completely:
-     * it is FULL (32 samples), not empty.  Read all 32.
+     * Quando OVF > 0 e WR == RD, a FIFO deu a volta completa:
+     * esta CHEIA (32 amostras), nao vazia. Ler todas as 32.
      */
     if (avail == 0 && ovf > 0) avail = 32;
     if (avail == 0) return ESP_OK;
     if (avail > buf_len) avail = buf_len;
 
     /*
-     * Burst-read 6 bytes per sample from FIFO_DATA register.
-     * The MAX30102 auto-increments RD_PTR after each 6-byte read.
+     * Leitura em rajada de 6 bytes por amostra do registrador FIFO_DATA.
+     * O MAX30102 auto-incrementa o RD_PTR apos cada leitura de 6 bytes.
      */
     for (int i = 0; i < avail; i++) {
         uint8_t raw[6];
         ret = reg_read_burst(REG_FIFO_DATA, raw, 6);
         if (ret != ESP_OK) return ret;
 
-        /* NOTE: On many MAX30102 breakout boards the LED1/LED2 wiring is
-         * swapped relative to the datasheet.  Bytes 0-2 are actually IR
-         * and bytes 3-5 are Red.  Confirmed empirically: with the original
-         * assignment R > 1 (SpO2 ~28%), swapping gives R ~0.6 (SpO2 ~96%). */
+        /* NOTA: Em muitas placas breakout do MAX30102 a fiacao LED1/LED2
+         * esta invertida em relacao ao datasheet. Os bytes 0-2 sao na verdade IR
+         * e os bytes 3-5 sao Vermelho. Confirmado empiricamente: com a atribuicao
+         * original R > 1 (SpO2 ~28%), invertendo da R ~0.6 (SpO2 ~96%). */
         buf[i].ir  = (((uint32_t)raw[0] << 16) | ((uint32_t)raw[1] << 8) | raw[2]) & 0x03FFFF;
         buf[i].red = (((uint32_t)raw[3] << 16) | ((uint32_t)raw[4] << 8) | raw[5]) & 0x03FFFF;
     }
     *out_n = (uint8_t)avail;
 
-    /* Clear overflow counter after successful read */
+    /* Limpar contador de overflow apos leitura bem-sucedida */
     if (ovf > 0) {
         reg_write(REG_OVRFLOW_CTR, 0x00);
     }

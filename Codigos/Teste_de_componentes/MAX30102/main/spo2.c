@@ -1,69 +1,69 @@
 /**
  * @file spo2.c
- * @brief Per-beat SpO2 with ratio-of-ratios, quality gating, and median filter.
+ * @brief SpO2 por batimento com razao-de-razoes, filtragem de qualidade e mediana.
  *
- * ─── AC/DC Separation ───
+ * ─── Separacao AC/DC ───
  *
- * The AC component is the peak-to-trough amplitude of the *filtered* PPG
- * within one cardiac cycle:
+ * O componente AC e a amplitude pico-a-vale do PPG *filtrado*
+ * dentro de um ciclo cardiaco:
  *
- *   AC_IR  = max(ir_ac)  − min(ir_ac)   over the beat window
- *   AC_Red = max(red_ac) − min(red_ac)
+ *   AC_IR  = max(ir_ac)  − min(ir_ac)   na janela do batimento
+ *   AC_Vermelho = max(red_ac) − min(red_ac)
  *
- * Because the signal has already been bandpass-filtered (0.08–5 Hz by the
- * DC-removal + LPF stages), the AC here is purely pulsatile — free of DC
- * drift, 50/60 Hz noise, and high-frequency sensor noise.
+ * Como o sinal ja foi filtrado passa-banda (0,08-5 Hz pelos estagios
+ * de remocao DC + PBF), o AC aqui e puramente pulsatil, livre de
+ * deriva DC, ruido de 50/60 Hz e ruido de alta frequencia do sensor.
  *
- * The DC component is the average of the DC estimates across the beat:
+ * O componente DC e a media das estimativas DC ao longo do batimento:
  *
- *   DC_IR  = mean(ir_dc)  over the beat window
- *   DC_Red = mean(red_dc)
+ *   DC_IR  = media(ir_dc)  na janela do batimento
+ *   DC_Vermelho = media(red_dc)
  *
- * ─── Ratio of Ratios ───
+ * ─── Razao de Razoes ───
  *
- *   R = (AC_Red / DC_Red) / (AC_IR / DC_IR)
+ *   R = (AC_Vermelho / DC_Vermelho) / (AC_IR / DC_IR)
  *
- * For a healthy subject:  R ∈ [0.4, 0.7] → SpO2 ∈ [95, 100]
- * For severe hypoxia:     R ∈ [1.0, 1.5] → SpO2 ∈ [70, 85]
+ * Para um sujeito saudavel: R ∈ [0,4; 0,7] → SpO2 ∈ [95, 100]
+ * Para hipoxia severa:      R ∈ [1,0; 1,5] → SpO2 ∈ [70, 85]
  *
- * ─── Calibration ───
+ * ─── Calibracao ───
  *
- * The empirical quadratic (Maxim AN6409):
+ * A quadratica empirica (Maxim AN6409):
  *
- *   SpO2 = −45.060·R² + 30.354·R + 94.845
+ *   SpO2 = −45,060·R² + 30,354·R + 94,845
  *
- * This was derived from clinical pulse-oximetry studies and is the standard
- * used by most MAX30102 reference designs.
+ * Foi derivada de estudos clinicos de oximetria de pulso e e o padrao
+ * usado pela maioria dos designs de referencia do MAX30102.
  *
- * ─── Quality Gating ───
+ * ─── Filtragem de Qualidade ───
  *
- * A beat's R value is rejected if:
- *   (a) The beat was too short (< 33 samples / 330 ms → >180 BPM) or
- *       too long (> 150 samples / 1500 ms → <40 BPM)
- *   (b) AC_IR < 50 counts (no meaningful pulsation — likely no finger)
- *   (c) Perfusion index AC/DC < 0.05% (signal is indistinguishable
- *       from noise at the ADC's quantisation level)
- *   (d) R < 0.2 or R > 1.8 (outside physiological range + margin)
+ * O valor R de um batimento e rejeitado se:
+ *   (a) O batimento foi muito curto (< 33 amostras / 330 ms → >180 BPM) ou
+ *       muito longo (> 150 amostras / 1500 ms → <40 BPM)
+ *   (b) AC_IR < 50 contagens (sem pulsacao significativa, provavel sem dedo)
+ *   (c) Indice de perfusao AC/DC < 0,05% (sinal indistinguivel do ruido
+ *       no nivel de quantizacao do ADC)
+ *   (d) R < 0,2 ou R > 1,8 (fora da faixa fisiologica + margem)
  *
- * ─── Outlier Rejection via Median ───
+ * ─── Rejeicao de Outliers via Mediana ───
  *
- * The last 4 valid R values are stored.  The median is taken.
- * This makes a single aberrant beat (motion artifact) unable to shift
- * the output by more than one rank — the SpO2 output remains stable.
+ * Os ultimos 4 valores R validos sao armazenados. A mediana e calculada.
+ * Isso impede que um unico batimento aberrante (artefato de movimento)
+ * desloque a saida por mais de uma posicao, mantendo o SpO2 estavel.
  */
 
 #include "spo2.h"
 #include <string.h>
 #include <math.h>
 
-/* Thresholds */
+/* Limiares */
 #define MIN_BEAT_SAMPLES    33      /* 330 ms */
-#define MIN_AC_AMPLITUDE    50.0f   /* reject weak signals */
-#define MIN_PI_RATIO        0.0005f /* 0.05% perfusion index */
+#define MIN_AC_AMPLITUDE    50.0f   /* rejeitar sinais fracos */
+#define MIN_PI_RATIO        0.0005f /* 0,05% indice de perfusao */
 #define R_MIN               0.2f
 #define R_MAX               1.8f
 
-/* ─── Helpers ─── */
+/* ─── Auxiliares ─── */
 
 static float median_f(const float *v, uint8_t n)
 {
@@ -85,7 +85,7 @@ static float median_f(const float *v, uint8_t n)
 
 static inline float fabsf_safe(float x) { return x < 0.0f ? -x : x; }
 
-/* ─── Public ─── */
+/* ─── Publico ─── */
 
 void spo2_init(spo2_state_t *st)
 {
@@ -105,13 +105,13 @@ void spo2_accumulate(spo2_state_t *st,
                      float ir_ac, float ir_dc,
                      float red_ac, float red_dc)
 {
-    /* Track min/max of AC within this beat */
+    /* Rastrear min/max do AC neste batimento */
     if (ir_ac  > st->ir_ac_max)  st->ir_ac_max  = ir_ac;
     if (ir_ac  < st->ir_ac_min)  st->ir_ac_min  = ir_ac;
     if (red_ac > st->red_ac_max) st->red_ac_max = red_ac;
     if (red_ac < st->red_ac_min) st->red_ac_min = red_ac;
 
-    /* Accumulate DC for averaging */
+    /* Acumular DC para media */
     st->ir_dc_accum  += ir_dc;
     st->red_dc_accum += red_dc;
     st->beat_samples++;
@@ -121,13 +121,13 @@ uint8_t spo2_on_beat(spo2_state_t *st)
 {
     uint16_t n = st->beat_samples;
 
-    /* Reset accumulators for next beat (do this before early returns) */
+    /* Resetar acumuladores para o proximo batimento (antes dos retornos antecipados) */
     float ir_ac_pp  = st->ir_ac_max  - st->ir_ac_min;
     float red_ac_pp = st->red_ac_max - st->red_ac_min;
     float ir_dc_avg = (n > 0) ? st->ir_dc_accum  / (float)n : 1.0f;
     float red_dc_avg= (n > 0) ? st->red_dc_accum / (float)n : 1.0f;
 
-    /* Reset beat-level accumulators */
+    /* Resetar acumuladores do nivel de batimento */
     st->ir_ac_max  = -1e18f;
     st->ir_ac_min  =  1e18f;
     st->red_ac_max = -1e18f;
@@ -136,17 +136,17 @@ uint8_t spo2_on_beat(spo2_state_t *st)
     st->red_dc_accum = 0.0f;
     st->beat_samples = 0;
 
-    /* ── Quality gate (a): beat length ── */
+    /* ── Porta de qualidade (a): duracao do batimento ── */
     if (n < MIN_BEAT_SAMPLES || n > SPO2_MAX_BEAT_LEN) {
         return st->spo2;
     }
 
-    /* ── Quality gate (b): minimum AC amplitude ── */
+    /* ── Porta de qualidade (b): amplitude AC minima ── */
     if (ir_ac_pp < MIN_AC_AMPLITUDE || red_ac_pp < MIN_AC_AMPLITUDE) {
         return st->spo2;
     }
 
-    /* ── Quality gate (c): perfusion index ── */
+    /* ── Porta de qualidade (c): indice de perfusao ── */
     if (fabsf_safe(ir_dc_avg)  < 1.0f) ir_dc_avg  = 1.0f;
     if (fabsf_safe(red_dc_avg) < 1.0f) red_dc_avg = 1.0f;
 
@@ -156,24 +156,24 @@ uint8_t spo2_on_beat(spo2_state_t *st)
         return st->spo2;
     }
 
-    /* ── Compute R ── */
+    /* ── Calcular R ── */
     float r = (red_ac_pp / red_dc_avg) / (ir_ac_pp / ir_dc_avg);
 
-    /* ── Quality gate (d): physiological range ── */
+    /* ── Porta de qualidade (d): faixa fisiologica ── */
     if (r < R_MIN || r > R_MAX) {
         return st->spo2;
     }
 
-    /* ── Accept this R value ── */
+    /* ── Aceitar este valor R ── */
     st->last_r = r;
     st->r_values[st->r_idx] = r;
     st->r_idx = (st->r_idx + 1) % SPO2_R_WINDOW;
     if (st->r_count < SPO2_R_WINDOW) st->r_count++;
 
-    /* ── Median R → SpO2 ── */
+    /* ── Mediana de R → SpO2 ── */
     float r_med = median_f(st->r_values, st->r_count);
 
-    /* Quadratic calibration (Maxim AN6409) */
+    /* Calibracao quadratica (Maxim AN6409) */
     float spo2_f = -45.060f * r_med * r_med + 30.354f * r_med + 94.845f;
 
     if (spo2_f > 100.0f) spo2_f = 100.0f;
