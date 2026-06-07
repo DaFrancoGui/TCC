@@ -20,8 +20,8 @@
 /* Color depth: 16 (RGB565) */
 #define LV_COLOR_DEPTH 16
 
-/* Swap the 2 bytes of RGB565 color. Useful if display has different byte order */
-#define LV_COLOR_16_SWAP 0
+/* Swap the 2 bytes of RGB565 color. GC9A01 via SPI expects big-endian */
+#define LV_COLOR_16_SWAP 1
 
 /* Enable more complex drawing routines to manage screens transparency */
 #define LV_COLOR_SCREEN_TRANSP 0
@@ -104,7 +104,7 @@
 #define LV_FONT_FMT_TXT_LARGE 0
 
 /* Enables/disables support for compressed fonts */
-#define LV_FONT_COMPRESSED 0
+#define LV_FONT_COMPRESSED 1
 
 /* Enable subpixel rendering */
 #define LV_FONT_SUBPX 0
