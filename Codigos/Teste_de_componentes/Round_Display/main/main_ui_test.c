@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_freertos_hooks.h"
+#include "esp_system.h"
+#include "esp_heap_caps.h"
 #include "esp_log.h"
 #include "esp_err.h"
 #include "esp_check.h"
@@ -27,6 +30,14 @@
 LV_FONT_DECLARE(font_sharetechmono_32);
 
 static const char *TAG = "UI_TEST";
+
+static volatile uint32_t idle_counter = 0;
+
+static bool idle_hook_cb(void)
+{
+    idle_counter++;
+    return false;
+}
 
 // ============ Hardware Config ============
 #define PIN_MOSI        GPIO_NUM_18
@@ -58,8 +69,10 @@ static i2c_master_bus_handle_t  i2c_bus      = NULL;
 static i2c_master_dev_handle_t  rtc_dev      = NULL;
 
 // ============ LVGL objects ============
-static lv_obj_t *label_date  = NULL;
-static lv_obj_t *btn_inc     = NULL;   // "+" — incrementa campo atual
+static lv_obj_t *label_date      = NULL;
+static lv_obj_t *label_perf_cpu  = NULL;
+static lv_obj_t *label_perf_heap = NULL;
+static lv_obj_t *btn_inc         = NULL;   // "+" — incrementa campo atual
 static lv_obj_t *btn_set     = NULL;   // "SET" / "OK" — avança campo / salva
 static lv_obj_t *lbl_btn_set = NULL;
 
@@ -440,6 +453,8 @@ void app_main(void)
 {
     ESP_LOGI(TAG, "=== iDroid Watchface ===");
 
+    ESP_ERROR_CHECK(esp_register_freertos_idle_hook_for_cpu(idle_hook_cb, 0));
+
     ESP_ERROR_CHECK(init_lcd());
     ESP_ERROR_CHECK(init_touch());
     ESP_ERROR_CHECK(init_rtc());
@@ -472,6 +487,19 @@ void app_main(void)
     create_second_ticks(ui_Screen1);
     create_config_buttons(ui_Screen1);
 
+    // Labels de performance (CPU e Heap)
+    label_perf_cpu = lv_label_create(ui_Screen1);
+    lv_obj_set_style_text_font(label_perf_cpu, &lv_font_montserrat_12, 0);
+    lv_obj_set_style_text_color(label_perf_cpu, lv_color_hex(0x000000), 0);
+    lv_obj_align(label_perf_cpu, LV_ALIGN_CENTER, -16, 15);
+    lv_label_set_text(label_perf_cpu, "CPU: --%");
+
+    label_perf_heap = lv_label_create(ui_Screen1);
+    lv_obj_set_style_text_font(label_perf_heap, &lv_font_montserrat_12, 0);
+    lv_obj_set_style_text_color(label_perf_heap, lv_color_hex(0x000000), 0);
+    lv_obj_align(label_perf_heap, LV_ALIGN_CENTER, -16, 33);
+    lv_label_set_text(label_perf_heap, "RAM: -- KB livre");
+
     lvgl_port_unlock();
 
     // Lê RTC uma vez para inicializar o display e os valores de cfg_
@@ -501,6 +529,28 @@ void app_main(void)
 
         lvgl_port_lock(0);
         update_display(h, m, s, day, wday, mon, blink_on);
+
+        // Atualiza indicadores de performance a cada 1 s (2 iterações de 500 ms)
+        if (iter % 2 == 0) {
+            static uint32_t last_idle     = 0;
+            static uint32_t idle_baseline = 0;
+            uint32_t idle_now   = idle_counter;
+            uint32_t idle_delta = idle_now - last_idle;
+            last_idle = idle_now;
+            if (idle_baseline == 0 && idle_delta > 0) idle_baseline = idle_delta;
+            if (idle_delta > idle_baseline)            idle_baseline = idle_delta;
+            int cpu_load = (idle_baseline > 0)
+                ? (int)(100 - (idle_delta * 100ULL) / idle_baseline)
+                : 0;
+            if (cpu_load < 0)   cpu_load = 0;
+            if (cpu_load > 100) cpu_load = 100;
+
+            size_t heap_free = esp_get_free_heap_size() / 1024;
+
+            lv_label_set_text_fmt(label_perf_cpu,  "CPU: %d%%", cpu_load);
+            lv_label_set_text_fmt(label_perf_heap, "RAM: %u KB livre", (unsigned)heap_free);
+        }
+
         lvgl_port_unlock();
 
         vTaskDelay(pdMS_TO_TICKS(500));
