@@ -20,5 +20,6 @@ idf_component_register(
         "ui/screens"
         "relogio"
         "sensores/max30102"
-    REQUIRES driver esp_lcd_gc9a01 chsc6x_touch esp_lvgl_port lvgl
+        "sensores/ds18b20"
+    REQUIRES driver esp_lcd_gc9a01 chsc6x_touch esp_lvgl_port lvgl ds18b20 onewire_bus
 )

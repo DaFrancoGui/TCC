@@ -37,6 +37,7 @@
 #include "rtc_pcf8563.h"
 #include "watchface.h"
 #include "max30102_screen.h"
+#include "ds18b20_screen.h"
 
 static const char *TAG = "IDROID";
 
@@ -223,8 +224,36 @@ static esp_err_t init_lvgl(void)
 }
 
 // ============ Menu de Sensores ============
-static void menu_back_cb(lv_event_t *e) { lv_scr_load(ui_Screen1); }
+static void menu_back_cb(lv_event_t *e)     { lv_scr_load(ui_Screen1); }
 static void open_max30102_cb(lv_event_t *e) { max30102_screen_show(); }
+static void open_ds18b20_cb(lv_event_t *e)  { ds18b20_screen_show(); }
+
+// Cria um botao circular de sensor com legenda. Cada sensor novo e so mais
+// uma chamada destas em create_menu_screen().
+static void menu_add_sensor(int x, int y, uint32_t color, uint32_t color_pr,
+                            const char *icon, const char *caption,
+                            lv_event_cb_t cb)
+{
+    lv_obj_t *btn = lv_btn_create(scr_menu);
+    lv_obj_set_size(btn, 64, 64);
+    lv_obj_set_style_radius(btn, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_bg_color(btn, lv_color_hex(color), 0);
+    lv_obj_set_style_bg_color(btn, lv_color_hex(color_pr), LV_STATE_PRESSED);
+    lv_obj_set_style_shadow_width(btn, 0, 0);
+    lv_obj_align(btn, LV_ALIGN_CENTER, x, y);
+    lv_obj_add_event_cb(btn, cb, LV_EVENT_CLICKED, NULL);
+    lv_obj_t *lbl = lv_label_create(btn);
+    lv_label_set_text(lbl, icon);
+    lv_obj_set_style_text_color(lbl, lv_color_hex(0xFFFFFF), 0);
+    lv_obj_set_style_text_font(lbl, &lv_font_montserrat_20, 0);
+    lv_obj_center(lbl);
+
+    lv_obj_t *cap = lv_label_create(scr_menu);
+    lv_label_set_text(cap, caption);
+    lv_obj_set_style_text_color(cap, lv_color_hex(0x555555), 0);
+    lv_obj_set_style_text_font(cap, &lv_font_montserrat_12, 0);
+    lv_obj_align(cap, LV_ALIGN_CENTER, x, y + 44);
+}
 
 static void create_menu_screen(void)
 {
@@ -236,33 +265,16 @@ static void create_menu_screen(void)
     lv_label_set_text(title, "SENSORES");
     lv_obj_set_style_text_color(title, lv_color_hex(0x222222), 0);
     lv_obj_set_style_text_font(title, &lv_font_montserrat_20, 0);
-    lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 30);
+    lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 24);
 
-    // Botao do MAX30102 (cada sensor novo adiciona seu botao aqui)
-    lv_obj_t *btn_max = lv_btn_create(scr_menu);
-    lv_obj_set_size(btn_max, 84, 84);
-    lv_obj_set_style_radius(btn_max, LV_RADIUS_CIRCLE, 0);
-    lv_obj_set_style_bg_color(btn_max, lv_color_hex(0xE53935), 0);
-    lv_obj_set_style_bg_color(btn_max, lv_color_hex(0xB71C1C), LV_STATE_PRESSED);
-    lv_obj_set_style_shadow_width(btn_max, 0, 0);
-    lv_obj_align(btn_max, LV_ALIGN_CENTER, 0, -8);
-    lv_obj_add_event_cb(btn_max, open_max30102_cb, LV_EVENT_CLICKED, NULL);
-    lv_obj_t *lbl_max = lv_label_create(btn_max);
-    lv_label_set_text(lbl_max, "HR");
-    lv_obj_set_style_text_color(lbl_max, lv_color_hex(0xFFFFFF), 0);
-    lv_obj_set_style_text_font(lbl_max, &lv_font_montserrat_20, 0);
-    lv_obj_center(lbl_max);
-
-    lv_obj_t *cap = lv_label_create(scr_menu);
-    lv_label_set_text(cap, "MAX30102");
-    lv_obj_set_style_text_color(cap, lv_color_hex(0x555555), 0);
-    lv_obj_set_style_text_font(cap, &lv_font_montserrat_12, 0);
-    lv_obj_align(cap, LV_ALIGN_CENTER, 0, 48);
+    // Cada sensor = uma linha aqui (futuros sensores preenchem a grade)
+    menu_add_sensor(-46, -6, 0xE53935, 0xB71C1C, "HR", "MAX30102", open_max30102_cb);
+    menu_add_sensor( 46, -6, 0xF57C00, 0xE65100, "T",  "DS18B20",  open_ds18b20_cb);
 
     lv_obj_t *btn_back = lv_btn_create(scr_menu);
     app_style_btn(btn_back);
     lv_obj_set_size(btn_back, 80, 30);
-    lv_obj_align(btn_back, LV_ALIGN_BOTTOM_MID, 0, -22);
+    lv_obj_align(btn_back, LV_ALIGN_BOTTOM_MID, 0, -16);
     lv_obj_add_event_cb(btn_back, menu_back_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_t *lbl_back = lv_label_create(btn_back);
     lv_label_set_text(lbl_back, "VOLTAR");
@@ -283,13 +295,15 @@ void app_main(void)
     i2c_scan();                                 // diagnostico: quem responde no barramento
     ESP_ERROR_CHECK(rtc_pcf8563_init(i2c_bus, i2c_mutex));
     max30102_module_init(i2c_bus, i2c_mutex);   // nao-fatal: watch funciona sem o sensor
+    ds18b20_module_init();                       // 1-Wire (GPIO2), nao-fatal
     ESP_ERROR_CHECK(init_lvgl());
 
     lvgl_port_lock(0);
     ui_init();                              // cria ui_Screen1 (watchface base)
     create_menu_screen();                   // tela de menu
     watchface_create(ui_Screen1, scr_menu); // relogio sobre ui_Screen1
-    max30102_screen_create(scr_menu);       // tela do sensor
+    max30102_screen_create(scr_menu);       // tela do MAX30102
+    ds18b20_screen_create(scr_menu);        // tela do DS18B20
     lvgl_port_unlock();
 
     ESP_LOGI(TAG, "UI pronta. Iniciando loop...");
