@@ -21,5 +21,6 @@ idf_component_register(
         "relogio"
         "sensores/max30102"
         "sensores/ds18b20"
+        "sensores/ltr390"
     REQUIRES driver esp_lcd_gc9a01 chsc6x_touch esp_lvgl_port lvgl ds18b20 onewire_bus
 )

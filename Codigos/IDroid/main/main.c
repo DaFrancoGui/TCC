@@ -38,6 +38,7 @@
 #include "watchface.h"
 #include "max30102_screen.h"
 #include "ds18b20_screen.h"
+#include "ltr390_screen.h"
 
 static const char *TAG = "IDROID";
 
@@ -66,7 +67,8 @@ static lv_disp_t                *lvgl_disp     = NULL;
 static i2c_master_bus_handle_t   i2c_bus      = NULL;
 static SemaphoreHandle_t         i2c_mutex    = NULL;
 
-static lv_obj_t *scr_menu = NULL;
+static lv_obj_t *scr_menu  = NULL;   // pagina 1 (MAX30102, DS18B20)
+static lv_obj_t *scr_menu2 = NULL;   // pagina 2 (LTR390: Lux, UV)
 
 // ============ Medicao de carga de CPU ============
 static volatile uint32_t idle_counter = 0;
@@ -223,18 +225,25 @@ static esp_err_t init_lvgl(void)
     return ESP_OK;
 }
 
-// ============ Menu de Sensores ============
-static void menu_back_cb(lv_event_t *e)     { lv_scr_load(ui_Screen1); }
+// ============ Menu de Sensores (paginado) ============
+static void menu_back_cb(lv_event_t *e)     { lv_scr_load(ui_Screen1); }   // -> watchface
 static void open_max30102_cb(lv_event_t *e) { max30102_screen_show(); }
 static void open_ds18b20_cb(lv_event_t *e)  { ds18b20_screen_show(); }
+static void open_lux_cb(lv_event_t *e)      { ltr390_lux_screen_show(); }
+static void open_uv_cb(lv_event_t *e)       { ltr390_uv_screen_show(); }
 
-// Cria um botao circular de sensor com legenda. Cada sensor novo e so mais
-// uma chamada destas em create_menu_screen().
-static void menu_add_sensor(int x, int y, uint32_t color, uint32_t color_pr,
+// Navegacao entre paginas do menu
+static void to_page2_cb(lv_event_t *e) { lv_scr_load(scr_menu2); }   // pag1 -> pag2
+static void to_page1_cb(lv_event_t *e) { lv_scr_load(scr_menu); }    // pag2 -> pag1
+static void to_mpu_cb(lv_event_t *e)   { /* futura tela do MPU-9250 */ }
+
+// Botao circular de sensor com legenda.
+static void menu_add_sensor(lv_obj_t *parent, int x, int y,
+                            uint32_t color, uint32_t color_pr,
                             const char *icon, const char *caption,
                             lv_event_cb_t cb)
 {
-    lv_obj_t *btn = lv_btn_create(scr_menu);
+    lv_obj_t *btn = lv_btn_create(parent);
     lv_obj_set_size(btn, 64, 64);
     lv_obj_set_style_radius(btn, LV_RADIUS_CIRCLE, 0);
     lv_obj_set_style_bg_color(btn, lv_color_hex(color), 0);
@@ -248,39 +257,80 @@ static void menu_add_sensor(int x, int y, uint32_t color, uint32_t color_pr,
     lv_obj_set_style_text_font(lbl, &lv_font_montserrat_20, 0);
     lv_obj_center(lbl);
 
-    lv_obj_t *cap = lv_label_create(scr_menu);
+    lv_obj_t *cap = lv_label_create(parent);
     lv_label_set_text(cap, caption);
     lv_obj_set_style_text_color(cap, lv_color_hex(0x555555), 0);
     lv_obj_set_style_text_font(cap, &lv_font_montserrat_12, 0);
     lv_obj_align(cap, LV_ALIGN_CENTER, x, y + 44);
 }
 
+// Seta de navegacao redonda ("<" / ">") na lateral.
+static void nav_arrow(lv_obj_t *parent, lv_align_t align, int x,
+                      const char *sym, lv_event_cb_t cb)
+{
+    lv_obj_t *btn = lv_btn_create(parent);
+    lv_obj_set_size(btn, 36, 36);
+    lv_obj_set_style_radius(btn, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_bg_color(btn, lv_color_hex(0x1A1A1A), 0);
+    lv_obj_set_style_bg_color(btn, lv_color_hex(0x333333), LV_STATE_PRESSED);
+    lv_obj_set_style_border_color(btn, lv_color_hex(0x555555), 0);
+    lv_obj_set_style_border_width(btn, 1, 0);
+    lv_obj_set_style_shadow_width(btn, 0, 0);
+    lv_obj_align(btn, align, x, 0);
+    lv_obj_add_event_cb(btn, cb, LV_EVENT_CLICKED, NULL);
+    lv_obj_t *lbl = lv_label_create(btn);
+    lv_label_set_text(lbl, sym);
+    lv_obj_set_style_text_color(lbl, lv_color_hex(0xAAAAAA), 0);
+    lv_obj_set_style_text_font(lbl, &lv_font_montserrat_20, 0);
+    lv_obj_center(lbl);
+}
+
+// Botao "VOLTAR" inferior padrao.
+static void menu_add_voltar(lv_obj_t *parent, lv_event_cb_t cb)
+{
+    lv_obj_t *btn = lv_btn_create(parent);
+    app_style_btn(btn);
+    lv_obj_set_size(btn, 80, 30);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, -16);
+    lv_obj_add_event_cb(btn, cb, LV_EVENT_CLICKED, NULL);
+    lv_obj_t *lbl = lv_label_create(btn);
+    lv_label_set_text(lbl, "VOLTAR");
+    lv_obj_set_style_text_color(lbl, lv_color_hex(0xDDDDDD), 0);
+    lv_obj_set_style_text_font(lbl, &lv_font_montserrat_12, 0);
+    lv_obj_center(lbl);
+}
+
+static lv_obj_t *make_menu_page(const char *title)
+{
+    lv_obj_t *scr = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(scr, lv_color_hex(0xFFFFFF), 0);
+    lv_obj_clear_flag(scr, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_t *t = lv_label_create(scr);
+    lv_label_set_text(t, title);
+    lv_obj_set_style_text_color(t, lv_color_hex(0x222222), 0);
+    lv_obj_set_style_text_font(t, &lv_font_montserrat_20, 0);
+    lv_obj_align(t, LV_ALIGN_TOP_MID, 0, 24);
+    return scr;
+}
+
+// Pagina 1: MAX30102 + DS18B20, VOLTAR (watchface) e ">" (pag 2)
 static void create_menu_screen(void)
 {
-    scr_menu = lv_obj_create(NULL);
-    lv_obj_set_style_bg_color(scr_menu, lv_color_hex(0xFFFFFF), 0);
-    lv_obj_clear_flag(scr_menu, LV_OBJ_FLAG_SCROLLABLE);
+    scr_menu = make_menu_page("SENSORES");
+    menu_add_sensor(scr_menu, -46, -6, 0xE53935, 0xB71C1C, "HR", "MAX30102", open_max30102_cb);
+    menu_add_sensor(scr_menu,  46, -6, 0xF57C00, 0xE65100, "T",  "DS18B20",  open_ds18b20_cb);
+    menu_add_voltar(scr_menu, menu_back_cb);
+    nav_arrow(scr_menu, LV_ALIGN_RIGHT_MID, -6, ">", to_page2_cb);
+}
 
-    lv_obj_t *title = lv_label_create(scr_menu);
-    lv_label_set_text(title, "SENSORES");
-    lv_obj_set_style_text_color(title, lv_color_hex(0x222222), 0);
-    lv_obj_set_style_text_font(title, &lv_font_montserrat_20, 0);
-    lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 24);
-
-    // Cada sensor = uma linha aqui (futuros sensores preenchem a grade)
-    menu_add_sensor(-46, -6, 0xE53935, 0xB71C1C, "HR", "MAX30102", open_max30102_cb);
-    menu_add_sensor( 46, -6, 0xF57C00, 0xE65100, "T",  "DS18B20",  open_ds18b20_cb);
-
-    lv_obj_t *btn_back = lv_btn_create(scr_menu);
-    app_style_btn(btn_back);
-    lv_obj_set_size(btn_back, 80, 30);
-    lv_obj_align(btn_back, LV_ALIGN_BOTTOM_MID, 0, -16);
-    lv_obj_add_event_cb(btn_back, menu_back_cb, LV_EVENT_CLICKED, NULL);
-    lv_obj_t *lbl_back = lv_label_create(btn_back);
-    lv_label_set_text(lbl_back, "VOLTAR");
-    lv_obj_set_style_text_color(lbl_back, lv_color_hex(0xDDDDDD), 0);
-    lv_obj_set_style_text_font(lbl_back, &lv_font_montserrat_12, 0);
-    lv_obj_center(lbl_back);
+// Pagina 2: LTR390 (Lux + UV), "<" (pag 1) e ">" (futura tela do MPU-9250)
+static void create_menu2_screen(void)
+{
+    scr_menu2 = make_menu_page("LUZ / UV");
+    menu_add_sensor(scr_menu2, -46, -6, 0xF9A825, 0xF57F17, "LUX", "Lux", open_lux_cb);
+    menu_add_sensor(scr_menu2,  46, -6, 0x7B1FA2, 0x4A148C, "UV",  "UV",  open_uv_cb);
+    nav_arrow(scr_menu2, LV_ALIGN_LEFT_MID,   6, "<", to_page1_cb);
+    nav_arrow(scr_menu2, LV_ALIGN_RIGHT_MID, -6, ">", to_mpu_cb);   // stub p/ MPU-9250
 }
 
 // ============ Main ============
@@ -296,14 +346,18 @@ void app_main(void)
     ESP_ERROR_CHECK(rtc_pcf8563_init(i2c_bus, i2c_mutex));
     max30102_module_init(i2c_bus, i2c_mutex);   // nao-fatal: watch funciona sem o sensor
     ds18b20_module_init();                       // 1-Wire (GPIO2), nao-fatal
+    ltr390_module_init(i2c_bus, i2c_mutex);      // I2C (0x53), nao-fatal
     ESP_ERROR_CHECK(init_lvgl());
 
     lvgl_port_lock(0);
     ui_init();                              // cria ui_Screen1 (watchface base)
-    create_menu_screen();                   // tela de menu
+    create_menu_screen();                   // pagina 1 do menu
+    create_menu2_screen();                  // pagina 2 do menu
     watchface_create(ui_Screen1, scr_menu); // relogio sobre ui_Screen1
     max30102_screen_create(scr_menu);       // tela do MAX30102
     ds18b20_screen_create(scr_menu);        // tela do DS18B20
+    ltr390_lux_screen_create(scr_menu2);    // tela de Lux (volta p/ pagina 2)
+    ltr390_uv_screen_create(scr_menu2);     // tela de UV  (volta p/ pagina 2)
     lvgl_port_unlock();
 
     ESP_LOGI(TAG, "UI pronta. Iniciando loop...");
