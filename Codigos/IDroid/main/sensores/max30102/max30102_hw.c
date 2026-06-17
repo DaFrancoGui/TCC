@@ -4,6 +4,7 @@
  */
 
 #include "max30102_hw.h"
+#include "i2c_recover.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -23,6 +24,7 @@ static esp_err_t reg_write(uint8_t reg, uint8_t val)
     esp_err_t ret;
     if (s_mutex) xSemaphoreTake(s_mutex, portMAX_DELAY);
     ret = i2c_master_transmit(s_dev, buf, 2, MAX30102_I2C_TIMEOUT_MS);
+    if (ret != ESP_OK) i2c_recover_bus();
     if (s_mutex) xSemaphoreGive(s_mutex);
     return ret;
 }
@@ -32,6 +34,7 @@ static esp_err_t reg_read(uint8_t reg, uint8_t *val)
     esp_err_t ret;
     if (s_mutex) xSemaphoreTake(s_mutex, portMAX_DELAY);
     ret = i2c_master_transmit_receive(s_dev, &reg, 1, val, 1, MAX30102_I2C_TIMEOUT_MS);
+    if (ret != ESP_OK) i2c_recover_bus();
     if (s_mutex) xSemaphoreGive(s_mutex);
     return ret;
 }
@@ -41,6 +44,7 @@ static esp_err_t reg_read_burst(uint8_t reg, uint8_t *buf, size_t len)
     esp_err_t ret;
     if (s_mutex) xSemaphoreTake(s_mutex, portMAX_DELAY);
     ret = i2c_master_transmit_receive(s_dev, &reg, 1, buf, len, MAX30102_I2C_TIMEOUT_MS);
+    if (ret != ESP_OK) i2c_recover_bus();
     if (s_mutex) xSemaphoreGive(s_mutex);
     return ret;
 }

@@ -13,7 +13,7 @@ file(GLOB_RECURSE MODULE_SRCS
 )
 
 idf_component_register(
-    SRCS "main.c" ${MODULE_SRCS}
+    SRCS "main.c" "i2c_recover.c" ${MODULE_SRCS}
     INCLUDE_DIRS
         "."
         "ui"
@@ -22,5 +22,6 @@ idf_component_register(
         "sensores/max30102"
         "sensores/ds18b20"
         "sensores/ltr390"
-    REQUIRES driver esp_lcd_gc9a01 chsc6x_touch esp_lvgl_port lvgl ds18b20 onewire_bus
+        "sensores/mpu9250"
+    REQUIRES driver esp_lcd_gc9a01 chsc6x_touch esp_lvgl_port lvgl ds18b20 onewire_bus nvs_flash
 )

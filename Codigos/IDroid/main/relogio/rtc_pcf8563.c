@@ -4,6 +4,7 @@
  */
 
 #include "rtc_pcf8563.h"
+#include "i2c_recover.h"
 #include "esp_log.h"
 
 #define PCF8563_I2C_ADDR    0x51
@@ -40,6 +41,7 @@ void rtc_read(uint8_t *h, uint8_t *m, uint8_t *s,
     esp_err_t ret = ESP_FAIL;
     if (xSemaphoreTake(s_mutex, pdMS_TO_TICKS(100)) == pdTRUE) {
         ret = i2c_master_transmit_receive(s_dev, &reg, 1, data, 7, 100);
+        if (ret != ESP_OK) i2c_recover_bus();
         xSemaphoreGive(s_mutex);
     }
     if (ret == ESP_OK) {
@@ -67,7 +69,7 @@ void rtc_write(uint8_t h, uint8_t m, uint8_t s,
         dec2bcd(yr),
     };
     if (xSemaphoreTake(s_mutex, pdMS_TO_TICKS(100)) == pdTRUE) {
-        i2c_master_transmit(s_dev, buf, sizeof(buf), 100);
+        if (i2c_master_transmit(s_dev, buf, sizeof(buf), 100) != ESP_OK) i2c_recover_bus();
         xSemaphoreGive(s_mutex);
     }
 }

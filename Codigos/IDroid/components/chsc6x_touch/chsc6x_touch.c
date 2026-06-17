@@ -21,6 +21,7 @@ static const char *TAG = "CHSC6X";
 
 // Handle I2C global (precisamos armazenar em algum lugar)
 static i2c_master_dev_handle_t s_i2c_dev = NULL;
+static i2c_master_bus_handle_t s_i2c_bus = NULL;   // para recuperar o barramento pos-NACK
 static SemaphoreHandle_t s_i2c_mutex = NULL;
 
 static esp_err_t chsc6x_read_data(esp_lcd_touch_handle_t tp);
@@ -47,6 +48,7 @@ esp_err_t chsc6x_touch_new(const chsc6x_touch_config_t *config, esp_lcd_touch_ha
         .scl_speed_hz = 100000,
     };
     
+    s_i2c_bus = config->i2c_bus;
     ret = i2c_master_bus_add_device(config->i2c_bus, &dev_cfg, &s_i2c_dev);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Failed to add I2C device: %s", esp_err_to_name(ret));
@@ -113,6 +115,8 @@ static esp_err_t chsc6x_read_data(esp_lcd_touch_handle_t tp)
         // Usar mutex se disponível (timeout curto para não travar LVGL)
         if (xSemaphoreTake(s_i2c_mutex, pdMS_TO_TICKS(5)) == pdTRUE) {
             ret = i2c_master_receive(s_i2c_dev, data, CHSC6X_READ_LEN, 50);
+            // NACK contamina o barramento compartilhado: recupera no proprio erro
+            if (ret != ESP_OK && s_i2c_bus) i2c_master_bus_reset(s_i2c_bus);
             xSemaphoreGive(s_i2c_mutex);
         } else {
             // Timeout - assumir sem toque
@@ -121,6 +125,7 @@ static esp_err_t chsc6x_read_data(esp_lcd_touch_handle_t tp)
     } else {
         // Sem mutex - leitura direta
         ret = i2c_master_receive(s_i2c_dev, data, CHSC6X_READ_LEN, 50);
+        if (ret != ESP_OK && s_i2c_bus) i2c_master_bus_reset(s_i2c_bus);
     }
     
     if (ret != ESP_OK) {

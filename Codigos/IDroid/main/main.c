@@ -34,11 +34,13 @@
 
 #include "ui/ui.h"
 #include "app.h"
+#include "i2c_recover.h"
 #include "rtc_pcf8563.h"
 #include "watchface.h"
 #include "max30102_screen.h"
 #include "ds18b20_screen.h"
 #include "ltr390_screen.h"
+#include "mpu9250_screen.h"
 
 static const char *TAG = "IDROID";
 
@@ -69,13 +71,14 @@ static SemaphoreHandle_t         i2c_mutex    = NULL;
 
 static lv_obj_t *scr_menu  = NULL;   // pagina 1 (MAX30102, DS18B20)
 static lv_obj_t *scr_menu2 = NULL;   // pagina 2 (LTR390: Lux, UV)
+static lv_obj_t *scr_menu3 = NULL;   // pagina 3 (MPU-9250: Bussola)
 
 // ============ Medicao de carga de CPU ============
 static volatile uint32_t idle_counter = 0;
 static bool idle_hook_cb(void) { idle_counter++; return false; }
 
 // ============ Registro de telas para o loop ============
-#define MAX_SCREENS 8
+#define MAX_SCREENS 16
 static struct { lv_obj_t *scr; void (*update)(void); } s_screens[MAX_SCREENS];
 static int s_screen_count = 0;
 
@@ -164,6 +167,7 @@ static esp_err_t init_touch(void)
         .flags.enable_internal_pullup = true,
     };
     ESP_RETURN_ON_ERROR(i2c_new_master_bus(&bus_cfg, &i2c_bus), TAG, "I2C bus");
+    i2c_recover_set_bus(i2c_bus);   // habilita recuperacao pos-NACK p/ todos os drivers
 
     i2c_mutex = xSemaphoreCreateMutex();
     ESP_RETURN_ON_FALSE(i2c_mutex != NULL, ESP_FAIL, TAG, "I2C mutex");
@@ -197,7 +201,9 @@ static void i2c_scan(void)
         }
     }
     ESP_LOGI(TAG, "=== %d dispositivo(s) no barramento ===", found);
-    esp_log_level_set("i2c.master", ESP_LOG_WARN);
+    // Silencia o spam de NACK do driver: NACKs sao recuperados (i2c_recover_bus)
+    // e em barramento lotado o flood de log starva a CPU (quebra ate o 1-Wire).
+    esp_log_level_set("i2c.master", ESP_LOG_NONE);
 }
 
 // ============ LVGL Init ============
@@ -231,11 +237,13 @@ static void open_max30102_cb(lv_event_t *e) { max30102_screen_show(); }
 static void open_ds18b20_cb(lv_event_t *e)  { ds18b20_screen_show(); }
 static void open_lux_cb(lv_event_t *e)      { ltr390_lux_screen_show(); }
 static void open_uv_cb(lv_event_t *e)       { ltr390_uv_screen_show(); }
+static void open_compass_cb(lv_event_t *e)  { mpu9250_compass_show(); }
 
 // Navegacao entre paginas do menu
 static void to_page2_cb(lv_event_t *e) { lv_scr_load(scr_menu2); }   // pag1 -> pag2
 static void to_page1_cb(lv_event_t *e) { lv_scr_load(scr_menu); }    // pag2 -> pag1
-static void to_mpu_cb(lv_event_t *e)   { /* futura tela do MPU-9250 */ }
+static void to_page3_cb(lv_event_t *e) { lv_scr_load(scr_menu3); }   // pag2 -> pag3
+static void to_page2b_cb(lv_event_t *e){ lv_scr_load(scr_menu2); }   // pag3 -> pag2
 
 // Botao circular de sensor com legenda.
 static void menu_add_sensor(lv_obj_t *parent, int x, int y,
@@ -323,14 +331,22 @@ static void create_menu_screen(void)
     nav_arrow(scr_menu, LV_ALIGN_RIGHT_MID, -6, ">", to_page2_cb);
 }
 
-// Pagina 2: LTR390 (Lux + UV), "<" (pag 1) e ">" (futura tela do MPU-9250)
+// Pagina 2: LTR390 (Lux + UV), "<" (pag 1) e ">" (pag 3)
 static void create_menu2_screen(void)
 {
     scr_menu2 = make_menu_page("LUZ / UV");
     menu_add_sensor(scr_menu2, -46, -6, 0xF9A825, 0xF57F17, "LUX", "Lux", open_lux_cb);
     menu_add_sensor(scr_menu2,  46, -6, 0x7B1FA2, 0x4A148C, "UV",  "UV",  open_uv_cb);
     nav_arrow(scr_menu2, LV_ALIGN_LEFT_MID,   6, "<", to_page1_cb);
-    nav_arrow(scr_menu2, LV_ALIGN_RIGHT_MID, -6, ">", to_mpu_cb);   // stub p/ MPU-9250
+    nav_arrow(scr_menu2, LV_ALIGN_RIGHT_MID, -6, ">", to_page3_cb);
+}
+
+// Pagina 3: MPU-9250 (Bussola), "<" (pag 2). Espaco p/ o pedometro depois.
+static void create_menu3_screen(void)
+{
+    scr_menu3 = make_menu_page("MOVIMENTO");
+    menu_add_sensor(scr_menu3, 0, -6, 0x1565C0, 0x0D47A1, "C", "Bussola", open_compass_cb);
+    nav_arrow(scr_menu3, LV_ALIGN_LEFT_MID, 6, "<", to_page2b_cb);
 }
 
 // ============ Main ============
@@ -347,17 +363,20 @@ void app_main(void)
     max30102_module_init(i2c_bus, i2c_mutex);   // nao-fatal: watch funciona sem o sensor
     ds18b20_module_init();                       // 1-Wire (GPIO2), nao-fatal
     ltr390_module_init(i2c_bus, i2c_mutex);      // I2C (0x53), nao-fatal
+    mpu9250_module_init(i2c_bus, i2c_mutex);     // I2C (0x68/0x0C), nao-fatal
     ESP_ERROR_CHECK(init_lvgl());
 
     lvgl_port_lock(0);
     ui_init();                              // cria ui_Screen1 (watchface base)
     create_menu_screen();                   // pagina 1 do menu
     create_menu2_screen();                  // pagina 2 do menu
+    create_menu3_screen();                  // pagina 3 do menu
     watchface_create(ui_Screen1, scr_menu); // relogio sobre ui_Screen1
     max30102_screen_create(scr_menu);       // tela do MAX30102
     ds18b20_screen_create(scr_menu);        // tela do DS18B20
     ltr390_lux_screen_create(scr_menu2);    // tela de Lux (volta p/ pagina 2)
     ltr390_uv_screen_create(scr_menu2);     // tela de UV  (volta p/ pagina 2)
+    mpu9250_compass_create(scr_menu3);      // telas da bussola (volta p/ pagina 3)
     lvgl_port_unlock();
 
     ESP_LOGI(TAG, "UI pronta. Iniciando loop...");
