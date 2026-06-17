@@ -29,6 +29,9 @@ extern "C" {
 /* Sensibilidade do AK8963 em uT (16-bit, +/-4912 uT) */
 #define MAG_SENSITIVITY     4912.0f
 
+/* Amostra bruta do acelerometro (para o pedometro) */
+typedef struct { int16_t x, y, z; } mpu9250_accel_raw_t;
+
 /**
  * Inicializa o MPU-9250 (reset, wake, bypass) e o AK8963 (modo continuo 100 Hz,
  * 16-bit), adicionando ambos ao barramento compartilhado.
@@ -47,6 +50,12 @@ void mpu9250_hw_get_asa(float *ax, float *ay, float *az);
  * @return ESP_OK, ESP_ERR_NOT_FOUND (dados nao prontos) ou erro de I2C
  */
 esp_err_t mpu9250_hw_read_mag(int16_t *mx, int16_t *my, int16_t *mz);
+
+/** Le o acelerometro (burst 6 bytes de ACCEL_XOUT_H). +/-2g: 16384 LSB/g. */
+esp_err_t mpu9250_hw_read_accel(mpu9250_accel_raw_t *out);
+
+/** Retorna true se o MPU/AK8963 foi inicializado com sucesso. */
+bool mpu9250_hw_ok(void);
 
 #ifdef __cplusplus
 }

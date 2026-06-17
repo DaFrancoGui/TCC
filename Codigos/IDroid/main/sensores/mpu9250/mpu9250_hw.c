@@ -13,8 +13,13 @@ static const char *TAG = "MPU9250_HW";
 /* ── Registradores MPU-9250 ── */
 #define MPU_WHO_AM_I        0x75
 #define MPU_PWR_MGMT_1      0x6B
+#define MPU_PWR_MGMT_2      0x6C
 #define MPU_INT_PIN_CFG     0x37
 #define MPU_USER_CTRL       0x6A
+#define MPU_SMPLRT_DIV      0x19
+#define MPU_ACCEL_CONFIG    0x1C
+#define MPU_ACCEL_CONFIG2   0x1D
+#define MPU_ACCEL_XOUT_H    0x3B
 
 /* ── Registradores AK8963 ── */
 #define AK_WHO_AM_I         0x00
@@ -34,6 +39,7 @@ static const char *TAG = "MPU9250_HW";
 static i2c_master_dev_handle_t s_mpu = NULL;
 static i2c_master_dev_handle_t s_ak  = NULL;
 static SemaphoreHandle_t       s_mutex = NULL;
+static bool                    s_ok = false;
 
 static float s_asa_x = 1.0f, s_asa_y = 1.0f, s_asa_z = 1.0f;
 
@@ -91,6 +97,12 @@ esp_err_t mpu9250_hw_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
     reg_write(s_mpu, MPU_USER_CTRL, 0x00);   vTaskDelay(pdMS_TO_TICKS(10));
     reg_write(s_mpu, MPU_INT_PIN_CFG, 0x22); vTaskDelay(pdMS_TO_TICKS(50));
 
+    /* Acelerometro (para o pedometro): gyro off, +/-2g, DLPF 20Hz, 50 Hz */
+    reg_write(s_mpu, MPU_PWR_MGMT_2, 0x07);
+    reg_write(s_mpu, MPU_ACCEL_CONFIG, 0x00);
+    reg_write(s_mpu, MPU_ACCEL_CONFIG2, 0x04);
+    reg_write(s_mpu, MPU_SMPLRT_DIV, 19);
+
     /* Adiciona o AK8963 (0x0C), agora visivel via bypass */
     i2c_device_config_t ak_cfg = {
         .dev_addr_length = I2C_ADDR_BIT_LEN_7,
@@ -119,6 +131,20 @@ esp_err_t mpu9250_hw_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
     vTaskDelay(pdMS_TO_TICKS(10));
 
     ESP_LOGI(TAG, "AK8963 ok (ASA: %.3f %.3f %.3f)", s_asa_x, s_asa_y, s_asa_z);
+    s_ok = true;
+    return ESP_OK;
+}
+
+bool mpu9250_hw_ok(void) { return s_ok; }
+
+esp_err_t mpu9250_hw_read_accel(mpu9250_accel_raw_t *out)
+{
+    uint8_t b[6];
+    esp_err_t ret = reg_read(s_mpu, MPU_ACCEL_XOUT_H, b, 6);
+    if (ret != ESP_OK) return ret;
+    out->x = (int16_t)((b[0] << 8) | b[1]);
+    out->y = (int16_t)((b[2] << 8) | b[3]);
+    out->z = (int16_t)((b[4] << 8) | b[5]);
     return ESP_OK;
 }
 

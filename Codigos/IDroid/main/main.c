@@ -41,6 +41,7 @@
 #include "ds18b20_screen.h"
 #include "ltr390_screen.h"
 #include "mpu9250_screen.h"
+#include "pedometer_screen.h"
 
 static const char *TAG = "IDROID";
 
@@ -238,6 +239,7 @@ static void open_ds18b20_cb(lv_event_t *e)  { ds18b20_screen_show(); }
 static void open_lux_cb(lv_event_t *e)      { ltr390_lux_screen_show(); }
 static void open_uv_cb(lv_event_t *e)       { ltr390_uv_screen_show(); }
 static void open_compass_cb(lv_event_t *e)  { mpu9250_compass_show(); }
+static void open_pedometer_cb(lv_event_t *e){ pedometer_screen_show(); }
 
 // Navegacao entre paginas do menu
 static void to_page2_cb(lv_event_t *e) { lv_scr_load(scr_menu2); }   // pag1 -> pag2
@@ -341,11 +343,12 @@ static void create_menu2_screen(void)
     nav_arrow(scr_menu2, LV_ALIGN_RIGHT_MID, -6, ">", to_page3_cb);
 }
 
-// Pagina 3: MPU-9250 (Bussola), "<" (pag 2). Espaco p/ o pedometro depois.
+// Pagina 3: MPU-9250 (Bussola + Pedometro), "<" (pag 2)
 static void create_menu3_screen(void)
 {
     scr_menu3 = make_menu_page("MOVIMENTO");
-    menu_add_sensor(scr_menu3, 0, -6, 0x1565C0, 0x0D47A1, "C", "Bussola", open_compass_cb);
+    menu_add_sensor(scr_menu3, -46, -6, 0x1565C0, 0x0D47A1, "C", "Bussola",   open_compass_cb);
+    menu_add_sensor(scr_menu3,  46, -6, 0x00897B, 0x00695C, "P", "Pedometro", open_pedometer_cb);
     nav_arrow(scr_menu3, LV_ALIGN_LEFT_MID, 6, "<", to_page2b_cb);
 }
 
@@ -377,6 +380,7 @@ void app_main(void)
     ltr390_lux_screen_create(scr_menu2);    // tela de Lux (volta p/ pagina 2)
     ltr390_uv_screen_create(scr_menu2);     // tela de UV  (volta p/ pagina 2)
     mpu9250_compass_create(scr_menu3);      // telas da bussola (volta p/ pagina 3)
+    pedometer_screen_create(scr_menu3);     // tela do pedometro  (volta p/ pagina 3)
     lvgl_port_unlock();
 
     ESP_LOGI(TAG, "UI pronta. Iniciando loop...");
