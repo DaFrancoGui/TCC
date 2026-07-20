@@ -47,8 +47,11 @@ typedef struct {
     bool     present;
 } finger_state_t;
 
-#define FINGER_OFFSET_UP    9000
-#define FINGER_OFFSET_DOWN  6000
+/* Deltas em contagens brutas do ADC: escalam com a corrente do LED
+ * (CFG_LED_*_PA em max30102_hw.h). Valores para ~7,2 mA — na config
+ * de ~14,2 mA eram 9000/6000. */
+#define FINGER_OFFSET_UP    4500
+#define FINGER_OFFSET_DOWN  3000
 
 static void finger_init(finger_state_t *f) { memset(f, 0, sizeof(*f)); }
 
@@ -70,7 +73,7 @@ static bool finger_update(finger_state_t *f, uint32_t ir_raw)
     if (!f->present) {
         if (f->baseline_count == 0) {
             f->baseline = ir_raw;
-        } else if (ir_raw < f->baseline + 4000) {
+        } else if (ir_raw < f->baseline + 2000) {  /* escala com FINGER_OFFSET_* */
             f->baseline = (f->baseline * 7 + ir_raw) / 8;
         }
         if (f->baseline_count < 200) f->baseline_count++;

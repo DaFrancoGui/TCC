@@ -57,8 +57,13 @@ extern "C" {
 #define CFG_FIFO_CONFIG     0x0F   /* SMP_AVE=1, rollover on, A_FULL=15 */
 #define CFG_MODE_SPO2       0x03   /* modo SpO2 (Vermelho + IR)         */
 #define CFG_SPO2_CONFIG     0x67   /* ADC 16384nA, 100 Hz, PW 411us/18b */
-#define CFG_LED_RED_PA      0x47   /* ~14,2 mA */
-#define CFG_LED_IR_PA       0x47   /* ~14,2 mA */
+/* ~7,2 mA: na placa final (sem capacitor de bulk no 3,3V) os pulsos de LED a
+ * 14,2 mA afundam o rail e travam o barramento I2C — confirmado por teste A/B
+ * mesmo apos corrigir a solda do INT do LTR390. Se mudar, escalar
+ * FINGER_OFFSET_* em max30102_screen.c na mesma proporcao.
+ * Ver docs/problemas_solucoes/03_max30102.md, Problema 5. */
+#define CFG_LED_RED_PA      0x24   /* ~7,2 mA */
+#define CFG_LED_IR_PA       0x24   /* ~7,2 mA */
 
 /* SHDN: bit 7 do MODE_CONFIG → desliga LEDs/amostragem (economia) */
 #define CFG_MODE_SHUTDOWN   0x80

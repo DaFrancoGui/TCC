@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" font-family="Helvetica, Arial, sans-serif" role="img" aria-label="Esquema do divisor de tensao da bateria no XIAO ESP32-C6">
+  <style>
+    text { font-size: 13px; fill: #2B3138; }
+    .small { font-size: 11.5px; fill: #767D85; }
+    .mono { font-family: 'Courier New', monospace; font-size: 12px; }
+    .new-label { fill: #1D7A8C; font-weight: bold; }
+  </style>
+
+  <!-- fundo branco para impressao -->
+  <rect x="0" y="0" width="880" height="500" fill="#FFFFFF"/>
+
+  <!-- ===== Bateria ===== -->
+  <rect x="34" y="170" width="112" height="150" rx="8" fill="none" stroke="#2B3138" stroke-width="1.6"/>
+  <text x="90" y="232" text-anchor="middle">Bateria</text>
+  <text x="90" y="250" text-anchor="middle" class="small">LiPo 3,7 V</text>
+  <text x="90" y="266" text-anchor="middle" class="small">1200 mAh</text>
+  <text x="158" y="188" class="mono" fill="#C4453C">+</text>
+  <text x="158" y="316" class="mono" fill="#3A3F45">&#8722;</text>
+
+  <!-- ===== Fio vermelho: bateria -> chave -> pad + ===== -->
+  <polyline points="146,195 248,195" fill="none" stroke="#C4453C" stroke-width="2.6"/>
+  <circle cx="255" cy="195" r="4.5" fill="none" stroke="#C4453C" stroke-width="2"/>
+  <circle cx="325" cy="178" r="4.5" fill="none" stroke="#C4453C" stroke-width="2"/>
+  <circle cx="325" cy="216" r="4.5" fill="none" stroke="#767D85" stroke-width="1.6"/>
+  <line x1="259" y1="193" x2="321" y2="180" stroke="#C4453C" stroke-width="2.6"/>
+  <text x="290" y="163" text-anchor="middle" class="small">chave (comum &#8594; NF)</text>
+  <text x="338" y="221" class="small">NA &#8212; fica vazio</text>
+  <polyline points="330,178 362,178 362,195 618,195" fill="none" stroke="#C4453C" stroke-width="2.6"/>
+
+  <!-- ===== Fio preto: bateria -> pad - ===== -->
+  <polyline points="146,300 118,300 118,392 560,392 560,330 618,330" fill="none" stroke="#3A3F45" stroke-width="2.6"/>
+
+  <!-- ===== XIAO ===== -->
+  <rect x="618" y="130" width="222" height="240" rx="12" fill="none" stroke="#2B3138" stroke-width="1.6"/>
+  <text x="729" y="160" text-anchor="middle" font-weight="bold">XIAO ESP32-C6</text>
+  <rect x="610" y="187" width="16" height="16" rx="3" fill="#C4453C"/>
+  <text x="636" y="199" class="small">pad BAT + (verso)</text>
+  <rect x="610" y="322" width="16" height="16" rx="3" fill="#3A3F45"/>
+  <text x="636" y="334" class="small">pad BAT &#8722; (verso)</text>
+  <rect x="610" y="252" width="16" height="10" rx="2" fill="#1D7A8C"/>
+  <text x="636" y="261" class="new-label">pino D0 / A0 (GPIO0)</text>
+  <text x="636" y="276" class="small">header lateral</text>
+
+  <!-- ===== Ramo novo: divisor ===== -->
+  <circle cx="430" cy="195" r="5" fill="#1D7A8C"/>
+  <line x1="430" y1="195" x2="430" y2="216" stroke="#1D7A8C" stroke-width="2.4"/>
+  <polyline points="430,216 441,223 419,234 441,245 419,256 430,262" fill="none" stroke="#1D7A8C" stroke-width="2.4" stroke-linejoin="round"/>
+  <text x="452" y="243" class="new-label">R1 &#183; 100 k&#937;</text>
+  <line x1="430" y1="262" x2="430" y2="282" stroke="#1D7A8C" stroke-width="2.4"/>
+  <circle cx="430" cy="288" r="7" fill="#1D7A8C22" stroke="#1D7A8C" stroke-width="2.4"/>
+  <text x="352" y="285" text-anchor="end" class="new-label">ponto do meio</text>
+  <text x="352" y="303" text-anchor="end" class="mono">&#8776; 1,85 &#8211; 2,1 V</text>
+  <text x="352" y="319" text-anchor="end" class="small">metade da bateria &#8212; seguro p/ ADC</text>
+  <polyline points="437,288 520,288 520,257 610,257" fill="none" stroke="#1D7A8C" stroke-width="2.4"/>
+  <line x1="430" y1="295" x2="430" y2="312" stroke="#1D7A8C" stroke-width="2.4"/>
+  <polyline points="430,312 441,319 419,330 441,341 419,352 430,358" fill="none" stroke="#1D7A8C" stroke-width="2.4" stroke-linejoin="round"/>
+  <text x="452" y="339" class="new-label">R2 &#183; 100 k&#937;</text>
+  <line x1="430" y1="358" x2="430" y2="392" stroke="#1D7A8C" stroke-width="2.4"/>
+  <circle cx="430" cy="392" r="5" fill="#1D7A8C"/>
+
+  <!-- ===== Anotacoes de tensao ===== -->
+  <text x="430" y="180" text-anchor="middle" class="mono">3,7 &#8211; 4,2 V</text>
+  <text x="470" y="411" class="mono">0 V (GND)</text>
+
+  <!-- ===== Legenda ===== -->
+  <line x1="60" y1="455" x2="90" y2="455" stroke="#C4453C" stroke-width="3"/>
+  <text x="98" y="459" class="small">fio + (existente)</text>
+  <line x1="220" y1="455" x2="250" y2="455" stroke="#3A3F45" stroke-width="3"/>
+  <text x="258" y="459" class="small">fio &#8722; (existente)</text>
+  <line x1="380" y1="455" x2="410" y2="455" stroke="#1D7A8C" stroke-width="3"/>
+  <text x="418" y="459" class="small">ramo novo: R1, R2 e fio de leitura at&#233; o D0/A0</text>
+</svg>

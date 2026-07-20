@@ -94,25 +94,37 @@ esp_err_t max30102_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
 
     /* --- Resetar o sensor --- */
     ret = reg_write(REG_MODE_CONFIG, 0x40);          /* bit RESET */
-    if (ret != ESP_OK) return ret;
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Falha no RESET: %s", esp_err_to_name(ret));
+        return ret;
+    }
     vTaskDelay(pdMS_TO_TICKS(100));
 
     /* --- Limpar ponteiros da FIFO --- */
     ret  = reg_write(REG_FIFO_WR_PTR, 0x00);
     ret |= reg_write(REG_FIFO_RD_PTR, 0x00);
     ret |= reg_write(REG_OVRFLOW_CTR, 0x00);
-    if (ret != ESP_OK) return ret;
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Falha ao limpar FIFO: %s", esp_err_to_name(ret));
+        return ret;
+    }
 
     /* --- Configurar FIFO / ADC / LEDs --- */
     ret  = reg_write(REG_FIFO_CONFIG, CFG_FIFO_CONFIG);
     ret |= reg_write(REG_SPO2_CONFIG, CFG_SPO2_CONFIG);
     ret |= reg_write(REG_LED1_PA, CFG_LED_RED_PA);
     ret |= reg_write(REG_LED2_PA, CFG_LED_IR_PA);
-    if (ret != ESP_OK) return ret;
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Falha na configuracao FIFO/ADC/LED: %s", esp_err_to_name(ret));
+        return ret;
+    }
 
     /* --- Comeca em shutdown; a aquisicao e ligada pela UI (toggle) --- */
     ret = reg_write(REG_MODE_CONFIG, CFG_MODE_SHUTDOWN);
-    if (ret != ESP_OK) return ret;
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Falha ao entrar em shutdown: %s", esp_err_to_name(ret));
+        return ret;
+    }
 
     ESP_LOGI(TAG, "MAX30102 configurado (inicia em shutdown)");
     return ESP_OK;

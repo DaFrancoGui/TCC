@@ -17,3 +17,7 @@ CONFIG_LV_FONT_MONTSERRAT_12=y
 CONFIG_LV_FONT_MONTSERRAT_14=y
 CONFIG_LV_FONT_MONTSERRAT_20=y
 CONFIG_LV_MEM_SIZE_KILOBYTES=96
+
+# Watchdog de task com panic: se alguma task monopolizar a CPU (ex.: driver
+# I2C em spin com barramento travado), reinicia o relogio em vez de congelar.
+CONFIG_ESP_TASK_WDT_PANIC=y

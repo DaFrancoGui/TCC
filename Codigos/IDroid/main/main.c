@@ -37,6 +37,9 @@
 #include "i2c_recover.h"
 #include "rtc_pcf8563.h"
 #include "watchface.h"
+#include "bateria.h"
+#include "configs_screen.h"
+#include "screenshot.h"
 #include "max30102_screen.h"
 #include "ds18b20_screen.h"
 #include "ltr390_screen.h"
@@ -73,6 +76,7 @@ static SemaphoreHandle_t         i2c_mutex    = NULL;
 static lv_obj_t *scr_menu  = NULL;   // pagina 1 (MAX30102, DS18B20)
 static lv_obj_t *scr_menu2 = NULL;   // pagina 2 (LTR390: Lux, UV)
 static lv_obj_t *scr_menu3 = NULL;   // pagina 3 (MPU-9250: Bussola)
+static lv_obj_t *scr_menu4 = NULL;   // pagina 4 (Configs: Hora, Data)
 
 // ============ Medicao de carga de CPU ============
 static volatile uint32_t idle_counter = 0;
@@ -159,6 +163,10 @@ static esp_err_t init_lcd(void)
 // ============ Touch + I2C Init (cria barramento + mutex) ============
 static esp_err_t init_touch(void)
 {
+    /* Solta um eventual escravo preso no SDA antes de criar o driver
+     * (reset via USB no meio de uma transacao nao reseta os sensores). */
+    i2c_recover_at_boot(PIN_SDA, PIN_SCL);
+
     i2c_master_bus_config_t bus_cfg = {
         .i2c_port                     = I2C_NUM_0,
         .sda_io_num                   = PIN_SDA,
@@ -195,11 +203,18 @@ static void i2c_scan(void)
     esp_log_level_set("i2c.master", ESP_LOG_NONE);   // silencia NACKs do scan
     ESP_LOGI(TAG, "=== Scan I2C ===");
     int found = 0;
-    for (uint8_t addr = 1; addr < 0x7F; addr++) {
-        if (i2c_master_probe(i2c_bus, addr, 30) == ESP_OK) {
-            ESP_LOGI(TAG, "  encontrado: 0x%02X", addr);
-            found++;
+    for (int tentativa = 0; tentativa < 2; tentativa++) {
+        for (uint8_t addr = 1; addr < 0x7F; addr++) {
+            if (i2c_master_probe(i2c_bus, addr, 30) == ESP_OK) {
+                ESP_LOGI(TAG, "  encontrado: 0x%02X", addr);
+                found++;
+            }
         }
+        if (found > 0) break;
+        /* 0 dispositivos = barramento/controlador em mau estado; reseta e
+         * tenta de novo uma vez antes de entregar o boot aos sensores. */
+        ESP_LOGW(TAG, "scan vazio - resetando barramento e repetindo");
+        i2c_recover_bus();
     }
     ESP_LOGI(TAG, "=== %d dispositivo(s) no barramento ===", found);
     // Silencia o spam de NACK do driver: NACKs sao recuperados (i2c_recover_bus)
@@ -240,12 +255,16 @@ static void open_lux_cb(lv_event_t *e)      { ltr390_lux_screen_show(); }
 static void open_uv_cb(lv_event_t *e)       { ltr390_uv_screen_show(); }
 static void open_compass_cb(lv_event_t *e)  { mpu9250_compass_show(); }
 static void open_pedometer_cb(lv_event_t *e){ pedometer_screen_show(); }
+static void open_cfg_hora_cb(lv_event_t *e) { configs_hora_show(); }
+static void open_cfg_data_cb(lv_event_t *e) { configs_data_show(); }
 
 // Navegacao entre paginas do menu
 static void to_page2_cb(lv_event_t *e) { lv_scr_load(scr_menu2); }   // pag1 -> pag2
 static void to_page1_cb(lv_event_t *e) { lv_scr_load(scr_menu); }    // pag2 -> pag1
 static void to_page3_cb(lv_event_t *e) { lv_scr_load(scr_menu3); }   // pag2 -> pag3
 static void to_page2b_cb(lv_event_t *e){ lv_scr_load(scr_menu2); }   // pag3 -> pag2
+static void to_page4_cb(lv_event_t *e) { lv_scr_load(scr_menu4); }   // pag3 -> pag4
+static void to_page3b_cb(lv_event_t *e){ lv_scr_load(scr_menu3); }   // pag4 -> pag3
 
 // Botao circular de sensor com legenda.
 static void menu_add_sensor(lv_obj_t *parent, int x, int y,
@@ -326,9 +345,9 @@ static lv_obj_t *make_menu_page(const char *title)
 // Pagina 1: MAX30102 + DS18B20, VOLTAR (watchface) e ">" (pag 2)
 static void create_menu_screen(void)
 {
-    scr_menu = make_menu_page("SENSORES");
-    menu_add_sensor(scr_menu, -46, -6, 0xE53935, 0xB71C1C, "HR", "MAX30102", open_max30102_cb);
-    menu_add_sensor(scr_menu,  46, -6, 0xF57C00, 0xE65100, "T",  "DS18B20",  open_ds18b20_cb);
+    scr_menu = make_menu_page("VITAIS");
+    menu_add_sensor(scr_menu, -46, -6, 0xE53935, 0xB71C1C, "HR", "Coracao", open_max30102_cb);
+    menu_add_sensor(scr_menu,  46, -6, 0xF57C00, 0xE65100, "T",  "Temp",    open_ds18b20_cb);
     menu_add_voltar(scr_menu, menu_back_cb);
     nav_arrow(scr_menu, LV_ALIGN_RIGHT_MID, -6, ">", to_page2_cb);
 }
@@ -343,13 +362,23 @@ static void create_menu2_screen(void)
     nav_arrow(scr_menu2, LV_ALIGN_RIGHT_MID, -6, ">", to_page3_cb);
 }
 
-// Pagina 3: MPU-9250 (Bussola + Pedometro), "<" (pag 2)
+// Pagina 3: MPU-9250 (Bussola + Pedometro), "<" (pag 2) e ">" (pag 4)
 static void create_menu3_screen(void)
 {
     scr_menu3 = make_menu_page("MOVIMENTO");
     menu_add_sensor(scr_menu3, -46, -6, 0x1565C0, 0x0D47A1, "C", "Bussola",   open_compass_cb);
     menu_add_sensor(scr_menu3,  46, -6, 0x00897B, 0x00695C, "P", "Pedometro", open_pedometer_cb);
-    nav_arrow(scr_menu3, LV_ALIGN_LEFT_MID, 6, "<", to_page2b_cb);
+    nav_arrow(scr_menu3, LV_ALIGN_LEFT_MID,   6, "<", to_page2b_cb);
+    nav_arrow(scr_menu3, LV_ALIGN_RIGHT_MID, -6, ">", to_page4_cb);
+}
+
+// Pagina 4: Configs (Hora + Data), "<" (pag 3)
+static void create_menu4_screen(void)
+{
+    scr_menu4 = make_menu_page("CONFIGS");
+    menu_add_sensor(scr_menu4, -46, -6, 0x455A64, 0x263238, "H", "Hora", open_cfg_hora_cb);
+    menu_add_sensor(scr_menu4,  46, -6, 0x8D6E63, 0x5D4037, "D", "Data", open_cfg_data_cb);
+    nav_arrow(scr_menu4, LV_ALIGN_LEFT_MID, 6, "<", to_page3b_cb);
 }
 
 // ============ Main ============
@@ -367,6 +396,7 @@ void app_main(void)
     ds18b20_module_init();                       // 1-Wire (GPIO2), nao-fatal
     ltr390_module_init(i2c_bus, i2c_mutex);      // I2C (0x53), nao-fatal
     mpu9250_module_init(i2c_bus, i2c_mutex);     // I2C (0x68/0x0C), nao-fatal
+    bateria_init();                              // ADC GPIO0, nao-fatal
     ESP_ERROR_CHECK(init_lvgl());
 
     lvgl_port_lock(0);
@@ -374,7 +404,9 @@ void app_main(void)
     create_menu_screen();                   // pagina 1 do menu
     create_menu2_screen();                  // pagina 2 do menu
     create_menu3_screen();                  // pagina 3 do menu
+    create_menu4_screen();                  // pagina 4 do menu (Configs)
     watchface_create(ui_Screen1, scr_menu); // relogio sobre ui_Screen1
+    configs_screens_create(scr_menu4);      // telas de Hora e Data
     max30102_screen_create(scr_menu);       // tela do MAX30102
     ds18b20_screen_create(scr_menu);        // tela do DS18B20
     ltr390_lux_screen_create(scr_menu2);    // tela de Lux (volta p/ pagina 2)
@@ -382,6 +414,8 @@ void app_main(void)
     mpu9250_compass_create(scr_menu3);      // telas da bussola (volta p/ pagina 3)
     pedometer_screen_create(scr_menu3);     // tela do pedometro  (volta p/ pagina 3)
     lvgl_port_unlock();
+
+    screenshot_init();   // captura de tela via botao BOOT (documentacao do TCC)
 
     ESP_LOGI(TAG, "UI pronta. Iniciando loop...");
 
