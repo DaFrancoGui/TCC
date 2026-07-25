@@ -6,10 +6,38 @@
 #include "compass_process.h"
 #include "mpu9250_hw.h"   /* MAG_SENSITIVITY */
 #include <math.h>
+#include "esp_log.h"
+
+static const char *TAG = "COMPASS";
 
 #define PI_F                3.14159265359f
 #define HEADING_ALPHA       0.15f   /* filtro passa-baixa do heading */
 #define CAL_MIN_RANGE_UT    12.0f   /* spread minimo p/ validar a calibracao */
+
+/* Correcao fixa do heading (aplicada depois do atan2, antes do filtro):
+ *
+ * MOUNTING_OFFSET_DEG: rotacao entre o eixo +X do AK8963 e o "12 horas" do
+ *   relogio. A calibracao (hard/soft-iron) corrige a FORMA da leitura, mas NAO
+ *   essa rotacao — o sensor pode estar montado virado na placa. Medir uma vez:
+ *   com o relogio calibrado e deitado, aponte o topo para o Norte (use outra
+ *   bussola) e leia o heading; o valor lido e o offset a subtrair (ver abaixo).
+ * DECLINATION_DEG: declinacao magnetica local (Norte magnetico x geografico).
+ *   Florianopolis/SC ~ -21 (oeste). Consulte ngdc.noaa.gov/geomag/calculators.
+ *   Deixe 0 para exibir Norte MAGNETICO (comparavel a uma bussola comum). */
+/* INVERT_ROTATION: 1 espelha o sentido do heading — necessario porque o MPU
+ * esta montado de cabeca para baixo na placa. Confirmado em campo: com =1 o
+ * ponteiro aponta corretamente para o Norte MAGNETICO. */
+#define INVERT_ROTATION       1
+/* 180: a agulha vermelha apontava para o Sul; o giro de 180 poe ela no Norte.
+ * (O eixo do magnetometro fica a 180 do "12 horas" do relogio nesta montagem.) */
+#define MOUNTING_OFFSET_DEG   180.0f
+/* Declinacao magnetica em Florianopolis/SC (~ -21 deg oeste, 2026): converte o
+ * Norte magnetico lido para Norte GEOGRAFICO (verdadeiro). Confira o valor
+ * atual da sua coordenada em ngdc.noaa.gov/geomag/calculators/magcalc. */
+#define DECLINATION_DEG       -21.0f
+
+/* Log de diagnostico no heading (raw, uT, heading) ~1x/s. 0 desliga. */
+#define COMPASS_DEBUG_LOG     1
 
 /* ASA de fabrica e calibracao ativa */
 static float s_asa[3] = {1.0f, 1.0f, 1.0f};
@@ -54,7 +82,21 @@ float compass_update_heading(int16_t mx, int16_t my, int16_t mz)
     float fy = (ut[1] - s_cal.off[1]) * s_cal.scale[1];
 
     float heading = atan2f(fy, -fx) * 180.0f / PI_F;
-    if (heading < 0) heading += 360.0f;
+#if INVERT_ROTATION
+    heading = -heading;
+#endif
+    heading += MOUNTING_OFFSET_DEG + DECLINATION_DEG;
+    while (heading < 0)       heading += 360.0f;
+    while (heading >= 360.0f) heading -= 360.0f;
+
+#if COMPASS_DEBUG_LOG
+    static uint32_t dbg = 0;
+    if ((dbg++ % 4) == 0) {    /* ~4x/s a 60 ms/amostra: acompanhar ao vivo */
+        ESP_LOGI(TAG, "raw[%d %d %d] uT[%.1f %.1f %.1f] off[%.1f %.1f] head=%.0f",
+                 mx, my, mz, ut[0], ut[1], ut[2],
+                 s_cal.off[0], s_cal.off[1], heading);
+    }
+#endif
 
     if (s_filtered < 0) {
         s_filtered = heading;

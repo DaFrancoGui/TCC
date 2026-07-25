@@ -24,16 +24,16 @@ extern "C" {
 
 /* --------- Configuracao do barramento 1-Wire --------- */
 
-#define DS18B20_ONEWIRE_GPIO    2       /* GPIO do barramento 1-Wire (pino A2/D2, pull-up 4,7k necessario) */
+#define DS18B20_ONEWIRE_GPIO    20      /* GPIO do barramento 1-Wire (pino D9, pull-up 4,7k necessario) */
 
 /*
- * Tempo de conversao para resolucao 12 bits (datasheet, Table 2):
+ * Tempo de conversao para resolucao 11 bits (datasheet, Table 2):
  *   9  bits  ->  93,75 ms
  *   10 bits  -> 187,5  ms
- *   11 bits  -> 375    ms
- *   12 bits  -> 750    ms   ← usado aqui (resolucao 0,0625 C/LSB)
+ *   11 bits  -> 375    ms   ← usado aqui (0,125 C/LSB)
+ *   12 bits  -> 750    ms
  */
-#define DS18B20_CONV_TIME_MS    750
+#define DS18B20_CONV_TIME_MS    375
 
 /* Faixa de temperatura ambiente esperada em condicoes normais de uso */
 #define DS18B20_TEMP_MIN       -10.0f   /* -10 °C */

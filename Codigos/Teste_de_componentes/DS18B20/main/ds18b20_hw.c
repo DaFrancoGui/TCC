@@ -57,14 +57,14 @@ esp_err_t ds18b20_hw_init(void)
         return ret;
     }
 
-    /* --- Configurar resolucao maxima: 12 bits = 0,0625 C/LSB, t_conv = 750 ms --- */
-    ret = ds18b20_set_resolution(s_sensor, DS18B20_RESOLUTION_12B);
+    /* --- Resolucao 11 bits = 0,125 C/LSB, t_conv = 375 ms (rapido p/ 1 casa) --- */
+    ret = ds18b20_set_resolution(s_sensor, DS18B20_RESOLUTION_11B);
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "Falha ao configurar resolucao 12 bits: %s", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "Falha ao configurar resolucao 11 bits: %s", esp_err_to_name(ret));
         return ret;
     }
 
-    ESP_LOGI(TAG, "DS18B20 pronto: resolucao 12 bits, t_conv = %d ms", DS18B20_CONV_TIME_MS);
+    ESP_LOGI(TAG, "DS18B20 pronto: resolucao 11 bits, t_conv = %d ms", DS18B20_CONV_TIME_MS);
     return ESP_OK;
 }
 
@@ -79,7 +79,7 @@ esp_err_t ds18b20_hw_read(float *out_temp, bool *out_valid)
         return ret;
     }
 
-    /* Aguardar conclusao da conversao (datasheet: 750 ms para 12 bits) */
+    /* Aguardar conclusao da conversao (datasheet: 375 ms para 11 bits) */
     vTaskDelay(pdMS_TO_TICKS(DS18B20_CONV_TIME_MS));
 
     /* Ler scratchpad e extrair temperatura */

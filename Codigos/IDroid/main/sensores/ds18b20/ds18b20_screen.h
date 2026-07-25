@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-/** Inicializa o 1-Wire (GPIO2 via RMT) e a task de leitura. Nao-fatal. */
+/** Inicializa o 1-Wire (GPIO20/D9 via RMT) e a task de leitura. Nao-fatal. */
 esp_err_t ds18b20_module_init(void);
 
 /** Constroi a tela; o botao VOLTAR retorna para `menu_scr`. */

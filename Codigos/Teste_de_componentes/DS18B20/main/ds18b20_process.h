@@ -40,7 +40,7 @@ extern "C" {
 #endif
 
 /* Coeficiente de suavizacao EMA (alpha = 0,3, tau ≈ 9 s) */
-#define DS18B20_EMA_ALPHA     0.30f
+#define DS18B20_EMA_ALPHA     0.50f
 
 /* Numero de amostras por janela de relatorio de min/max */
 #define DS18B20_REPORT_WINDOW 10

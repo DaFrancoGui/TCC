@@ -54,21 +54,20 @@ esp_err_t ds18b20_hw_init(void)
     ret = ds18b20_new_single_device(s_bus, &sensor_cfg, &s_sensor);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Sensor DS18B20 nao encontrado: %s", esp_err_to_name(ret));
-        /* Sem sensor: libera o barramento para nao deixar o GPIO preso.
-         * No shield, GPIO2 = SD CS — deixa-lo flutuando perturba o SPI. */
+        /* Sem sensor: libera o barramento para nao deixar o GPIO preso. */
         onewire_bus_del(s_bus);
         s_bus = NULL;
         return ret;
     }
 
     /* --- Configurar resolucao maxima: 12 bits = 0,0625 C/LSB, t_conv = 750 ms --- */
-    ret = ds18b20_set_resolution(s_sensor, DS18B20_RESOLUTION_12B);
+    ret = ds18b20_set_resolution(s_sensor, DS18B20_RESOLUTION_11B);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Falha ao configurar resolucao 12 bits: %s", esp_err_to_name(ret));
         return ret;
     }
 
-    ESP_LOGI(TAG, "DS18B20 pronto: resolucao 12 bits, t_conv = %d ms", DS18B20_CONV_TIME_MS);
+    ESP_LOGI(TAG, "DS18B20 pronto: resolucao 11 bits, t_conv = %d ms", DS18B20_CONV_TIME_MS);
     return ESP_OK;
 }
 

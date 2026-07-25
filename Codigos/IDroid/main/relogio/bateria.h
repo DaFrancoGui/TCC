@@ -17,12 +17,15 @@ extern "C" {
 esp_err_t bateria_init(void);
 
 /**
- * Le a tensao da bateria (media de 16 amostras) e estima a carga.
- * @param bat_mv  tensao da bateria em mV (ja com o fator do divisor)
- * @param pct     carga estimada 0-100%% (curva de descarga LiPo 1S)
+ * Le a tensao da bateria (media de 16 amostras + EMA) e estima a carga.
+ * @param bat_mv    tensao da bateria em mV (ja com o fator do divisor)
+ * @param pct       carga estimada 0-100%% (curva de descarga LiPo 1S)
+ * @param charging  true se a tensao indica USB/carregador ligado (o carregador
+ *                  segura o terminal acima da tensao de repouso). Heuristica por
+ *                  limiar — sem pino VBUS acessivel no XIAO.
  * @return false se o ADC nao inicializou ou a leitura falhou
  */
-bool bateria_read(uint32_t *bat_mv, uint8_t *pct);
+bool bateria_read(uint32_t *bat_mv, uint8_t *pct, bool *charging);
 
 #ifdef __cplusplus
 }

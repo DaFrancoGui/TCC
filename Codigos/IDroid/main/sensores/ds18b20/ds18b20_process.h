@@ -39,8 +39,11 @@
 extern "C" {
 #endif
 
-/* Coeficiente de suavizacao EMA (alpha = 0,3, tau ≈ 9 s) */
-#define DS18B20_EMA_ALPHA     0.30f
+/* Coeficiente de suavizacao EMA. O DS18B20 e digital e estavel (pouco ruido),
+ * e o flag `valid` ja rejeita leituras ruins — entao o filtro e leve so para
+ * estabilizar a ultima casa decimal. alpha=0,5 => responde em ~2 amostras.
+ * (Use 1,0 para desativar o filtro por completo.) */
+#define DS18B20_EMA_ALPHA     0.50f
 
 /* Numero de amostras por janela de relatorio de min/max */
 #define DS18B20_REPORT_WINDOW 10

@@ -19,10 +19,19 @@ static const char *TAG = "BATERIA";
 #define BAT_ADC_ATTEN       ADC_ATTEN_DB_12
 #define BAT_N_SAMPLES       16
 #define BAT_DIVIDER_RATIO   2.0f              /* divisor 1:2 (2 resistores iguais) */
+#define BAT_EMA_ALPHA       0.3f              /* lido a cada 500 ms: assenta em ~4 s */
+/* Limiar de "carregando" com histerese, na leitura INSTANTANEA (reacao rapida):
+ * no teste, 56%% na bateria (~3840 mV) pulou para ~4040 mV ao plugar o USB.
+ * Entra carregando acima de 4000, sai abaixo de 3900 (banda evita flicker). */
+#define BAT_CHARGING_HI_MV  4000
+#define BAT_CHARGING_LO_MV  3900
 
 static adc_oneshot_unit_handle_t s_adc  = NULL;
 static adc_cali_handle_t         s_cali = NULL;
 static bool                      s_ok   = false;
+static float                     s_ema_mv   = 0.0f;
+static bool                      s_ema_init = false;
+static bool                      s_charging = false;
 
 /* Curva de descarga tipica de LiPo 1S em repouso: pares {mV, %} */
 static const struct { uint16_t mv; uint8_t pct; } s_curve[] = {
@@ -80,7 +89,7 @@ esp_err_t bateria_init(void)
     return ESP_OK;
 }
 
-bool bateria_read(uint32_t *bat_mv, uint8_t *pct)
+bool bateria_read(uint32_t *bat_mv, uint8_t *pct, bool *charging)
 {
     if (!s_ok) return false;
 
@@ -100,7 +109,29 @@ bool bateria_read(uint32_t *bat_mv, uint8_t *pct)
     }
     if (ok == 0) return false;
 
-    *bat_mv = (uint32_t)((acc_mv / ok) * BAT_DIVIDER_RATIO);
-    *pct    = battery_percent(*bat_mv);
+    uint32_t inst_mv = (uint32_t)((acc_mv / ok) * BAT_DIVIDER_RATIO);
+
+    /* Carregando: histerese na leitura INSTANTANEA (o carregador levanta o
+     * terminal na hora ao plugar), sem esperar o EMA — deteccao em ~500 ms. */
+    bool was_charging = s_charging;
+    if (inst_mv >= BAT_CHARGING_HI_MV)      s_charging = true;
+    else if (inst_mv < BAT_CHARGING_LO_MV)  s_charging = false;
+
+    /* Ao trocar de regime (plugou/desplugou), re-semeia o EMA para a % saltar
+     * direto para a nova tensao em vez de convergir lentamente. */
+    if (s_charging != was_charging) s_ema_init = false;
+
+    /* Filtro EMA entre chamadas: o LiPo tem curva muito plana no meio da
+     * descarga (~0,25 %/mV), entao o ruido do ADC vira saltos de %. */
+    if (!s_ema_init) {
+        s_ema_mv   = (float)inst_mv;
+        s_ema_init = true;
+    } else {
+        s_ema_mv += BAT_EMA_ALPHA * ((float)inst_mv - s_ema_mv);
+    }
+
+    *bat_mv   = (uint32_t)(s_ema_mv + 0.5f);
+    *pct      = battery_percent(*bat_mv);
+    *charging = s_charging;
     return true;
 }

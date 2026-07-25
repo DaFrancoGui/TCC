@@ -56,7 +56,7 @@ static void temp_task(void *arg)
             g_valid = valid;
             g_has_reading = true;
         }
-        vTaskDelay(pdMS_TO_TICKS(250));
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
 

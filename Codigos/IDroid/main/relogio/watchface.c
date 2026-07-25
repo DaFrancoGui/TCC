@@ -171,11 +171,16 @@ void watchface_update(void)
         lv_label_set_text_fmt(label_perf_cpu, "CPU: %d%%", cpu);
     }
 
-    // Bateria muda devagar: le na primeira iteracao e depois a cada 30 s
-    if (iter % 60 == 0) {
-        uint32_t mv; uint8_t pct;
-        if (bateria_read(&mv, &pct)) {
-            lv_label_set_text_fmt(label_bateria, "Bateria: %u%%", pct);
+    // Bateria: le a cada 500 ms (todo ciclo). O EMA e a histerese de carga
+    // ficam em bateria.c; deteccao de plug/unplug em ~500 ms.
+    {
+        uint32_t mv; uint8_t pct; bool charging;
+        if (bateria_read(&mv, &pct, &charging)) {
+            if (charging) {
+                lv_label_set_text(label_bateria, "Carregando");
+            } else {
+                lv_label_set_text_fmt(label_bateria, "Bateria: %u%%", pct);
+            }
         } else {
             lv_label_set_text(label_bateria, "Bateria: --%");
         }

@@ -6,9 +6,9 @@
  * Conversion derivations (from LTR390-UV-01 datasheet, sections 6.3–6.4):
  *
  * UVS → UV Index:
- *   UVI = UVS_raw / (UV_SENSITIVITY × (gain / 18) × (int_ms / 100))
- *   At gain=18x, int=100 ms:
- *   UVI = UVS_raw / (2300 × 1.0 × 1.0) = UVS_raw / 2300
+ *   UVI = UVS_raw / (UV_SENSITIVITY × (gain / 18) × (int_ms / 400))
+ *   A referência 2300 é a gain=18x e 20-bit (400 ms). Rodando a 18-bit (100 ms):
+ *   UVI = UVS_raw / (2300 × 1.0 × 0.25) = UVS_raw / 575
  *
  * ALS → Lux:
  *   lux = C_lux × ALS_raw / (gain × (int_ms / 100))
@@ -29,17 +29,18 @@
  * ───────────────────────────────────────────── */
 
 /**
- * Converts a 20-bit UVS ADC count to UV Index.
+ * Converts an 18-bit UVS ADC count to UV Index.
  *
- * UV_SENSITIVITY (2300) is the reference sensitivity at gain=18x, 100 ms.
- * With LTR390_PROC_UVS_GAIN=18 and LTR390_INT_FACTOR=1, the denominator = 2300.
- * Kept as a general formula to make gain/resolution changes safe.
+ * UV_SENSITIVITY (2300) é a sensibilidade de referência a gain=18x e 20-bit
+ * (400 ms). A 18-bit (100 ms) o fator LTR390_UVS_INT_FACTOR=0.25 corrige a
+ * escala → denominador = 575. Antes usava fator 1 (referência errada de
+ * 100 ms) e o UVI saía 4× baixo.
  */
 static float convert_uvs_to_uvi(uint32_t raw)
 {
     float denominator = LTR390_UV_SENSITIVITY
                         * (LTR390_PROC_UVS_GAIN / 18.0f)
-                        * LTR390_INT_FACTOR;
+                        * LTR390_UVS_INT_FACTOR;
     if (denominator < 0.001f) denominator = 0.001f;  /* guard against division by zero */
     return (float)raw / denominator;
 }
@@ -48,11 +49,11 @@ static float convert_uvs_to_uvi(uint32_t raw)
  * Converts a 20-bit ALS ADC count to illuminance (lux).
  *
  * C_lux = 0.6 (datasheet constant for LTR390-UV-01).
- * With LTR390_PROC_ALS_GAIN=3 and LTR390_INT_FACTOR=1, lux = 0.6×raw/3 = raw×0.2.
+ * With LTR390_PROC_ALS_GAIN=3 and LTR390_ALS_INT_FACTOR=1, lux = 0.6×raw/3 = raw×0.2.
  */
 static float convert_als_to_lux(uint32_t raw)
 {
-    float denominator = LTR390_PROC_ALS_GAIN * LTR390_INT_FACTOR;
+    float denominator = LTR390_PROC_ALS_GAIN * LTR390_ALS_INT_FACTOR;
     if (denominator < 0.001f) denominator = 0.001f;
     return LTR390_ALS_C_LUX * (float)raw / denominator;
 }

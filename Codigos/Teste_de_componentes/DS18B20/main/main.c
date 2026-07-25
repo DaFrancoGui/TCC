@@ -3,11 +3,11 @@
  * @brief Pipeline de temperatura ambiente com DS18B20 no ESP32-C6.
  *
  * Pipeline:
- *   DS18B20 1-Wire via RMT (12 bits, 0,0625 C/LSB, conversao de 750 ms)
+ *   DS18B20 1-Wire via RMT (11 bits, 0,125 C/LSB, conversao de 375 ms)
  *       |
  *       v
  *   Estagio 1 — ds18b20_hw_read():
- *     Dispara conversao -> aguarda 750 ms -> le scratchpad -> valida faixa
+ *     Dispara conversao -> aguarda 375 ms -> le scratchpad -> valida faixa
  *       |
  *       v
  *   Estagio 2 — Saida direta (modo normal) ou EMA + diagnosticos (modo debug)
@@ -21,7 +21,7 @@
  *   janela min/max e contadores para analise de comportamento.
  *
  * Ciclo de medicao:
- *   ds18b20_hw_read() bloqueia 750 ms (conversao) + vTaskDelay(250 ms)
+ *   ds18b20_hw_read() bloqueia 375 ms (conversao) + vTaskDelay(100 ms)
  *   Taxa efetiva: 1 amostra a cada ~1 s (1 Hz)
  */
 
@@ -38,7 +38,7 @@ static const char *TAG = "DS18B20_MAIN";
 /* Modo debug: 0 = saida limpa (so temperatura), 1 = diagnosticos completos */
 #define DS18B20_DEBUG_MODE    0
 
-/* Intervalo de espera entre ciclos de medicao (apos a conversao de 750 ms) */
+/* Intervalo de espera entre ciclos de medicao (apos a conversao de 375 ms) */
 #define MEASURE_INTERVAL_MS   250
 
 void app_main(void)
@@ -57,7 +57,7 @@ void app_main(void)
              DS18B20_DEBUG_MODE ? "ATIVO" : "desligado");
 
     while (1) {
-        /* ---- Leitura bruta (bloqueante ~750 ms) ---- */
+        /* ---- Leitura bruta (bloqueante ~375 ms) ---- */
         float raw_temp = 0.0f;
         bool  valid    = false;
 

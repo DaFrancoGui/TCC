@@ -24,19 +24,21 @@ extern "C" {
 
 /* --------- Configuracao do barramento 1-Wire --------- */
 
-/* GPIO do barramento 1-Wire — pino A2/D2 (GPIO2). Pull-up 4,7k entre DATA e
- * 3,3V necessario. (D0 fica livre para o ADC de bateria.) A falha inicial era
- * falta de 3,3V no VDD do sensor, nao o pino. */
-#define DS18B20_ONEWIRE_GPIO    2
+/* GPIO do barramento 1-Wire — pino D9 (GPIO20). Movido do GPIO2 na placa final:
+ * o net do GPIO2 desenvolveu uma fuga de ~1,6k para o GND (leitura de DATA
+ * presa em ~1V), entao a trilha foi cortada e o DATA jumpeado para o D9.
+ * D9 = MISO do SPI, que o display (write-only) nunca dirige — pino limpo.
+ * Pull-up de 4,7k (integrado no modulo) entre DATA e 3,3V necessario. */
+#define DS18B20_ONEWIRE_GPIO    20
 
 /*
  * Tempo de conversao para resolucao 12 bits (datasheet, Table 2):
  *   9  bits  ->  93,75 ms
  *   10 bits  -> 187,5  ms
- *   11 bits  -> 375    ms
- *   12 bits  -> 750    ms   ← usado aqui (resolucao 0,0625 C/LSB)
+ *   11 bits  -> 375    ms   ← usado aqui (resolucao 0,125 C/LSB, otimo p/ 1 casa)
+ *   12 bits  -> 750    ms
  */
-#define DS18B20_CONV_TIME_MS    750
+#define DS18B20_CONV_TIME_MS    375
 
 /* Faixa de temperatura ambiente esperada em condicoes normais de uso */
 #define DS18B20_TEMP_MIN       -10.0f   /* -10 °C */

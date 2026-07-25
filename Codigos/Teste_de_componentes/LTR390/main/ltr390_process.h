@@ -56,8 +56,11 @@ extern "C" {
 #define LTR390_PROC_UVS_GAIN      18.0f
 #define LTR390_PROC_ALS_GAIN       3.0f
 
-/* Integration time normalisation factor (chosen resolution = 100 ms) */
-#define LTR390_INT_FACTOR          1.0f   /* 100 ms / 100 ms */
+/* Fatores de integracao — DIFERENTES para UVI e lux (referencias distintas):
+ *  UVI: referencia = 400 ms (20-bit). Rodando a 100 ms (18-bit) -> 100/400.
+ *  Lux: a constante C_lux=0.6 ja e calibrada para o fator 1 a 18-bit. */
+#define LTR390_UVS_INT_FACTOR      0.25f  /* 100 ms / 400 ms (20-bit ref) */
+#define LTR390_ALS_INT_FACTOR      1.0f   /* 18-bit ref da formula de lux */
 
 /* ALS Lux constant from datasheet (C_lux = 0.6) */
 #define LTR390_ALS_C_LUX          0.6f
