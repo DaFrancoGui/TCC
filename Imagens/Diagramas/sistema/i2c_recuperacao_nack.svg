@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 556" font-family="Helvetica" role="img" aria-label="Fluxograma da recuperacao apos erro de transacao: take mutex, transacao I2C, se falha chama i2c_recover_bus com bus_reset antes de liberar o mutex e retorna o erro ao modulo">
+<rect x="0" y="0" width="760" height="556" fill="#FFFFFF"/>
+<text x="380" y="32" text-anchor="middle" font-family="Helvetica" font-size="15" fill="#2B3138" font-weight="bold">Recuperação do barramento I²C após erro de transação</text>
+<defs>
+<marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#767D85"/></marker>
+</defs>
+<rect x="160" y="56" width="180" height="38" rx="18" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="250" y="79" text-anchor="middle" font-family="Helvetica" font-size="12" fill="#14515E" font-weight="bold">task acessa o I²C</text>
+<line x1="250" y1="94" x2="250" y2="114" stroke="#767D85" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="160" y="116" width="180" height="38" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="250" y="139" text-anchor="middle" font-family="monospace" font-size="12" fill="#14515E" font-weight="bold">take(i2c_mutex)</text>
+<line x1="250" y1="154" x2="250" y2="174" stroke="#767D85" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="150" y="176" width="200" height="40" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="250" y="195" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#14515E" font-weight="bold">i2c_master_transmit</text>
+<text x="250" y="210" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#767D85">[_receive]</text>
+<line x1="250" y1="216" x2="250" y2="224" stroke="#767D85" stroke-width="1.4" marker-end="url(#ar)"/>
+<polygon points="250,224 342,270 250,316 158,270" fill="#FBFCFC" stroke="#1D7A8C" stroke-width="1.6"/>
+<text x="250" y="267" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#14515E" font-weight="bold">transação</text>
+<text x="250" y="282" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#14515E" font-weight="bold">OK?</text>
+<line x1="250" y1="316" x2="250" y2="342" stroke="#767D85" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="264" y="333" text-anchor="start" font-family="Helvetica" font-size="10.5" fill="#1D7A8C" font-weight="bold">sim</text>
+<rect x="160" y="344" width="180" height="38" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="250" y="367" text-anchor="middle" font-family="monospace" font-size="12" fill="#14515E" font-weight="bold">give(i2c_mutex)</text>
+<line x1="250" y1="382" x2="250" y2="404" stroke="#767D85" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="160" y="406" width="180" height="38" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="250" y="429" text-anchor="middle" font-family="Helvetica" font-size="11" fill="#14515E" font-weight="bold">publica o dado</text>
+<line x1="250" y1="444" x2="250" y2="490" stroke="#767D85" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="150" y="492" width="200" height="40" rx="18" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="250" y="511" text-anchor="middle" font-family="Helvetica" font-size="11" fill="#14515E" font-weight="bold">próxima transação</text>
+<text x="250" y="525" text-anchor="middle" font-family="Helvetica" font-size="10" fill="#767D85">pode prosseguir</text>
+<line x1="342" y1="270" x2="448" y2="270" stroke="#767D85" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="395" y="261" text-anchor="middle" font-family="Helvetica" font-size="10.5" fill="#C4453C" font-weight="bold">não · erro</text>
+<rect x="448" y="246" width="232" height="46" rx="5" fill="#FBF3F2" stroke="#C4453C" stroke-width="1.6"/>
+<text x="564" y="265" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#C4453C" font-weight="bold">i2c_recover_bus():</text>
+<text x="564" y="281" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#C4453C">i2c_master_bus_reset(bus)</text>
+<line x1="564" y1="292" x2="564" y2="314" stroke="#767D85" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="474" y="316" width="180" height="38" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="564" y="339" text-anchor="middle" font-family="monospace" font-size="12" fill="#14515E" font-weight="bold">give(i2c_mutex)</text>
+<line x1="564" y1="354" x2="564" y2="382" stroke="#767D85" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="448" y="384" width="232" height="46" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="564" y="403" text-anchor="middle" font-family="Helvetica" font-size="11" fill="#14515E" font-weight="bold">erro retornado ao módulo</text>
+<text x="564" y="419" text-anchor="middle" font-family="Helvetica" font-size="10" fill="#767D85">dado não é atualizado</text>
+<polyline points="564,430 564,512 352,512" fill="none" stroke="#767D85" stroke-width="1.4" marker-end="url(#ar)"/>
+</svg>

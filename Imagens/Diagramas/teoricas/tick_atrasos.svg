@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 850" width="1500" height="850"
+     font-family="DejaVu Sans, Liberation Sans, sans-serif" role="img"
+     aria-label="Figura conceitual com duas linhas do tempo sobre a mesma grade de ticks. Na faixa superior, atrasos relativos iniciados após cada execução acumulam desvio. Na faixa inferior, liberações referenciadas ao período permanecem alinhadas aos instantes ideais.">
+  <defs>
+    <marker id="arrowGraphite" markerWidth="9" markerHeight="9" refX="7.5" refY="4.5" orient="auto">
+      <path d="M0,0 L8,4.5 L0,9 Z" fill="#263238"/>
+    </marker>
+    <marker id="arrowAmber" markerWidth="8" markerHeight="8" refX="6.8" refY="4" orient="auto">
+      <path d="M0,0 L7,4 L0,8 Z" fill="#F9A825"/>
+    </marker>
+    <marker id="arrowAmberStart" markerWidth="8" markerHeight="8" refX="0.2" refY="4" orient="auto">
+      <path d="M7,0 L0,4 L7,8 Z" fill="#F9A825"/>
+    </marker>
+    <style>
+      .title       { font-size: 25px; font-weight: 700; fill: #263238; }
+      .subtitle    { font-size: 14px; font-style: italic; fill: #607178; }
+      .band-title  { font-size: 18px; font-weight: 700; fill: #263238; }
+      .band-sub    { font-size: 13px; fill: #607178; }
+      .period      { font-size: 13px; font-weight: 700; fill: #1565C0; }
+      .tick-label  { font-size: 12px; fill: #607178; }
+      .callout     { font-size: 13px; font-weight: 700; }
+      .block-label { font-size: 12px; font-weight: 700; }
+      .legend      { font-size: 13px; fill: #263238; }
+      .note        { font-size: 12px; font-style: italic; fill: #607178; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1500" height="850" fill="#FFFFFF"/>
+
+  <text x="750" y="42" text-anchor="middle" class="title">Atraso relativo e referência periódica absoluta</text>
+  <text x="750" y="68" text-anchor="middle" class="subtitle">figura conceitual — tempos, durações e proporções apenas ilustrativos</text>
+
+  <!-- Faixas -->
+  <rect x="38" y="145" width="1424" height="245" rx="9" fill="#FEFAF4"
+        stroke="#B8C1C5" stroke-width="1.4" stroke-dasharray="7 5"/>
+  <rect x="38" y="415" width="1424" height="245" rx="9" fill="#F5FAFB"
+        stroke="#B8C1C5" stroke-width="1.4" stroke-dasharray="7 5"/>
+
+  <!-- Identificação dos seis períodos ideais -->
+  <text x="340"  y="102" text-anchor="middle" class="period">P1</text>
+  <text x="520"  y="102" text-anchor="middle" class="period">P2</text>
+  <text x="700"  y="102" text-anchor="middle" class="period">P3</text>
+  <text x="880"  y="102" text-anchor="middle" class="period">P4</text>
+  <text x="1060" y="102" text-anchor="middle" class="period">P5</text>
+  <text x="1240" y="102" text-anchor="middle" class="period">P6</text>
+
+  <!-- Grade de ticks compartilhada: cinco subdivisões por período conceitual -->
+  <g stroke="#DCE3E6" stroke-width="1">
+    <path d="M286 114 V140 M286 215 V642"/>
+    <path d="M322 114 V140 M322 215 V642"/>
+    <path d="M358 114 V140 M358 215 V642"/>
+    <path d="M394 114 V140 M394 215 V642"/>
+    <path d="M466 114 V140 M466 215 V642"/>
+    <path d="M502 114 V140 M502 215 V642"/>
+    <path d="M538 114 V140 M538 215 V642"/>
+    <path d="M574 114 V140 M574 215 V642"/>
+    <path d="M646 114 V140 M646 215 V642"/>
+    <path d="M682 114 V140 M682 215 V642"/>
+    <path d="M718 114 V140 M718 215 V642"/>
+    <path d="M754 114 V140 M754 215 V642"/>
+    <path d="M826 114 V140 M826 215 V642"/>
+    <path d="M862 114 V140 M862 215 V642"/>
+    <path d="M898 114 V140 M898 215 V642"/>
+    <path d="M934 114 V140 M934 215 V642"/>
+    <path d="M1006 114 V140 M1006 215 V642"/>
+    <path d="M1042 114 V140 M1042 215 V642"/>
+    <path d="M1078 114 V140 M1078 215 V642"/>
+    <path d="M1114 114 V140 M1114 215 V642"/>
+    <path d="M1186 114 V140 M1186 215 V642"/>
+    <path d="M1222 114 V140 M1222 215 V642"/>
+    <path d="M1258 114 V140 M1258 215 V642"/>
+    <path d="M1294 114 V140 M1294 215 V642"/>
+  </g>
+
+  <!-- Instantes ideais / limites dos períodos -->
+  <g stroke="#1565C0" stroke-width="1.5" stroke-dasharray="6 5" opacity="0.78">
+    <path d="M250 112 V140 M250 215 V642"/>
+    <path d="M430 112 V140 M430 215 V642"/>
+    <path d="M610 112 V140 M610 215 V642"/>
+    <path d="M790 112 V140 M790 215 V642"/>
+    <path d="M970 112 V140 M970 215 V642"/>
+    <path d="M1150 112 V140 M1150 215 V642"/>
+    <path d="M1330 112 V140 M1330 215 V642"/>
+  </g>
+
+  <!-- Zonas de leitura dos cabeçalhos sobre a grade -->
+  <rect x="58" y="153" width="510" height="58" fill="#FEFAF4"/>
+  <rect x="58" y="423" width="630" height="58" fill="#F5FAFB"/>
+
+  <!-- Ticks no topo -->
+  <line x1="250" y1="116" x2="1330" y2="116" stroke="#263238" stroke-width="1.5"
+        marker-end="url(#arrowGraphite)"/>
+  <g stroke="#263238" stroke-width="1.5">
+    <line x1="250" y1="109" x2="250" y2="123"/>
+    <line x1="286" y1="111" x2="286" y2="121"/>
+    <line x1="322" y1="111" x2="322" y2="121"/>
+    <line x1="358" y1="111" x2="358" y2="121"/>
+    <line x1="394" y1="111" x2="394" y2="121"/>
+    <line x1="430" y1="109" x2="430" y2="123"/>
+    <line x1="466" y1="111" x2="466" y2="121"/>
+    <line x1="502" y1="111" x2="502" y2="121"/>
+    <line x1="538" y1="111" x2="538" y2="121"/>
+    <line x1="574" y1="111" x2="574" y2="121"/>
+    <line x1="610" y1="109" x2="610" y2="123"/>
+    <line x1="646" y1="111" x2="646" y2="121"/>
+    <line x1="682" y1="111" x2="682" y2="121"/>
+    <line x1="718" y1="111" x2="718" y2="121"/>
+    <line x1="754" y1="111" x2="754" y2="121"/>
+    <line x1="790" y1="109" x2="790" y2="123"/>
+    <line x1="826" y1="111" x2="826" y2="121"/>
+    <line x1="862" y1="111" x2="862" y2="121"/>
+    <line x1="898" y1="111" x2="898" y2="121"/>
+    <line x1="934" y1="111" x2="934" y2="121"/>
+    <line x1="970" y1="109" x2="970" y2="123"/>
+    <line x1="1006" y1="111" x2="1006" y2="121"/>
+    <line x1="1042" y1="111" x2="1042" y2="121"/>
+    <line x1="1078" y1="111" x2="1078" y2="121"/>
+    <line x1="1114" y1="111" x2="1114" y2="121"/>
+    <line x1="1150" y1="109" x2="1150" y2="123"/>
+    <line x1="1186" y1="111" x2="1186" y2="121"/>
+    <line x1="1222" y1="111" x2="1222" y2="121"/>
+    <line x1="1258" y1="111" x2="1258" y2="121"/>
+    <line x1="1294" y1="111" x2="1294" y2="121"/>
+    <line x1="1330" y1="109" x2="1330" y2="123"/>
+  </g>
+  <text x="224" y="120" text-anchor="end" class="tick-label">ticks</text>
+
+  <!-- Faixa 1: atrasos relativos sucessivos -->
+  <text x="68" y="178" class="band-title">1  Atrasos relativos sucessivos</text>
+  <text x="68" y="200" class="band-sub">execução → espera relativa → próxima liberação</text>
+
+  <!-- Diamantes dos instantes ideais -->
+  <g fill="#FFFFFF" stroke="#1565C0" stroke-width="2">
+    <path d="M250 226 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M430 226 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M610 226 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M790 226 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M970 226 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M1150 226 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M1330 226 l7 7 -7 7 -7 -7 Z"/>
+  </g>
+
+  <!-- Chamada curta para o instante ideal -->
+  <text x="430" y="220" text-anchor="middle" class="callout" fill="#1565C0">instante ideal</text>
+
+  <!-- Linha temporal -->
+  <line x1="250" y1="309" x2="1394" y2="309" stroke="#263238" stroke-width="1.8"
+        marker-end="url(#arrowGraphite)"/>
+
+  <!-- Execuções com duração variável -->
+  <g fill="#00796B" stroke="#005E54" stroke-width="1.3">
+    <rect x="250"  y="265" width="20" height="34" rx="3"/>
+    <rect x="450"  y="265" width="30" height="34" rx="3"/>
+    <rect x="660"  y="265" width="40" height="34" rx="3"/>
+    <rect x="880"  y="265" width="25" height="34" rx="3"/>
+    <rect x="1085" y="265" width="30" height="34" rx="3"/>
+    <rect x="1295" y="265" width="28" height="34" rx="3"/>
+  </g>
+
+  <!-- Esperas relativas de mesma extensão, sempre iniciadas após a execução -->
+  <g fill="#E8F1F7" stroke="#1565C0" stroke-width="1.35">
+    <rect x="270"  y="265" width="180" height="34" rx="3"/>
+    <rect x="480"  y="265" width="180" height="34" rx="3"/>
+    <rect x="700"  y="265" width="180" height="34" rx="3"/>
+    <rect x="905"  y="265" width="180" height="34" rx="3"/>
+    <rect x="1115" y="265" width="180" height="34" rx="3"/>
+    <path d="M1323 265 H1390 L1382 282 L1390 299 H1323 Z"/>
+  </g>
+
+  <text x="260" y="287" text-anchor="middle" class="block-label" fill="#FFFFFF">E</text>
+  <text x="360" y="287" text-anchor="middle" class="block-label" fill="#1565C0">bloqueio / espera</text>
+
+  <!-- Liberações efetivas, progressivamente deslocadas -->
+  <g stroke="#F9A825" stroke-width="2.5" fill="#F9A825">
+    <line x1="250"  y1="253" x2="250"  y2="304"/><path d="M244 253 L256 253 L250 261 Z"/>
+    <line x1="450"  y1="253" x2="450"  y2="304"/><path d="M444 253 L456 253 L450 261 Z"/>
+    <line x1="660"  y1="253" x2="660"  y2="304"/><path d="M654 253 L666 253 L660 261 Z"/>
+    <line x1="880"  y1="253" x2="880"  y2="304"/><path d="M874 253 L886 253 L880 261 Z"/>
+    <line x1="1085" y1="253" x2="1085" y2="304"/><path d="M1079 253 L1091 253 L1085 261 Z"/>
+    <line x1="1295" y1="253" x2="1295" y2="304"/><path d="M1289 253 L1301 253 L1295 261 Z"/>
+  </g>
+
+  <!-- Desvio acumulado apenas na faixa relativa -->
+  <line x1="1153" y1="342" x2="1292" y2="342" stroke="#F9A825" stroke-width="2.3"
+        marker-start="url(#arrowAmberStart)" marker-end="url(#arrowAmber)"/>
+  <line x1="1150" y1="318" x2="1150" y2="351" stroke="#F9A825" stroke-width="1.6"/>
+  <line x1="1295" y1="318" x2="1295" y2="351" stroke="#F9A825" stroke-width="1.6"/>
+  <text x="1222.5" y="365" text-anchor="middle" class="callout" fill="#9A6500">desvio acumulado</text>
+
+  <!-- Faixa 2: referência periódica absoluta -->
+  <text x="68" y="448" class="band-title">2  Referência periódica absoluta</text>
+  <text x="68" y="470" class="band-sub">liberações alinhadas à grade; execução variável dentro de cada janela</text>
+
+  <line x1="250" y1="579" x2="1394" y2="579" stroke="#263238" stroke-width="1.8"
+        marker-end="url(#arrowGraphite)"/>
+
+  <!-- Instante ideal e liberação efetiva coincidem -->
+  <g fill="#FFFFFF" stroke="#1565C0" stroke-width="2">
+    <path d="M250 496 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M430 496 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M610 496 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M790 496 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M970 496 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M1150 496 l7 7 -7 7 -7 -7 Z"/>
+    <path d="M1330 496 l7 7 -7 7 -7 -7 Z"/>
+  </g>
+  <g stroke="#F9A825" stroke-width="2.5" fill="#F9A825">
+    <line x1="250"  y1="513" x2="250"  y2="574"/><path d="M244 513 L256 513 L250 521 Z"/>
+    <line x1="430"  y1="513" x2="430"  y2="574"/><path d="M424 513 L436 513 L430 521 Z"/>
+    <line x1="610"  y1="513" x2="610"  y2="574"/><path d="M604 513 L616 513 L610 521 Z"/>
+    <line x1="790"  y1="513" x2="790"  y2="574"/><path d="M784 513 L796 513 L790 521 Z"/>
+    <line x1="970"  y1="513" x2="970"  y2="574"/><path d="M964 513 L976 513 L970 521 Z"/>
+    <line x1="1150" y1="513" x2="1150" y2="574"/><path d="M1144 513 L1156 513 L1150 521 Z"/>
+    <line x1="1330" y1="513" x2="1330" y2="574"/><path d="M1324 513 L1336 513 L1330 521 Z"/>
+  </g>
+
+  <!-- Execuções variáveis; a espera termina sempre no próximo instante ideal -->
+  <g fill="#00796B" stroke="#005E54" stroke-width="1.3">
+    <rect x="250"  y="535" width="20" height="34" rx="3"/>
+    <rect x="430"  y="535" width="30" height="34" rx="3"/>
+    <rect x="610"  y="535" width="40" height="34" rx="3"/>
+    <rect x="790"  y="535" width="25" height="34" rx="3"/>
+    <rect x="970"  y="535" width="30" height="34" rx="3"/>
+    <rect x="1150" y="535" width="28" height="34" rx="3"/>
+  </g>
+  <g fill="#E8F1F7" stroke="#1565C0" stroke-width="1.35">
+    <rect x="270"  y="535" width="160" height="34" rx="3"/>
+    <rect x="460"  y="535" width="150" height="34" rx="3"/>
+    <rect x="650"  y="535" width="140" height="34" rx="3"/>
+    <rect x="815"  y="535" width="155" height="34" rx="3"/>
+    <rect x="1000" y="535" width="150" height="34" rx="3"/>
+    <rect x="1178" y="535" width="152" height="34" rx="3"/>
+  </g>
+  <text x="260" y="557" text-anchor="middle" class="block-label" fill="#FFFFFF">E</text>
+  <text x="350" y="557" text-anchor="middle" class="block-label" fill="#1565C0">bloqueio / espera</text>
+  <text x="790" y="626" text-anchor="middle" class="callout" fill="#1565C0">alinhamento preservado</text>
+
+  <!-- Legenda -->
+  <line x1="54" y1="694" x2="1446" y2="694" stroke="#B8C1C5" stroke-width="1.2"/>
+
+  <line x1="72" y1="727" x2="72" y2="751" stroke="#D0D9DD" stroke-width="2"/>
+  <line x1="62" y1="739" x2="82" y2="739" stroke="#263238" stroke-width="1.5"/>
+  <text x="94" y="744" class="legend">tick</text>
+
+  <line x1="190" y1="719" x2="190" y2="755" stroke="#1565C0" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <path d="M190 728 l7 7 -7 7 -7 -7 Z" fill="#FFFFFF" stroke="#1565C0" stroke-width="2"/>
+  <text x="212" y="744" class="legend">instante ideal</text>
+
+  <rect x="405" y="727" width="42" height="22" rx="3" fill="#00796B" stroke="#005E54" stroke-width="1.2"/>
+  <text x="460" y="744" class="legend">execução da tarefa</text>
+
+  <rect x="650" y="727" width="54" height="22" rx="3" fill="#E8F1F7" stroke="#1565C0" stroke-width="1.3"/>
+  <text x="717" y="744" class="legend">bloqueio / espera</text>
+
+  <line x1="912" y1="721" x2="912" y2="752" stroke="#F9A825" stroke-width="2.5"/>
+  <path d="M906 721 L918 721 L912 729 Z" fill="#F9A825"/>
+  <text x="932" y="744" class="legend">liberação efetiva</text>
+
+  <line x1="1125" y1="738" x2="1200" y2="738" stroke="#F9A825" stroke-width="2.2"
+        marker-start="url(#arrowAmberStart)" marker-end="url(#arrowAmber)"/>
+  <text x="1214" y="744" class="legend">desvio acumulado</text>
+
+  <text x="54" y="793" class="note">E = execução · P1…P6 = períodos conceituais consecutivos</text>
+  <text x="1446" y="793" text-anchor="end" class="note">mesma grade de ticks nas duas faixas · sem escala temporal</text>
+</svg>

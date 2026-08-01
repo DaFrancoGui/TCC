@@ -135,7 +135,11 @@ void pedometer_screen_create(lv_obj_t *menu_scr)
 
     app_register_screen(scr_ped, ped_update);
     xTaskCreate(ped_task, "ped_task", 4096, NULL, 3, NULL);
-    ESP_LOGI(TAG, "Pedometro pronto");
+    if (mpu9250_hw_ok()) {
+        ESP_LOGI(TAG, "Pedometro pronto");
+    } else {
+        ESP_LOGW(TAG, "Tela do pedometro criada; MPU-9250 indisponivel");
+    }
 }
 
 void pedometer_screen_show(void)

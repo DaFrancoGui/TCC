@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1000" width="1240" height="1000" font-family="DejaVu Sans" role="img" aria-label="Diagrama conceitual de contrato modular: um nucleo no topo, uma area de contrato publico com as operacoes inicializar, criar tela, exibir e atualizar e informar disponibilidade, tres modulos genericos A, B e C com estado privado, aquisicao, processamento e apresentacao protegidos por uma fronteira de encapsulamento, e servicos compartilhados fora dos modulos acessados por interfaces explicitas">
+  <style>
+    .title   { font-size: 19px; fill: #2B3138; font-weight: bold; }
+    .subtitle{ font-size: 11.5px; fill: #767D85; font-style: italic; }
+    .grouptl { font-size: 14px; font-weight: bold; }
+    .modtl   { font-size: 14px; fill: #2B3138; font-weight: bold; }
+    .boxtl   { font-size: 11.5px; fill: #2B3138; font-weight: bold; }
+    .chip    { font-size: 11px; fill: #14515E; font-weight: bold; }
+    .sub     { font-size: 9.5px; fill: #767D85; }
+    .subm    { font-size: 10.5px; fill: #767D85; }
+    .stereo  { font-size: 9.5px; fill: #767D85; font-style: italic; }
+    .note    { font-size: 9.5px; fill: #767D85; font-style: italic; }
+    .leg     { font-size: 10.5px; fill: #2B3138; }
+  </style>
+
+  <rect x="0" y="0" width="1240" height="1000" fill="#FFFFFF"/>
+
+  <text x="620" y="38" text-anchor="middle" class="title">Contrato modular: núcleo, módulos e serviços compartilhados</text>
+  <text x="620" y="60" text-anchor="middle" class="subtitle">figura conceitual — módulos genéricos A, B e C, sem correspondência com sensores específicos</text>
+
+  <!-- ===================== NUCLEO ===================== -->
+  <rect x="440" y="86" width="360" height="80" rx="7" fill="#DCEBEE" stroke="#1D7A8C" stroke-width="2"/>
+  <text x="620" y="116" text-anchor="middle" class="grouptl" fill="#14515E">Núcleo</text>
+  <text x="620" y="136" text-anchor="middle" class="subm">composição explícita dos módulos,</text>
+  <text x="620" y="153" text-anchor="middle" class="subm">navegação e ciclo de vida</text>
+
+  <text x="424" y="112" text-anchor="end" class="note">os três módulos são</text>
+  <text x="424" y="128" text-anchor="end" class="note">tratados pela mesma</text>
+  <text x="424" y="144" text-anchor="end" class="note">expectativa</text>
+
+  <text x="816" y="112" class="note">composição explícita:</text>
+  <text x="816" y="128" class="note">o núcleo conhece os</text>
+  <text x="816" y="144" class="note">módulos que compõe</text>
+
+  <!-- ===================== CONTRATO PUBLICO ===================== -->
+  <rect x="120" y="200" width="1000" height="104" rx="7" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="2"/>
+  <text x="140" y="226" class="grouptl" fill="#14515E">Contrato público</text>
+  <text x="140" y="244" class="subm">as mesmas operações, qualquer que seja a implementação interna ou o transporte do módulo</text>
+
+  <rect x="150" y="252" width="220" height="38" rx="19" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.3"/>
+  <text x="260" y="276" text-anchor="middle" class="chip">inicializar</text>
+  <rect x="390" y="252" width="220" height="38" rx="19" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.3"/>
+  <text x="500" y="276" text-anchor="middle" class="chip">criar tela</text>
+  <rect x="630" y="252" width="220" height="38" rx="19" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.3"/>
+  <text x="740" y="276" text-anchor="middle" class="chip">exibir e atualizar</text>
+  <rect x="870" y="252" width="220" height="38" rx="19" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.3"/>
+  <text x="980" y="276" text-anchor="middle" class="chip">informar disponibilidade</text>
+
+  <!-- ===================== MODULO A ===================== -->
+  <g transform="translate(120,0)">
+    <rect x="0" y="350" width="300" height="346" rx="7" fill="#FBFBFB" stroke="#2B3138" stroke-width="1.6"/>
+    <text x="150" y="378" text-anchor="middle" class="modtl">Módulo A</text>
+    <text x="150" y="396" text-anchor="middle" class="stereo">«implementa o contrato»</text>
+    <rect x="12" y="408" width="276" height="274" rx="5" fill="#FFFFFF" stroke="#767D85" stroke-width="1.3" stroke-dasharray="5 4"/>
+    <text x="150" y="424" text-anchor="middle" class="stereo">fronteira de encapsulamento</text>
+
+    <rect x="26" y="436" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="456" text-anchor="middle" class="boxtl">Apresentação</text>
+    <text x="150" y="472" text-anchor="middle" class="sub">constrói e atualiza a tela</text>
+
+    <rect x="26" y="500" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="520" text-anchor="middle" class="boxtl">Estado privado</text>
+    <text x="150" y="536" text-anchor="middle" class="sub">valores e situação do módulo</text>
+
+    <rect x="26" y="564" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="584" text-anchor="middle" class="boxtl">Processamento</text>
+    <text x="150" y="600" text-anchor="middle" class="sub">algoritmo próprio do módulo</text>
+
+    <rect x="26" y="628" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="648" text-anchor="middle" class="boxtl">Aquisição / driver</text>
+    <text x="150" y="664" text-anchor="middle" class="sub">transporte «T1»</text>
+
+    <g stroke="#B8BDC3" stroke-width="1.2">
+      <line x1="150" y1="500" x2="150" y2="491"/>
+      <line x1="150" y1="564" x2="150" y2="555"/>
+      <line x1="150" y1="628" x2="150" y2="619"/>
+    </g>
+    <g fill="#B8BDC3">
+      <polygon points="145,491 155,491 150,483"/>
+      <polygon points="145,555 155,555 150,547"/>
+      <polygon points="145,619 155,619 150,611"/>
+    </g>
+  </g>
+
+  <!-- ===================== MODULO B ===================== -->
+  <g transform="translate(470,0)">
+    <rect x="0" y="350" width="300" height="346" rx="7" fill="#FBFBFB" stroke="#2B3138" stroke-width="1.6"/>
+    <text x="150" y="378" text-anchor="middle" class="modtl">Módulo B</text>
+    <text x="150" y="396" text-anchor="middle" class="stereo">«implementa o contrato»</text>
+    <rect x="12" y="408" width="276" height="274" rx="5" fill="#FFFFFF" stroke="#767D85" stroke-width="1.3" stroke-dasharray="5 4"/>
+    <text x="150" y="424" text-anchor="middle" class="stereo">fronteira de encapsulamento</text>
+
+    <rect x="26" y="436" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="456" text-anchor="middle" class="boxtl">Apresentação</text>
+    <text x="150" y="472" text-anchor="middle" class="sub">constrói e atualiza a tela</text>
+
+    <rect x="26" y="500" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="520" text-anchor="middle" class="boxtl">Estado privado</text>
+    <text x="150" y="536" text-anchor="middle" class="sub">valores e situação do módulo</text>
+
+    <rect x="26" y="564" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="584" text-anchor="middle" class="boxtl">Processamento</text>
+    <text x="150" y="600" text-anchor="middle" class="sub">outro algoritmo, outra taxa</text>
+
+    <rect x="26" y="628" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="648" text-anchor="middle" class="boxtl">Aquisição / driver</text>
+    <text x="150" y="664" text-anchor="middle" class="sub">transporte «T2»</text>
+
+    <g stroke="#B8BDC3" stroke-width="1.2">
+      <line x1="150" y1="500" x2="150" y2="491"/>
+      <line x1="150" y1="564" x2="150" y2="555"/>
+      <line x1="150" y1="628" x2="150" y2="619"/>
+    </g>
+    <g fill="#B8BDC3">
+      <polygon points="145,491 155,491 150,483"/>
+      <polygon points="145,555 155,555 150,547"/>
+      <polygon points="145,619 155,619 150,611"/>
+    </g>
+  </g>
+
+  <!-- ===================== MODULO C ===================== -->
+  <g transform="translate(820,0)">
+    <rect x="0" y="350" width="300" height="346" rx="7" fill="#FBFBFB" stroke="#2B3138" stroke-width="1.6"/>
+    <text x="150" y="378" text-anchor="middle" class="modtl">Módulo C</text>
+    <text x="150" y="396" text-anchor="middle" class="stereo">«implementa o contrato»</text>
+    <rect x="12" y="408" width="276" height="274" rx="5" fill="#FFFFFF" stroke="#767D85" stroke-width="1.3" stroke-dasharray="5 4"/>
+    <text x="150" y="424" text-anchor="middle" class="stereo">fronteira de encapsulamento</text>
+
+    <rect x="26" y="436" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="456" text-anchor="middle" class="boxtl">Apresentação</text>
+    <text x="150" y="472" text-anchor="middle" class="sub">constrói e atualiza a tela</text>
+
+    <rect x="26" y="500" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="520" text-anchor="middle" class="boxtl">Estado privado</text>
+    <text x="150" y="536" text-anchor="middle" class="sub">valores e situação do módulo</text>
+
+    <rect x="26" y="564" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="584" text-anchor="middle" class="boxtl">Processamento</text>
+    <text x="150" y="600" text-anchor="middle" class="sub">algoritmo próprio do módulo</text>
+
+    <rect x="26" y="628" width="248" height="46" rx="5" fill="#F4F7F8" stroke="#767D85" stroke-width="1.2"/>
+    <text x="150" y="648" text-anchor="middle" class="boxtl">Aquisição / driver</text>
+    <text x="150" y="664" text-anchor="middle" class="sub">transporte «T1», como A</text>
+
+    <g stroke="#B8BDC3" stroke-width="1.2">
+      <line x1="150" y1="500" x2="150" y2="491"/>
+      <line x1="150" y1="564" x2="150" y2="555"/>
+      <line x1="150" y1="628" x2="150" y2="619"/>
+    </g>
+    <g fill="#B8BDC3">
+      <polygon points="145,491 155,491 150,483"/>
+      <polygon points="145,555 155,555 150,547"/>
+      <polygon points="145,619 155,619 150,611"/>
+    </g>
+  </g>
+
+  <!-- ===================== SERVICOS COMPARTILHADOS ===================== -->
+  <text x="290" y="712" class="boxtl">Serviços compartilhados — fora dos módulos</text>
+  <rect x="104" y="720" width="1032" height="176" rx="7" fill="#F6FAFB" stroke="#B8BDC3" stroke-width="1.2" stroke-dasharray="6 4"/>
+
+  <line x1="150" y1="770" x2="1090" y2="770" stroke="#1D7A8C" stroke-width="2.5"/>
+  <text x="445" y="760" text-anchor="middle" class="note">interfaces explícitas de serviço</text>
+  <text x="795" y="760" text-anchor="middle" class="note">qualquer módulo pode usar qualquer serviço</text>
+  <g stroke="#1D7A8C" stroke-width="2">
+    <line x1="270" y1="770" x2="270" y2="796"/>
+    <line x1="620" y1="770" x2="620" y2="796"/>
+    <line x1="970" y1="770" x2="970" y2="796"/>
+  </g>
+
+  <rect x="120" y="796" width="300" height="72" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <text x="270" y="824" text-anchor="middle" class="boxtl" fill="#14515E">Serviço de barramento</text>
+  <text x="270" y="843" text-anchor="middle" class="sub">acesso serializado ao recurso</text>
+  <text x="270" y="859" text-anchor="middle" class="sub">compartilhado e sua recuperação</text>
+
+  <rect x="470" y="796" width="300" height="72" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <text x="620" y="824" text-anchor="middle" class="boxtl" fill="#14515E">Serviço de interface gráfica</text>
+  <text x="620" y="843" text-anchor="middle" class="sub">desenho das telas e</text>
+  <text x="620" y="859" text-anchor="middle" class="sub">eventos de entrada</text>
+
+  <rect x="820" y="796" width="300" height="72" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <text x="970" y="824" text-anchor="middle" class="boxtl" fill="#14515E">Serviço de persistência</text>
+  <text x="970" y="843" text-anchor="middle" class="sub">parâmetros preservados</text>
+  <text x="970" y="859" text-anchor="middle" class="sub">entre execuções</text>
+
+  <text x="1120" y="886" text-anchor="end" class="note">um mesmo serviço pode atender mais de um módulo</text>
+
+  <!-- ===================== SETAS (desenhadas por ultimo) ===================== -->
+
+  <!-- nucleo -> contrato -->
+  <line x1="620" y1="168" x2="620" y2="192" stroke="#1D7A8C" stroke-width="2"/>
+  <polygon points="614,191 626,191 620,201" fill="#1D7A8C"/>
+
+  <!-- chamadas previstas pelo contrato: contrato -> modulos -->
+  <g stroke="#1D7A8C" stroke-width="2">
+    <line x1="236" y1="306" x2="236" y2="341"/>
+    <line x1="586" y1="306" x2="586" y2="341"/>
+    <line x1="936" y1="306" x2="936" y2="341"/>
+  </g>
+  <g fill="#1D7A8C">
+    <polygon points="230,340 242,340 236,350"/>
+    <polygon points="580,340 592,340 586,350"/>
+    <polygon points="930,340 942,340 936,350"/>
+  </g>
+
+  <!-- dados publicados: modulos -> contrato -->
+  <g stroke="#C97B1E" stroke-width="2" stroke-dasharray="7 4">
+    <line x1="304" y1="348" x2="304" y2="315"/>
+    <line x1="654" y1="348" x2="654" y2="315"/>
+    <line x1="1004" y1="348" x2="1004" y2="315"/>
+  </g>
+  <g fill="#C97B1E">
+    <polygon points="298,316 310,316 304,306"/>
+    <polygon points="648,316 660,316 654,306"/>
+    <polygon points="998,316 1010,316 1004,306"/>
+  </g>
+
+  <!-- acesso a servico: modulos -> interfaces de servico -->
+  <g stroke="#2B3138" stroke-width="1.6" stroke-dasharray="2 4" stroke-linecap="round">
+    <line x1="270" y1="676" x2="270" y2="758"/>
+    <line x1="620" y1="676" x2="620" y2="758"/>
+    <line x1="970" y1="676" x2="970" y2="758"/>
+  </g>
+  <g fill="none" stroke="#2B3138" stroke-width="1.8">
+    <polyline points="263,759 270,770 277,759"/>
+    <polyline points="613,759 620,770 627,759"/>
+    <polyline points="963,759 970,770 977,759"/>
+  </g>
+  <g fill="#1D7A8C">
+    <rect x="265" y="765" width="10" height="10"/>
+    <rect x="615" y="765" width="10" height="10"/>
+    <rect x="965" y="765" width="10" height="10"/>
+  </g>
+
+  <!-- ===================== LEGENDA ===================== -->
+  <line x1="104" y1="906" x2="1136" y2="906" stroke="#B8BDC3" stroke-width="1"/>
+
+  <line x1="120" y1="932" x2="150" y2="932" stroke="#1D7A8C" stroke-width="2"/>
+  <polygon points="149,926 149,938 160,932" fill="#1D7A8C"/>
+  <text x="172" y="936" class="leg">chamada prevista pelo contrato (núcleo → módulo)</text>
+
+  <line x1="640" y1="932" x2="670" y2="932" stroke="#C97B1E" stroke-width="2" stroke-dasharray="7 4"/>
+  <polygon points="669,926 669,938 680,932" fill="#C97B1E"/>
+  <text x="692" y="936" class="leg">dados publicados pelo módulo (valores e disponibilidade)</text>
+
+  <line x1="120" y1="960" x2="152" y2="960" stroke="#2B3138" stroke-width="1.6" stroke-dasharray="2 4" stroke-linecap="round"/>
+  <polyline points="151,953 162,960 151,967" fill="none" stroke="#2B3138" stroke-width="1.8"/>
+  <text x="172" y="964" class="leg">acesso a serviço compartilhado, por interface explícita</text>
+
+  <line x1="640" y1="960" x2="672" y2="960" stroke="#B8BDC3" stroke-width="1.2"/>
+  <polygon points="671,955 671,965 680,960" fill="#B8BDC3"/>
+  <text x="692" y="964" class="leg">fluxo interno, protegido pela fronteira de encapsulamento</text>
+</svg>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 465" font-family="DejaVu Sans, sans-serif" role="img" aria-label="Gráfico de barras do consumo de corrente da bateria por cenário de uso, medido na placa final; de 110 mA na tela principal até 210 mA durante a medição de frequência cardíaca">
+  <style>
+    .small { font-size: 11.5px; fill: #767D85; }
+    .axis  { font-family: 'Courier New', monospace; font-size: 11.5px; fill: #767D85; }
+    .title { font-size: 16px; fill: #2B3138; font-weight: bold; }
+    .lbl   { font-size: 12.5px; fill: #2B3138; }
+    .val   { font-family: 'Courier New', monospace; font-size: 12.5px; font-weight: bold; fill: #14515E; }
+  </style>
+
+  <rect x="0" y="0" width="880" height="465" fill="#FFFFFF"/>
+  <text x="455" y="36" text-anchor="middle" class="title">Consumo de corrente por cenário</text>
+
+  <!-- Grade vertical (mA): 0,50,100,150,200 -> x = 230 + mA*2.2 -->
+  <g stroke="#ECECEC" stroke-width="1">
+    <line x1="230" y1="70" x2="230" y2="402"/>
+    <line x1="340" y1="70" x2="340" y2="402"/>
+    <line x1="450" y1="70" x2="450" y2="402"/>
+    <line x1="560" y1="70" x2="560" y2="402"/>
+    <line x1="670" y1="70" x2="670" y2="402"/>
+  </g>
+
+  <!-- Eixos -->
+  <line x1="230" y1="70" x2="230" y2="402" stroke="#B8BDC3" stroke-width="1.4"/>
+  <line x1="230" y1="402" x2="700" y2="402" stroke="#B8BDC3" stroke-width="1.4"/>
+
+  <!-- ===== Barras (descendente por mA); barra h=20 ===== -->
+  <rect x="230" y="78"  width="462" height="20" rx="3" fill="#1D7A8C"/>
+  <text x="222" y="92"  text-anchor="end" class="lbl">FC / SpO2 medindo</text>
+  <text x="700" y="92"  class="val">210 mA</text>
+
+  <rect x="230" y="115" width="396" height="20" rx="3" fill="#1D7A8C"/>
+  <text x="222" y="129" text-anchor="end" class="lbl">Bússola</text>
+  <text x="634" y="129" class="val">180 mA</text>
+
+  <rect x="230" y="152" width="330" height="20" rx="3" fill="#1D7A8C"/>
+  <text x="222" y="166" text-anchor="end" class="lbl">Temperatura</text>
+  <text x="568" y="166" class="val">150 mA</text>
+
+  <rect x="230" y="189" width="286" height="20" rx="3" fill="#1D7A8C"/>
+  <text x="222" y="203" text-anchor="end" class="lbl">Luz / UV</text>
+  <text x="524" y="203" class="val">130 mA</text>
+
+  <rect x="230" y="226" width="286" height="20" rx="3" fill="#1D7A8C"/>
+  <text x="222" y="240" text-anchor="end" class="lbl">Calibração da bússola</text>
+  <text x="524" y="240" class="val">130 mA</text>
+
+  <rect x="230" y="263" width="264" height="20" rx="3" fill="#1D7A8C"/>
+  <text x="222" y="277" text-anchor="end" class="lbl">Navegação (menu)</text>
+  <text x="502" y="277" class="val">120 mA</text>
+
+  <rect x="230" y="300" width="264" height="20" rx="3" fill="#1D7A8C"/>
+  <text x="222" y="314" text-anchor="end" class="lbl">Pedômetro</text>
+  <text x="502" y="314" class="val">120 mA</text>
+
+  <!-- Idle (referencia): barra mais clara + contorno -->
+  <rect x="230" y="337" width="242" height="20" rx="3" fill="#9FC5CD" stroke="#1D7A8C" stroke-width="1.4"/>
+  <text x="222" y="351" text-anchor="end" class="lbl" font-weight="bold">Tela principal</text>
+  <text x="480" y="351" class="val">110 mA</text>
+
+  <rect x="230" y="374" width="198" height="20" rx="3" fill="#1D7A8C"/>
+  <text x="222" y="388" text-anchor="end" class="lbl">FC / SpO2 parado</text>
+  <text x="436" y="388" class="val">90 mA</text>
+
+  <!-- Linha de referência da tela principal: 110 mA -->
+  <line x1="472" y1="68" x2="472" y2="402" stroke="#767D85" stroke-width="1.3" stroke-dasharray="5 4"/>
+  <text x="476" y="66" class="small">referência 110 mA</text>
+
+  <!-- Ticks X -->
+  <text x="230" y="418" text-anchor="middle" class="axis">0</text>
+  <text x="340" y="418" text-anchor="middle" class="axis">50</text>
+  <text x="450" y="418" text-anchor="middle" class="axis">100</text>
+  <text x="560" y="418" text-anchor="middle" class="axis">150</text>
+  <text x="670" y="418" text-anchor="middle" class="axis">200</text>
+  <text x="465" y="440" text-anchor="middle" class="small">corrente da bateria (mA)</text>
+</svg>

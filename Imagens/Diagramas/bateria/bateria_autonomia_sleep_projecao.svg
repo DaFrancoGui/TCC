@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 455" font-family="Helvetica, Arial, sans-serif" role="img" aria-label="Projecao de autonomia da bateria em escala logaritmica, do estado atual de 9 horas ate cerca de 3 meses com deep sleep">
+  <style>
+    .small { font-size: 11.5px; fill: #767D85; }
+    .axis  { font-family: 'Courier New', monospace; font-size: 11.5px; fill: #767D85; }
+    .title { font-size: 16px; fill: #2B3138; font-weight: bold; }
+    .lbl   { font-size: 12.5px; fill: #2B3138; }
+    .val   { font-family: 'Courier New', monospace; font-size: 13px; font-weight: bold; fill: #14515E; }
+  </style>
+
+  <rect x="0" y="0" width="880" height="455" fill="#FFFFFF"/>
+  <text x="440" y="36" text-anchor="middle" class="title">Projeção de autonomia com modo de baixo consumo</text>
+
+  <!-- Escala log X: x(v)=250+(log10(v)-0.778)*212.4 ; v em horas -->
+  <g stroke="#ECECEC" stroke-width="1">
+    <line x1="314" y1="78" x2="314" y2="388"/>
+    <line x1="378" y1="78" x2="378" y2="388"/>
+    <line x1="557" y1="78" x2="557" y2="388"/>
+    <line x1="692" y1="78" x2="692" y2="388"/>
+    <line x1="793" y1="78" x2="793" y2="388"/>
+  </g>
+
+  <!-- Eixo X -->
+  <line x1="250" y1="388" x2="815" y2="388" stroke="#B8BDC3" stroke-width="1.4"/>
+
+  <!-- Guias horizontais por linha (label -> dot) -->
+  <g stroke="#ECECEC" stroke-width="1">
+    <line x1="250" y1="96"  x2="287" y2="96"/>
+    <line x1="250" y1="156" x2="321" y2="156"/>
+    <line x1="250" y1="216" x2="644" y2="216"/>
+    <line x1="250" y1="276" x2="700" y2="276"/>
+    <line x1="250" y1="336" x2="800" y2="336"/>
+  </g>
+
+  <!-- Row1 Atual (medido/ancorado) -->
+  <text x="240" y="100" text-anchor="end" class="lbl" font-weight="bold">Atual (sem sleep)</text>
+  <circle cx="287" cy="96" r="8" fill="#1D7A8C"/>
+  <text x="287" y="84" text-anchor="middle" class="val">~9 h</text>
+
+  <!-- Row2 Backlight dim (projecao) -->
+  <text x="240" y="160" text-anchor="end" class="lbl">Backlight dimerizável</text>
+  <circle cx="321" cy="156" r="8" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="2.4"/>
+  <text x="321" y="144" text-anchor="middle" class="val">~13 h</text>
+
+  <!-- Row3 Light sleep (projecao) -->
+  <text x="240" y="220" text-anchor="end" class="lbl">Light sleep + wrist-raise</text>
+  <circle cx="644" cy="216" r="8" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="2.4"/>
+  <text x="644" y="204" text-anchor="middle" class="val">~18 dias</text>
+
+  <!-- Row4 Deep sleep frequente (projecao) -->
+  <text x="240" y="280" text-anchor="end" class="lbl">Deep sleep + uso frequente</text>
+  <circle cx="700" cy="276" r="8" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="2.4"/>
+  <text x="700" y="264" text-anchor="middle" class="val">~1 mês</text>
+
+  <!-- Row5 Deep sleep tipico (projecao) -->
+  <text x="240" y="340" text-anchor="end" class="lbl">Deep sleep + uso típico</text>
+  <circle cx="800" cy="336" r="8" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="2.4"/>
+  <text x="800" y="324" text-anchor="middle" class="val">~3 meses</text>
+
+  <!-- Ticks X (unidades humanas) -->
+  <text x="314" y="404" text-anchor="middle" class="axis">12 h</text>
+  <text x="378" y="404" text-anchor="middle" class="axis">1 dia</text>
+  <text x="557" y="404" text-anchor="middle" class="axis">1 semana</text>
+  <text x="692" y="404" text-anchor="middle" class="axis">1 mês</text>
+  <text x="793" y="404" text-anchor="middle" class="axis">3 meses</text>
+  <text x="532" y="424" text-anchor="middle" class="small">autonomia (escala logarítmica)</text>
+
+  <!-- Legenda (decodifica os marcadores) -->
+  <circle cx="258" cy="444" r="7" fill="#1D7A8C"/>
+  <text x="270" y="448" class="small">medido / ancorado em medição</text>
+  <circle cx="470" cy="444" r="7" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="2.4"/>
+  <text x="482" y="448" class="small">projeção</text>
+</svg>

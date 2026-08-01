@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1030 664" font-family="Helvetica, Arial, sans-serif" role="img" aria-label="Diagrama UML do modulo MPU-9250: um driver comum (accel + mag via bypass) ramifica em dois submodulos, bussola (magnetometro) e pedometro (acelerometro), cada um com sua tela; a calibracao da bussola depende da NVS; barramento I2C requerido">
+  <style>
+    .title  { font-size: 16px; fill: #2B3138; font-weight: bold; }
+    .stereo { font-size: 10px; fill: #767D85; font-style: italic; }
+    .cname  { font-size: 15px; fill: #14515E; font-weight: bold; }
+    .sub    { font-size: 11px; fill: #14515E; font-weight: bold; }
+    .part   { font-size: 10.5px; fill: #767D85; }
+    .btitle { font-size: 11.5px; fill: #14515E; font-weight: bold; }
+    .bpart  { font-size: 9.5px; fill: #767D85; }
+    .grp    { font-size: 10.5px; fill: #767D85; font-style: italic; }
+    .flowlab{ font-size: 9px; fill: #767D85; font-style: italic; }
+    .red    { font-size: 10px; fill: #C4453C; font-weight: bold; }
+    .leg    { font-size: 11px; fill: #2B3138; }
+  </style>
+
+  <defs>
+    <g id="ci">
+      <rect x="0" y="0" width="18" height="13" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.1"/>
+      <rect x="-4" y="2" width="8" height="3.2" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.1"/>
+      <rect x="-4" y="7" width="8" height="3.2" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.1"/>
+    </g>
+    <marker id="flow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8 Z" fill="#1D7A8C"/></marker>
+    <marker id="dep" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#767D85" stroke-width="1.3"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1030" height="664" fill="#FFFFFF"/>
+  <text x="515" y="34" text-anchor="middle" class="title">MPU-9250 — arquitetura do módulo (bússola + pedômetro)</text>
+
+  <!-- ===== Referencia ao sistema ===== -->
+  <rect x="70" y="62" width="380" height="60" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.4"/>
+  <use xlink:href="#ci" x="430" y="70"/>
+  <text x="84" y="82" class="stereo">«component»</text>
+  <text x="84" y="99" class="sub">main.c — núcleo</text>
+  <text x="84" y="115" class="part">registro de telas · loop de despacho (500 ms)</text>
+
+  <rect x="610" y="62" width="340" height="60" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.4"/>
+  <use xlink:href="#ci" x="930" y="70"/>
+  <text x="624" y="82" class="stereo">«component»</text>
+  <text x="624" y="99" class="sub">LVGL + esp_lvgl_port</text>
+  <text x="624" y="115" class="part">GC9A01 240×240 · touch</text>
+
+  <line x1="240" y1="150" x2="240" y2="122" stroke="#B8BDC3" stroke-width="1.2"/>
+  <circle cx="240" cy="136" r="6" fill="#1D7A8C"/>
+
+  <!-- dependencias telas -> LVGL -->
+  <line x1="711" y1="222" x2="711" y2="124" stroke="#767D85" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#dep)"/>
+  <polyline points="808,434 880,434 880,124" fill="none" stroke="#767D85" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#dep)"/>
+
+  <!-- ===== Pacote do modulo ===== -->
+  <rect x="70" y="150" width="900" height="350" rx="8" fill="#F7FAFB" stroke="#1D7A8C" stroke-width="1.6" stroke-dasharray="7 4"/>
+  <use xlink:href="#ci" x="940" y="158"/>
+  <text x="86" y="172" class="stereo">«component»</text>
+  <text x="86" y="192" class="cname">MPU-9250</text>
+  <text x="86" y="210" class="sub">bússola · pedômetro · 9-DOF</text>
+
+  <!-- B0 driver comum -->
+  <rect x="100" y="300" width="182" height="132" rx="4" fill="#FFFFFF" stroke="#B8BDC3" stroke-width="1.2"/>
+  <text x="110" y="320" class="btitle">mpu9250_hw</text>
+  <text x="110" y="340" class="bpart">I²C 0x68 + AK8963 0x0C</text>
+  <text x="110" y="357" class="bpart">bypass (INT_PIN_CFG)</text>
+  <text x="110" y="374" class="bpart">accel ±2g · 50 Hz</text>
+  <text x="110" y="391" class="bpart">mag 100 Hz · ASA</text>
+  <text x="110" y="408" class="bpart">giroscópio desligado</text>
+
+  <!-- B1 bussola -->
+  <rect x="330" y="222" width="216" height="92" rx="4" fill="#FFFFFF" stroke="#B8BDC3" stroke-width="1.2"/>
+  <text x="340" y="242" class="btitle">bússola (magnetômetro)</text>
+  <text x="340" y="260" class="bpart">µT (ASA) · atan2</text>
+  <text x="340" y="276" class="bpart">calib hard/soft-iron (12 gomos)</text>
+  <text x="340" y="292" class="bpart">filtro α=0,15 · setores 45°</text>
+
+  <!-- B2 tela bussola -->
+  <rect x="616" y="222" width="192" height="92" rx="4" fill="#FFFFFF" stroke="#B8BDC3" stroke-width="1.2"/>
+  <text x="626" y="242" class="btitle">tela bússola (LVGL)</text>
+  <text x="626" y="260" class="bpart">agulha lv_meter</text>
+  <text x="626" y="276" class="bpart">N/E/S/W · heading</text>
+
+  <!-- B3 pedometro -->
+  <rect x="330" y="388" width="216" height="92" rx="4" fill="#FFFFFF" stroke="#B8BDC3" stroke-width="1.2"/>
+  <text x="340" y="408" class="btitle">pedômetro (acelerômetro)</text>
+  <text x="340" y="426" class="bpart">|a| · EMA α=0,2</text>
+  <text x="340" y="442" class="bpart">limiar 1,15 g · histerese</text>
+  <text x="340" y="458" class="bpart">debounce 300 ms</text>
+
+  <!-- B4 tela pedometro -->
+  <rect x="616" y="388" width="192" height="92" rx="4" fill="#FFFFFF" stroke="#B8BDC3" stroke-width="1.2"/>
+  <text x="626" y="408" class="btitle">tela pedômetro (LVGL)</text>
+  <text x="626" y="426" class="bpart">passos · distância</text>
+  <text x="626" y="442" class="bpart">RESET (sem persistência)</text>
+
+  <!-- NVS (abaixo da bussola) -->
+  <rect x="330" y="332" width="206" height="52" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.4"/>
+  <use xlink:href="#ci" x="518" y="338"/>
+  <text x="342" y="351" class="stereo">«component»</text>
+  <text x="342" y="369" class="sub">NVS · calibração bússola</text>
+
+  <!-- fluxos de ramificacao -->
+  <line x1="282" y1="338" x2="326" y2="286" stroke="#1D7A8C" stroke-width="1.6" marker-end="url(#flow)"/>
+  <line x1="282" y1="396" x2="326" y2="432" stroke="#1D7A8C" stroke-width="1.6" marker-end="url(#flow)"/>
+  <text x="292" y="316" class="flowlab">mag</text>
+  <text x="292" y="420" class="flowlab">accel</text>
+  <line x1="546" y1="268" x2="612" y2="268" stroke="#1D7A8C" stroke-width="1.6" marker-end="url(#flow)"/>
+  <line x1="546" y1="434" x2="612" y2="434" stroke="#1D7A8C" stroke-width="1.6" marker-end="url(#flow)"/>
+  <text x="579" y="262" text-anchor="middle" class="flowlab">heading</text>
+  <text x="579" y="428" text-anchor="middle" class="flowlab">passos</text>
+
+  <!-- dependencia calib -> NVS -->
+  <line x1="438" y1="314" x2="438" y2="332" stroke="#767D85" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#dep)"/>
+  <text x="446" y="328" class="flowlab">grava calib</text>
+
+  <!-- required socket (I2C) -->
+  <line x1="191" y1="432" x2="191" y2="500" stroke="#B8BDC3" stroke-width="1.2"/>
+  <path d="M183,500 A 8 8 0 0 0 199,500" fill="none" stroke="#1D7A8C" stroke-width="2.2"/>
+  <line x1="191" y1="500" x2="191" y2="548" stroke="#B8BDC3" stroke-width="1.2"/>
+
+  <!-- I2C bus -->
+  <rect x="70" y="548" width="400" height="60" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <use xlink:href="#ci" x="450" y="556"/>
+  <text x="84" y="568" class="stereo">«component»</text>
+  <text x="84" y="586" class="sub">I²C0 — barramento (0x68 + 0x0C · 100 kHz)</text>
+  <text x="84" y="602" class="red">mutex + i2c_recover</text>
+
+  <!-- ===== Legenda ===== -->
+  <line x1="70" y1="628" x2="960" y2="628" stroke="#ECECEC" stroke-width="1"/>
+  <circle cx="82" cy="648" r="6" fill="#1D7A8C"/>
+  <text x="98" y="652" class="leg">«Módulo» (fornecida ao núcleo)</text>
+  <path d="M318,652 A 8 8 0 0 0 334,652" fill="none" stroke="#1D7A8C" stroke-width="2.2"/>
+  <text x="344" y="652" class="leg">requerida: I²C</text>
+  <line x1="486" y1="648" x2="514" y2="648" stroke="#1D7A8C" stroke-width="1.6" marker-end="url(#flow)"/>
+  <text x="524" y="652" class="leg">fluxo de dados</text>
+  <line x1="648" y1="648" x2="690" y2="648" stroke="#767D85" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#dep)"/>
+  <text x="700" y="652" class="leg">dependência (tela / NVS)</text>
+</svg>

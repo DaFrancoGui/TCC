@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" font-family="Helvetica" role="img" aria-label="Frequencia cardiaca do MAX30102 no tempo sobreposta a faixa de referencia do oximetro de dedo">
+<rect x="0" y="0" width="880" height="520" fill="#FFFFFF"/>
+<text x="460" y="34" text-anchor="middle" font-family="Helvetica" font-size="15" fill="#2B3138" font-weight="bold">Frequência cardíaca — MAX30102 x oxímetro de dedo (referência)</text>
+<g stroke="#ECECEC" stroke-width="1">
+<line x1="90" y1="381" x2="830" y2="381"/>
+<line x1="90" y1="284" x2="830" y2="284"/>
+<line x1="90" y1="187" x2="830" y2="187"/>
+<line x1="90" y1="90" x2="830" y2="90"/>
+</g>
+<line x1="90" y1="90" x2="90" y2="430" stroke="#B8BDC3" stroke-width="1.4"/>
+<line x1="90" y1="430" x2="830" y2="430" stroke="#B8BDC3" stroke-width="1.4"/>
+<text x="80" y="385" text-anchor="end" font-family="monospace" font-size="11.5" fill="#767D85">60</text>
+<text x="80" y="288" text-anchor="end" font-family="monospace" font-size="11.5" fill="#767D85">70</text>
+<text x="80" y="191" text-anchor="end" font-family="monospace" font-size="11.5" fill="#767D85">80</text>
+<text x="80" y="94" text-anchor="end" font-family="monospace" font-size="11.5" fill="#767D85">90</text>
+<text x="90" y="78" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85">FC (BPM)</text>
+<text x="90" y="450" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#767D85">0</text>
+<text x="202" y="450" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#767D85">10</text>
+<text x="314" y="450" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#767D85">20</text>
+<text x="426" y="450" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#767D85">30</text>
+<text x="538" y="450" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#767D85">40</text>
+<text x="651" y="450" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#767D85">50</text>
+<text x="763" y="450" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#767D85">60</text>
+<text x="460" y="472" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85">tempo (s)</text>
+<rect x="90" y="168" width="168" height="19" fill="#F7EADB" stroke="#C97B1E" stroke-width="1"/>
+<text x="174" y="164" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#C97B1E" font-weight="bold">81</text>
+<rect x="269" y="255" width="45" height="20" fill="#F7EADB" stroke="#C97B1E" stroke-width="1"/>
+<text x="291" y="251" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#C97B1E" font-weight="bold">71-73</text>
+<rect x="325" y="177" width="202" height="20" fill="#F7EADB" stroke="#C97B1E" stroke-width="1"/>
+<text x="426" y="173" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#C97B1E" font-weight="bold">79-81</text>
+<rect x="538" y="216" width="68" height="20" fill="#F7EADB" stroke="#C97B1E" stroke-width="1"/>
+<text x="572" y="212" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#C97B1E" font-weight="bold">~76</text>
+<rect x="617" y="168" width="146" height="19" fill="#F7EADB" stroke="#C97B1E" stroke-width="1"/>
+<text x="690" y="164" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#C97B1E" font-weight="bold">~81</text>
+<line x1="168" y1="177" x2="180" y2="177" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="180" y1="177" x2="191" y2="177" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="191" y1="177" x2="258" y2="177" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="258" y1="177" x2="269" y2="304" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="269" y1="304" x2="281" y2="362" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="281" y1="362" x2="292" y2="304" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="292" y1="304" x2="303" y2="362" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="303" y1="362" x2="314" y2="304" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="314" y1="304" x2="325" y2="129" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="325" y1="129" x2="337" y2="129" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="337" y1="129" x2="348" y2="226" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="348" y1="226" x2="359" y2="226" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="359" y1="226" x2="370" y2="236" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="370" y1="236" x2="382" y2="236" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="382" y1="236" x2="393" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="393" y1="245" x2="404" y2="255" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="404" y1="255" x2="415" y2="265" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="415" y1="265" x2="426" y2="265" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="426" y1="265" x2="438" y2="236" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="438" y1="236" x2="449" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="449" y1="245" x2="460" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="460" y1="245" x2="471" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="471" y1="245" x2="482" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="482" y1="245" x2="494" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="494" y1="245" x2="505" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="505" y1="245" x2="516" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="516" y1="245" x2="527" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="527" y1="245" x2="538" y2="265" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="538" y1="265" x2="550" y2="284" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="550" y1="284" x2="561" y2="284" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="561" y1="284" x2="572" y2="284" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="572" y1="284" x2="583" y2="284" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="583" y1="284" x2="595" y2="284" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="595" y1="284" x2="606" y2="284" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="606" y1="284" x2="617" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="617" y1="245" x2="628" y2="255" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="628" y1="255" x2="639" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="639" y1="245" x2="651" y2="236" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="651" y1="236" x2="662" y2="236" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="662" y1="236" x2="673" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="673" y1="245" x2="684" y2="245" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="684" y1="245" x2="695" y2="236" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="695" y1="236" x2="707" y2="236" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="707" y1="236" x2="718" y2="236" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="718" y1="236" x2="740" y2="216" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="740" y1="216" x2="752" y2="187" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="752" y1="187" x2="763" y2="216" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="763" y1="216" x2="774" y2="216" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="774" y1="216" x2="785" y2="255" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="785" y1="255" x2="796" y2="265" stroke="#1D7A8C" stroke-width="2.2"/>
+<line x1="796" y1="265" x2="808" y2="265" stroke="#1D7A8C" stroke-width="2.2"/>
+<circle cx="168" cy="177" r="3" fill="#1D7A8C"/>
+<circle cx="180" cy="177" r="3" fill="#1D7A8C"/>
+<circle cx="191" cy="177" r="3" fill="#1D7A8C"/>
+<circle cx="258" cy="177" r="3" fill="#1D7A8C"/>
+<circle cx="269" cy="304" r="3" fill="#1D7A8C"/>
+<circle cx="281" cy="362" r="3" fill="#1D7A8C"/>
+<circle cx="292" cy="304" r="3" fill="#1D7A8C"/>
+<circle cx="303" cy="362" r="3" fill="#1D7A8C"/>
+<circle cx="314" cy="304" r="3" fill="#1D7A8C"/>
+<circle cx="325" cy="129" r="3" fill="#1D7A8C"/>
+<circle cx="337" cy="129" r="3" fill="#1D7A8C"/>
+<circle cx="348" cy="226" r="3" fill="#1D7A8C"/>
+<circle cx="359" cy="226" r="3" fill="#1D7A8C"/>
+<circle cx="370" cy="236" r="3" fill="#1D7A8C"/>
+<circle cx="382" cy="236" r="3" fill="#1D7A8C"/>
+<circle cx="393" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="404" cy="255" r="3" fill="#1D7A8C"/>
+<circle cx="415" cy="265" r="3" fill="#1D7A8C"/>
+<circle cx="426" cy="265" r="3" fill="#1D7A8C"/>
+<circle cx="438" cy="236" r="3" fill="#1D7A8C"/>
+<circle cx="449" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="460" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="471" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="482" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="494" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="505" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="516" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="527" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="538" cy="265" r="3" fill="#1D7A8C"/>
+<circle cx="550" cy="284" r="3" fill="#1D7A8C"/>
+<circle cx="561" cy="284" r="3" fill="#1D7A8C"/>
+<circle cx="572" cy="284" r="3" fill="#1D7A8C"/>
+<circle cx="583" cy="284" r="3" fill="#1D7A8C"/>
+<circle cx="595" cy="284" r="3" fill="#1D7A8C"/>
+<circle cx="606" cy="284" r="3" fill="#1D7A8C"/>
+<circle cx="617" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="628" cy="255" r="3" fill="#1D7A8C"/>
+<circle cx="639" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="651" cy="236" r="3" fill="#1D7A8C"/>
+<circle cx="662" cy="236" r="3" fill="#1D7A8C"/>
+<circle cx="673" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="684" cy="245" r="3" fill="#1D7A8C"/>
+<circle cx="695" cy="236" r="3" fill="#1D7A8C"/>
+<circle cx="707" cy="236" r="3" fill="#1D7A8C"/>
+<circle cx="718" cy="236" r="3" fill="#1D7A8C"/>
+<circle cx="740" cy="216" r="3" fill="#1D7A8C"/>
+<circle cx="752" cy="187" r="3" fill="#1D7A8C"/>
+<circle cx="763" cy="216" r="3" fill="#1D7A8C"/>
+<circle cx="774" cy="216" r="3" fill="#1D7A8C"/>
+<circle cx="785" cy="255" r="3" fill="#1D7A8C"/>
+<circle cx="796" cy="265" r="3" fill="#1D7A8C"/>
+<circle cx="808" cy="265" r="3" fill="#1D7A8C"/>
+<line x1="150" y1="500" x2="182" y2="500" stroke="#1D7A8C" stroke-width="2.2"/>
+<circle cx="166" cy="500" r="3" fill="#1D7A8C"/>
+<text x="190" y="504" text-anchor="start" font-family="Helvetica" font-size="11.5" fill="#767D85">MAX30102 (dispositivo)</text>
+<rect x="420" y="493" width="30" height="14" fill="#F7EADB" stroke="#C97B1E" stroke-width="1"/>
+<text x="458" y="504" text-anchor="start" font-family="Helvetica" font-size="11.5" fill="#767D85">oxímetro de dedo</text>
+</svg>

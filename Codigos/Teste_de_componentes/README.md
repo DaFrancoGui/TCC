@@ -4,14 +4,6 @@ Este diretório contém os testes individuais de cada componente utilizado no pr
 
 ## Componentes Disponíveis
 
-| Componente        | Interface | Descrição                                          | Documentação                      |
-| ----------------- | --------- | ---------------------------------------------------| --------------------------------- |
-| **DS18B20**       | 1-Wire    | Sensor de temperatura à prova d'água               | [README](DS18B20/README.md)       |
-| **ADXL345**       | I²C       | Acelerômetro triaxial                              | [README](ADXL345/README.md)       |
-| **MPU9250**       | I²C       | IMU 9-DOF (acelerômetro, giroscópio, magnetômetro) | [README](MPU9250/README.md)       |
-| **MAX30102**      | I²C       | Sensor de frequência cardíaca e SpO2               | [README](MAX30100/README.md)      |
-| **Round Display** | SPI + I²C | Display circular Seeed (GC9A01 + CST816S)          | [README](Round_Display/README.md) |
-
 Cada componente possui seu próprio README com:
 
 - Especificações técnicas
@@ -23,9 +15,7 @@ Cada componente possui seu próprio README com:
 ## Índice
 
 - [Preparação do Ambiente](#preparação-do-ambiente)
-- [Estrutura dos Projetos](#estrutura-dos-projetos)
 - [Comandos Básicos](#comandos-básicos)
-- [Troubleshooting Geral](#troubleshooting-geral)
 
 ---
 
@@ -80,35 +70,6 @@ Verifique qual chip USB seu ESP32 usa:
 3. Procure em **Portas (COM e LPT)**
 4. Deve aparecer como `COMx` (ex: COM5)
 5. Anote o número da porta
-
----
-
-## Estrutura dos Projetos
-
-Cada componente tem seu próprio projeto ESP-IDF:
-
-```
-Teste_de_componentes/
-├── DS18B20/          # Sensor de temperatura (1-Wire)
-├── ADXL345/          # Acelerômetro I²C
-├── MPU9250/          # IMU 9-DOF (Bússola, Gestos)
-│   ├── Bussola/      # Bússola digital (magnetômetro AK8963)
-│   └── Gestos/       # Reconhecimento de gestos (acelerômetro + giroscópio)
-├── MAX30100/         # Monitor cardíaco MAX30102 (HR + SpO2)
-└── Round_Display/    # Display circular Seeed
-```
-
-Cada projeto segue a estrutura padrão do ESP-IDF:
-
-```
-componente/
-├── main/
-│   ├── CMakeLists.txt
-│   └── componente.c
-├── CMakeLists.txt
-├── sdkconfig
-└── build/            # Gerado automaticamente (ignorado pelo git)
-```
 
 ---
 
@@ -208,98 +169,3 @@ idf.py -p COM5 flash monitor
 Para instruções detalhadas de cada componente, consulte o README específico na tabela acima.
 
 ---
-
-## Troubleshooting Geral
-
-## Troubleshooting Geral
-
-### Build Errors
-
-#### `idf.py: command not found`
-
-- Você está no terminal errado
-- Use o terminal **ESP-IDF Terminal** no VS Code
-
-#### `Target mismatch`
-
-```bash
-idf.py set-target esp32
-idf.py fullclean
-idf.py build
-```
-
-#### Erro de dependências
-
-```bash
-idf.py fullclean
-rm -rf managed_components
-idf.py build
-```
-
-### Flash Errors
-
-#### `Serial port not found`
-
-- Verifique o driver USB instalado
-- Confirme a porta no Gerenciador de Dispositivos
-- Especifique a porta: `idf.py -p COM5 flash`
-
-#### `Permission denied`
-
-- Feche o monitor serial antes de dar flash
-- Desconecte outros programas que usam a porta (Arduino IDE, PuTTY, etc.)
-
-### Monitor não mostra nada
-
-#### Baud rate errado
-
-```bash
-idf.py monitor -b 115200
-```
-
-#### Porta errada
-
-```bash
-idf.py -p COM5 monitor
-```
-
-#### Reset do ESP32
-
-- Pressione o botão RESET após abrir o monitor
-- Ou reconecte o cabo USB
-
-**Para problemas específicos de sensores e displays, consulte o README de cada componente:**
-
-- [DS18B20 Troubleshooting](DS18B20/README.md#troubleshooting)
-- [ADXL345 Troubleshooting](ADXL345/README.md#troubleshooting)
-- [MPU9250 Troubleshooting](MPU9250/README.md)
-- [MAX30102 Troubleshooting](MAX30100/README.md#troubleshooting)
-- [Round Display Troubleshooting](Round_Display/README.md#troubleshooting)
-
----
-
-## Referências
-
-- [ESP-IDF Programming Guide](https://docs.espressif.com/projects/esp-idf/en/latest/)
-- [ESP-IDF VS Code Extension](https://github.com/espressif/vscode-esp-idf-extension)
-- [DS18B20 Datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/DS18B20.pdf)
-- [ADXL345 Datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL345.pdf)
-- [MPU-9250 Product Specification](https://invensense.tdk.com/wp-content/uploads/2015/02/PS-MPU-9250A-01-v1.1.pdf)
-- [AK8963 Datasheet](https://www.alldatasheet.com/datasheet-pdf/pdf/535561/AKM/AK8963.html)
-- [MAX30102 Datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/MAX30102.pdf)
-
----
-
-## Notas
-
-- Sempre use o **ESP-IDF Terminal**, não o PowerShell comum
-- Cada componente é um projeto independente
-- A pasta `build/` é ignorada pelo git (.gitignore)
-- Para adicionar novos componentes, siga a mesma estrutura
-- Mantenha a documentação atualizada ao adicionar novos testes
-
----
-
-**Autor:** Guilherme Franco  
-**Data:** Fevereiro 2026  
-**Versão ESP-IDF:** v5.5.1

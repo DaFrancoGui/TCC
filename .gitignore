@@ -5,9 +5,8 @@ dependencies.lock
 managed_components/
 
 # Arduino reference libraries
-Codigos/Teste_de_componentes/Arduino_refs/
-Codigos/Teste_de_componentes/MAX30100
-PROMPT_SENSOR_TEMPLATE.md
+docs/
+Rascunho/
 
 # Python
 *.pyc

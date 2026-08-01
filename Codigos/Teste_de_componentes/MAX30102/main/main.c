@@ -25,6 +25,10 @@
 
 static const char *TAG = "PPG_MAIN";
 
+/* Coleta para grafico: pipeline a 100 Hz, saida CSV decimada para 50 Hz. */
+#define PPG_CSV_MODE         1
+#define PPG_CSV_DECIMATION   2
+
 /* ───────── Deteccao de dedo ─────────
  *
  * Histerese simples no IR bruto:
@@ -111,6 +115,9 @@ void app_main(void)
     bool was_present = false;
 
     ESP_LOGI(TAG, "Pipeline pronta, coloque o dedo no sensor\n");
+#if PPG_CSV_MODE
+    printf("PPGCSV_HEADER,sample,time_ms,ir_raw,red_raw,ir_dc,red_dc,ir_ac,red_ac\n");
+#endif
 
     /* Descartar amostras acumuladas durante os delays de init */
     max30102_fifo_clear();
@@ -179,7 +186,7 @@ void app_main(void)
             total_samples++;
 
             /* ── Diagnostico periodico (sempre, mesmo sem dedo) ── */
-            if (total_samples % 100 == 0) {
+            if (!PPG_CSV_MODE && total_samples % 100 == 0) {
                 printf("\n--- %lu s ---\n", total_samples / 100);
                 printf("IR: %6lu  Red: %6lu  (raw)\n", ir_raw, red_raw);
                 printf("Finger: %s  (base=%lu thr_up=%lu)\n",
@@ -196,6 +203,17 @@ void app_main(void)
             float ir_ac, ir_dc, red_ac, red_dc;
             ppg_filter_process(&ch_ir,  ir_raw,  &ir_ac,  &ir_dc);
             ppg_filter_process(&ch_red, red_raw, &red_ac, &red_dc);
+
+#if PPG_CSV_MODE
+            if (total_samples % PPG_CSV_DECIMATION == 0) {
+                printf("PPGCSV,%lu,%lu,%lu,%lu,%.1f,%.1f,%.1f,%.1f\n",
+                       (unsigned long)total_samples,
+                       (unsigned long)(total_samples * 10),
+                       (unsigned long)ir_raw,
+                       (unsigned long)red_raw,
+                       ir_dc, red_dc, ir_ac, red_ac);
+            }
+#endif
 
             /* ── Estagio 4: Frequencia cardiaca (no canal IR) ── */
             uint8_t bpm = hr_process(&hr, ir_ac);
@@ -221,7 +239,7 @@ void app_main(void)
             }
 
             /* ── Saida detalhada a cada 1 segundo (quando dedo presente) ── */
-            if (total_samples % 100 == 0) {
+            if (!PPG_CSV_MODE && total_samples % 100 == 0) {
                 printf("IR_ac: %8.1f  Red_ac: %8.1f  (filtered)\n", ir_ac, red_ac);
                 printf("IR_dc: %8.0f  Red_dc: %8.0f\n", ir_dc, red_dc);
                 printf("AC_range IR:[%.0f..%.0f] Red:[%.0f..%.0f]\n",
@@ -273,7 +291,7 @@ void app_main(void)
         }
 
         /* ── Leitura de temperatura a cada 30 segundos ── */
-        if (total_samples > 0 && (total_samples % 3000) < 32) {
+        if (!PPG_CSV_MODE && total_samples > 0 && (total_samples % 3000) < 32) {
             float temp;
             if (max30102_read_temperature(&temp) == ESP_OK) {
                 if (temp > 10.0f && temp < 60.0f) {

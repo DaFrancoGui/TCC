@@ -393,7 +393,7 @@ void app_main(void)
     i2c_scan();                                 // diagnostico: quem responde no barramento
     ESP_ERROR_CHECK(rtc_pcf8563_init(i2c_bus, i2c_mutex));
     max30102_module_init(i2c_bus, i2c_mutex);   // nao-fatal: watch funciona sem o sensor
-    ds18b20_module_init();                       // 1-Wire (GPIO2), nao-fatal
+    ds18b20_module_init();                       // 1-Wire (GPIO20), nao-fatal
     ltr390_module_init(i2c_bus, i2c_mutex);      // I2C (0x53), nao-fatal
     mpu9250_module_init(i2c_bus, i2c_mutex);     // I2C (0x68/0x0C), nao-fatal
     bateria_init();                              // ADC GPIO0, nao-fatal

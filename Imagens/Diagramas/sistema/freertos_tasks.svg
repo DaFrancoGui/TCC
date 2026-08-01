@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 462" font-family="Helvetica" role="img" aria-label="Mapa de tasks FreeRTOS: LVGL prioridade 4, tasks de sensor prioridade 3, screenshot prioridade 2, loop de despacho prioridade 1, idle prioridade 0, com mutex I2C e handoff por volatile, single-core">
+<rect x="0" y="0" width="940" height="462" fill="#FFFFFF"/>
+<text x="470" y="32" text-anchor="middle" font-family="Helvetica" font-size="15" fill="#2B3138" font-weight="bold">Mapa de tasks FreeRTOS — prioridades e sincronização</text>
+<defs>
+<marker id="flow" markerWidth="9" markerHeight="9" refX="6" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8 Z" fill="#1D7A8C"/></marker>
+</defs>
+<rect x="78" y="108" width="574" height="64" rx="5" fill="#F7FAFB" stroke="#E4EAEC" stroke-width="1"/>
+<rect x="78" y="182" width="574" height="92" rx="5" fill="#F7FAFB" stroke="#E4EAEC" stroke-width="1"/>
+<rect x="78" y="284" width="574" height="46" rx="5" fill="#F7FAFB" stroke="#E4EAEC" stroke-width="1"/>
+<rect x="78" y="340" width="574" height="46" rx="5" fill="#F7FAFB" stroke="#E4EAEC" stroke-width="1"/>
+<rect x="78" y="396" width="574" height="46" rx="5" fill="#F7FAFB" stroke="#E4EAEC" stroke-width="1"/>
+<text x="54" y="98" text-anchor="middle" font-family="Helvetica" font-size="10.5" fill="#767D85">↑ prioridade</text>
+<circle cx="54" cy="140" r="15" fill="#1D7A8C"/>
+<text x="54" y="145" text-anchor="middle" font-family="Helvetica" font-size="15" fill="#FFFFFF" font-weight="bold">4</text>
+<circle cx="54" cy="228" r="15" fill="#1D7A8C"/>
+<text x="54" y="233" text-anchor="middle" font-family="Helvetica" font-size="15" fill="#FFFFFF" font-weight="bold">3</text>
+<circle cx="54" cy="307" r="15" fill="#1D7A8C"/>
+<text x="54" y="312" text-anchor="middle" font-family="Helvetica" font-size="15" fill="#FFFFFF" font-weight="bold">2</text>
+<circle cx="54" cy="363" r="15" fill="#1D7A8C"/>
+<text x="54" y="368" text-anchor="middle" font-family="Helvetica" font-size="15" fill="#FFFFFF" font-weight="bold">1</text>
+<circle cx="54" cy="419" r="15" fill="#1D7A8C"/>
+<text x="54" y="424" text-anchor="middle" font-family="Helvetica" font-size="15" fill="#FFFFFF" font-weight="bold">0</text>
+<rect x="90" y="116" width="340" height="48" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="102" y="136" text-anchor="start" font-family="Helvetica" font-size="12.5" fill="#14515E" font-weight="bold">LVGL port (esp_lvgl_port)</text>
+<text x="102" y="153" text-anchor="start" font-family="Helvetica" font-size="10.5" fill="#767D85">flush por DMA + toque (esp_lcd_touch) · sempre ativa</text>
+<text x="90" y="196" text-anchor="start" font-family="Helvetica" font-size="10.5" fill="#767D85" font-style="italic">tasks de sensor — aquisição condicionada à função ativa; inativas aguardam 100–200 ms</text>
+<rect x="90" y="204" width="104" height="60" rx="5" fill="#FFFFFF" stroke="#B8BDC3" stroke-width="1.2"/>
+<text x="142" y="223" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#14515E" font-weight="bold">ppg_task</text>
+<text x="142" y="239" text-anchor="middle" font-family="Helvetica" font-size="10" fill="#767D85">MAX30102</text>
+<text x="142" y="254" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#767D85">30 ms · off 100</text>
+<rect x="200" y="204" width="104" height="60" rx="5" fill="#FFFFFF" stroke="#B8BDC3" stroke-width="1.2"/>
+<text x="252" y="223" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#14515E" font-weight="bold">temp_task</text>
+<text x="252" y="239" text-anchor="middle" font-family="Helvetica" font-size="10" fill="#767D85">DS18B20</text>
+<text x="252" y="254" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#767D85">conv.+100 · off 200</text>
+<rect x="310" y="204" width="104" height="60" rx="5" fill="#FFFFFF" stroke="#B8BDC3" stroke-width="1.2"/>
+<text x="362" y="223" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#14515E" font-weight="bold">ltr390_task</text>
+<text x="362" y="239" text-anchor="middle" font-family="Helvetica" font-size="10" fill="#767D85">LTR390</text>
+<text x="362" y="254" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#767D85">120 ms · off 200</text>
+<rect x="420" y="204" width="104" height="60" rx="5" fill="#FFFFFF" stroke="#B8BDC3" stroke-width="1.2"/>
+<text x="472" y="223" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#14515E" font-weight="bold">mpu_task</text>
+<text x="472" y="239" text-anchor="middle" font-family="Helvetica" font-size="10" fill="#767D85">bússola</text>
+<text x="472" y="254" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#767D85">60 ms · off 200</text>
+<rect x="530" y="204" width="104" height="60" rx="5" fill="#FFFFFF" stroke="#B8BDC3" stroke-width="1.2"/>
+<text x="582" y="223" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#14515E" font-weight="bold">ped_task</text>
+<text x="582" y="239" text-anchor="middle" font-family="Helvetica" font-size="10" fill="#767D85">pedômetro</text>
+<text x="582" y="254" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#767D85">20 ms · off 150</text>
+<rect x="90" y="290" width="380" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="102" y="306" text-anchor="start" font-family="monospace" font-size="12" fill="#14515E" font-weight="bold">screenshot_task</text>
+<text x="215" y="306" text-anchor="start" font-family="Helvetica" font-size="10.5" fill="#767D85">— dump de tela via serial (botão BOOT) · utilitário</text>
+<text x="102" y="321" text-anchor="start" font-family="Helvetica" font-size="10" fill="#767D85" font-style="italic">acima do despacho, abaixo dos sensores</text>
+<rect x="90" y="346" width="380" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="102" y="362" text-anchor="start" font-family="Helvetica" font-size="12" fill="#14515E" font-weight="bold">loop de despacho (app_main)</text>
+<text x="300" y="362" text-anchor="start" font-family="Helvetica" font-size="10.5" fill="#767D85">— 500 ms · update() da tela ativa</text>
+<rect x="90" y="402" width="380" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
+<text x="102" y="418" text-anchor="start" font-family="Helvetica" font-size="12" fill="#14515E" font-weight="bold">idle task</text>
+<text x="172" y="418" text-anchor="start" font-family="Helvetica" font-size="10.5" fill="#767D85">— Task WDT (5 s) · idle hook → %CPU</text>
+<rect x="676" y="116" width="208" height="48" rx="5" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.4" stroke-dasharray="5 4"/>
+<text x="688" y="135" text-anchor="start" font-family="Helvetica" font-size="11.5" fill="#14515E" font-weight="bold">variáveis volatile</text>
+<text x="688" y="152" text-anchor="start" font-family="Helvetica" font-size="9.5" fill="#767D85">BPM · temp · lux · heading · passos</text>
+<text x="676" y="186" text-anchor="start" font-family="Helvetica" font-size="9" fill="#767D85" font-style="italic">lida pelo despacho → LVGL renderiza</text>
+<rect x="676" y="200" width="208" height="66" rx="5" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.4" stroke-dasharray="5 4"/>
+<text x="688" y="220" text-anchor="start" font-family="Helvetica" font-size="11.5" fill="#14515E" font-weight="bold">mutex I²C</text>
+<text x="688" y="237" text-anchor="start" font-family="Helvetica" font-size="10" fill="#767D85">herança de prioridade</text>
+<text x="688" y="252" text-anchor="start" font-family="Helvetica" font-size="9.5" fill="#767D85">(touch + RTC também usam)</text>
+<line x1="640" y1="216" x2="672" y2="150" stroke="#1D7A8C" stroke-width="1.6" marker-end="url(#flow)"/>
+<text x="648" y="178" text-anchor="start" font-family="Helvetica" font-size="9.5" fill="#767D85" font-style="italic">publica</text>
+<line x1="642" y1="234" x2="674" y2="234" stroke="#1D7A8C" stroke-width="1.6" marker-end="url(#flow)"/>
+<text x="658" y="228" text-anchor="middle" font-family="Helvetica" font-size="9" fill="#767D85" font-style="italic">take/give</text>
+</svg>

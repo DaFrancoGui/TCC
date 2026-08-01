@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 372" font-family="DejaVu Sans, sans-serif" role="img" aria-label="Heading magnético do protótipo na versão de ensaio comparado à bússola Norvix DC45-2 em duas direções, com diferenças observadas de 16 e 22 graus">
+<rect x="0" y="0" width="880" height="372" fill="#FFFFFF"/>
+<text x="440" y="32" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#2B3138" font-weight="bold">Bússola — protótipo × Norvix DC45-2</text>
+<g stroke="#ECECEC" stroke-width="1">
+<line x1="120" y1="110" x2="120" y2="285"/>
+<line x1="209" y1="110" x2="209" y2="285"/>
+<line x1="298" y1="110" x2="298" y2="285"/>
+<line x1="386" y1="110" x2="386" y2="285"/>
+<line x1="475" y1="110" x2="475" y2="285"/>
+<line x1="564" y1="110" x2="564" y2="285"/>
+<line x1="652" y1="110" x2="652" y2="285"/>
+<line x1="741" y1="110" x2="741" y2="285"/>
+<line x1="830" y1="110" x2="830" y2="285"/>
+</g>
+<line x1="120" y1="285" x2="830" y2="285" stroke="#B8BDC3" stroke-width="1.4"/>
+<text x="120" y="303" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85" font-weight="bold">N</text>
+<text x="120" y="319" text-anchor="middle" font-family="monospace" font-size="10" fill="#767D85">0</text>
+<text x="209" y="303" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85" font-weight="bold">NE</text>
+<text x="209" y="319" text-anchor="middle" font-family="monospace" font-size="10" fill="#767D85">45</text>
+<text x="298" y="303" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85" font-weight="bold">E</text>
+<text x="298" y="319" text-anchor="middle" font-family="monospace" font-size="10" fill="#767D85">90</text>
+<text x="386" y="303" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85" font-weight="bold">SE</text>
+<text x="386" y="319" text-anchor="middle" font-family="monospace" font-size="10" fill="#767D85">135</text>
+<text x="475" y="303" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85" font-weight="bold">S</text>
+<text x="475" y="319" text-anchor="middle" font-family="monospace" font-size="10" fill="#767D85">180</text>
+<text x="564" y="303" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85" font-weight="bold">SW</text>
+<text x="564" y="319" text-anchor="middle" font-family="monospace" font-size="10" fill="#767D85">225</text>
+<text x="652" y="303" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85" font-weight="bold">W</text>
+<text x="652" y="319" text-anchor="middle" font-family="monospace" font-size="10" fill="#767D85">270</text>
+<text x="741" y="303" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85" font-weight="bold">NW</text>
+<text x="741" y="319" text-anchor="middle" font-family="monospace" font-size="10" fill="#767D85">315</text>
+<text x="830" y="303" text-anchor="middle" font-family="Helvetica" font-size="11.5" fill="#767D85" font-weight="bold">N</text>
+<text x="830" y="319" text-anchor="middle" font-family="monospace" font-size="10" fill="#767D85">360</text>
+<line x1="120" y1="150" x2="830" y2="150" stroke="#F0F0F0" stroke-width="1"/>
+<text x="112" y="154" text-anchor="end" font-family="Helvetica" font-size="12" fill="#2B3138">Ida  (≈ NW)</text>
+<line x1="751" y1="150" x2="783" y2="150" stroke="#C97B1E" stroke-width="6" stroke-opacity="1"/>
+<text x="767" y="139" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#C97B1E" font-weight="bold">+16°</text>
+<circle cx="751" cy="150" r="6" fill="#2B3138"/>
+<circle cx="783" cy="150" r="6" fill="#1D7A8C"/>
+<text x="751" y="174" text-anchor="middle" font-family="monospace" font-size="11" fill="#2B3138" font-weight="bold">320°</text>
+<text x="783" y="128" text-anchor="middle" font-family="monospace" font-size="11" fill="#1D7A8C" font-weight="bold">336°</text>
+<line x1="120" y1="225" x2="830" y2="225" stroke="#F0F0F0" stroke-width="1"/>
+<text x="112" y="229" text-anchor="end" font-family="Helvetica" font-size="12" fill="#2B3138">Volta  (≈ SE)</text>
+<line x1="376" y1="225" x2="420" y2="225" stroke="#C97B1E" stroke-width="6" stroke-opacity="1"/>
+<text x="398" y="214" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#C97B1E" font-weight="bold">+22°</text>
+<circle cx="376" cy="225" r="6" fill="#2B3138"/>
+<circle cx="420" cy="225" r="6" fill="#1D7A8C"/>
+<text x="376" y="249" text-anchor="middle" font-family="monospace" font-size="11" fill="#2B3138" font-weight="bold">130°</text>
+<text x="420" y="203" text-anchor="middle" font-family="monospace" font-size="11" fill="#1D7A8C" font-weight="bold">152°</text>
+<circle cx="130" cy="352" r="6" fill="#2B3138"/>
+<text x="144" y="356" text-anchor="start" font-family="Helvetica" font-size="11.5" fill="#767D85">Norvix DC45-2 (magnético)</text>
+<circle cx="360" cy="352" r="6" fill="#1D7A8C"/>
+<text x="374" y="356" text-anchor="start" font-family="DejaVu Sans, sans-serif" font-size="11.5" fill="#767D85">Protótipo (versão de ensaio, magnético)</text>
+<line x1="610" y1="352" x2="638" y2="352" stroke="#C97B1E" stroke-width="6"/>
+<text x="646" y="356" text-anchor="start" font-family="Helvetica" font-size="11.5" fill="#767D85">diferença observada</text>
+</svg>

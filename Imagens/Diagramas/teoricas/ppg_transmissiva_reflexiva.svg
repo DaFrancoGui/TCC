@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 680" width="1280" height="680" font-family="DejaVu Sans" role="img" aria-label="Esquema conceitual comparando as configuracoes transmissiva e reflexiva da fotopletismografia. Na transmissiva, o LED fica de um lado do tecido e o fotodetector do lado oposto, e a luz atravessa o tecido. Na reflexiva, dois LEDs e o fotodetector ficam na mesma face, e a luz penetra, se espalha e retorna ao detector.">
+  <style>
+    .title   { font-size: 19px; fill: #2B3138; font-weight: bold; }
+    .subtitle{ font-size: 11.5px; fill: #767D85; font-style: italic; }
+    .ptitle  { font-size: 15px; fill: #2B3138; font-weight: bold; }
+    .psub    { font-size: 10.5px; fill: #767D85; }
+    .boxtl   { font-size: 11.5px; font-weight: bold; }
+    .tis     { font-size: 9.5px; fill: #8A8F94; font-style: italic; }
+    .leg     { font-size: 10.5px; fill: #2B3138; }
+    .note    { font-size: 9.5px; fill: #767D85; font-style: italic; }
+  </style>
+
+  <rect x="0" y="0" width="1280" height="680" fill="#FFFFFF"/>
+
+  <text x="640" y="38" text-anchor="middle" class="title">Fotopletismografia: configurações transmissiva e reflexiva</text>
+  <text x="640" y="60" text-anchor="middle" class="subtitle">figura conceitual — esquema óptico sem escala</text>
+
+  <!-- ==================================================================== -->
+  <!-- PAINEL A — TRANSMISSIVA                                              -->
+  <!-- ==================================================================== -->
+  <rect x="40" y="84" width="580" height="500" rx="8" fill="#FCFCFC" stroke="#B8BDC3" stroke-width="1.2"/>
+  <text x="62" y="114" class="ptitle">Transmissiva</text>
+  <text x="62" y="134" class="psub">fonte e detector em lados opostos do tecido</text>
+  <text x="62" y="151" class="psub">configuração típica de dedo ou lóbulo da orelha</text>
+
+  <!-- tecido -->
+  <rect x="110" y="300" width="440" height="170" rx="26" fill="#F3F1EE" stroke="#8A8F94" stroke-width="1.4"/>
+  <text x="132" y="458" class="tis">tecido</text>
+
+  <!-- caminho optico dentro do tecido -->
+  <g fill="none" stroke="#2B3138" stroke-width="1.5">
+    <path d="M 300,300 C 296,360 310,412 315,470"/>
+    <path d="M 330,300 C 330,360 336,412 345,470"/>
+    <path d="M 360,300 C 366,360 352,420 345,470"/>
+  </g>
+  <g fill="none" stroke="#B8BDC3" stroke-width="1.4" stroke-dasharray="5 4">
+    <path d="M 300,300 C 258,356 200,390 162,408"/>
+    <path d="M 360,300 C 420,348 476,378 502,402"/>
+    <path d="M 330,300 C 300,380 260,430 232,452"/>
+  </g>
+
+  <!-- LED -->
+  <rect x="250" y="210" width="160" height="48" rx="6" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.8"/>
+  <text x="330" y="240" text-anchor="middle" class="boxtl" fill="#8A5510">LED (fonte)</text>
+
+  <!-- luz emitida -->
+  <g stroke="#C97B1E" stroke-width="2">
+    <line x1="300" y1="258" x2="300" y2="291"/>
+    <line x1="330" y1="258" x2="330" y2="291"/>
+    <line x1="360" y1="258" x2="360" y2="291"/>
+  </g>
+  <g fill="#C97B1E">
+    <polygon points="294,290 306,290 300,300"/>
+    <polygon points="324,290 336,290 330,300"/>
+    <polygon points="354,290 366,290 360,300"/>
+  </g>
+
+  <!-- luz detectada -->
+  <g stroke="#1D7A8C" stroke-width="2">
+    <line x1="315" y1="470" x2="315" y2="503"/>
+    <line x1="345" y1="470" x2="345" y2="503"/>
+  </g>
+  <g fill="#1D7A8C">
+    <polygon points="309,502 321,502 315,512"/>
+    <polygon points="339,502 351,502 345,512"/>
+  </g>
+
+  <!-- fotodetector -->
+  <rect x="250" y="512" width="160" height="48" rx="6" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.8"/>
+  <text x="330" y="542" text-anchor="middle" class="boxtl" fill="#14515E">Fotodetector</text>
+
+  <!-- ==================================================================== -->
+  <!-- PAINEL B — REFLEXIVA                                                 -->
+  <!-- ==================================================================== -->
+  <rect x="660" y="84" width="580" height="500" rx="8" fill="#FCFCFC" stroke="#B8BDC3" stroke-width="1.2"/>
+  <text x="682" y="114" class="ptitle">Reflexiva</text>
+  <text x="682" y="134" class="psub">fonte e detector na mesma face do tecido</text>
+  <text x="682" y="151" class="psub">compatível com o punho; configuração empregada pelo MAX30102</text>
+
+  <!-- tecido: meio aberto, apenas a face proxima importa -->
+  <rect x="730" y="300" width="440" height="210" fill="#F3F1EE"/>
+  <path d="M 730,510 L 730,300 L 1170,300 L 1170,510" fill="none" stroke="#8A8F94" stroke-width="1.4"/>
+  <line x1="730" y1="510" x2="1170" y2="510" stroke="#8A8F94" stroke-width="1.4" stroke-dasharray="6 5"/>
+  <text x="752" y="498" class="tis">tecido</text>
+
+  <!-- caminhos opticos: penetram, espalham e retornam -->
+  <g fill="none" stroke="#2B3138" stroke-width="1.5">
+    <path d="M 811,300 C 811,372 938,372 938,300"/>
+    <path d="M 811,300 C 811,438 938,438 938,300"/>
+    <path d="M 1089,300 C 1089,372 962,372 962,300"/>
+    <path d="M 1089,300 C 1089,438 962,438 962,300"/>
+  </g>
+  <g fill="none" stroke="#B8BDC3" stroke-width="1.4" stroke-dasharray="5 4">
+    <path d="M 811,300 C 782,406 792,478 826,494"/>
+    <path d="M 1089,300 C 1118,406 1108,478 1074,494"/>
+  </g>
+
+  <!-- modulo do sensor na mesma face -->
+  <text x="950" y="200" text-anchor="middle" class="psub">módulo do sensor</text>
+  <rect x="750" y="210" width="400" height="70" rx="7" fill="#FBFBFB" stroke="#2B3138" stroke-width="1.6"/>
+
+  <rect x="766" y="224" width="90" height="44" rx="5" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.8"/>
+  <text x="811" y="251" text-anchor="middle" class="boxtl" fill="#8A5510">LED</text>
+
+  <rect x="895" y="224" width="110" height="44" rx="5" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.8"/>
+  <text x="950" y="245" text-anchor="middle" class="boxtl" fill="#14515E">Foto-</text>
+  <text x="950" y="259" text-anchor="middle" class="boxtl" fill="#14515E">detector</text>
+
+  <rect x="1044" y="224" width="90" height="44" rx="5" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.8"/>
+  <text x="1089" y="251" text-anchor="middle" class="boxtl" fill="#8A5510">LED</text>
+
+  <!-- luz emitida -->
+  <g stroke="#C97B1E" stroke-width="2">
+    <line x1="811" y1="280" x2="811" y2="291"/>
+    <line x1="1089" y1="280" x2="1089" y2="291"/>
+  </g>
+  <g fill="#C97B1E">
+    <polygon points="805,290 817,290 811,300"/>
+    <polygon points="1083,290 1095,290 1089,300"/>
+  </g>
+
+  <!-- luz detectada -->
+  <g stroke="#1D7A8C" stroke-width="2">
+    <line x1="938" y1="300" x2="938" y2="289"/>
+    <line x1="962" y1="300" x2="962" y2="289"/>
+  </g>
+  <g fill="#1D7A8C">
+    <polygon points="932,290 944,290 938,280"/>
+    <polygon points="956,290 968,290 962,280"/>
+  </g>
+
+  <text x="877" y="294" text-anchor="middle" class="note">interface de contato</text>
+
+  <!-- ==================================================================== -->
+  <!-- LEGENDA                                                              -->
+  <!-- ==================================================================== -->
+  <line x1="40" y1="616" x2="1240" y2="616" stroke="#B8BDC3" stroke-width="1"/>
+
+  <line x1="60" y1="642" x2="84" y2="642" stroke="#C97B1E" stroke-width="2"/>
+  <polygon points="83,636 83,648 94,642" fill="#C97B1E"/>
+  <text x="104" y="646" class="leg">luz emitida</text>
+
+  <path d="M 250,648 C 262,632 286,632 298,648" fill="none" stroke="#2B3138" stroke-width="1.5"/>
+  <text x="312" y="646" class="leg">caminho óptico no tecido</text>
+
+  <line x1="620" y1="642" x2="644" y2="642" stroke="#1D7A8C" stroke-width="2"/>
+  <polygon points="643,636 643,648 654,642" fill="#1D7A8C"/>
+  <text x="664" y="646" class="leg">luz detectada</text>
+
+  <path d="M 880,648 C 892,632 916,632 928,648" fill="none" stroke="#B8BDC3" stroke-width="1.4" stroke-dasharray="5 4"/>
+  <text x="942" y="646" class="leg">luz que não retorna ao detector</text>
+</svg>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 360" font-family="Helvetica, Arial, sans-serif" role="img" aria-label="Indice UV medido pelo LTR390 na escala de risco da OMS comparado a referencia">
+  <style>
+    text { font-size: 13px; fill: #2B3138; }
+    .small { font-size: 11.5px; fill: #767D85; }
+    .cat   { font-size: 12px; fill: #FFFFFF; font-weight: bold; }
+    .mono  { font-family: 'Courier New', monospace; font-size: 13px; font-weight: bold; }
+    .title { font-size: 15px; fill: #2B3138; font-weight: bold; }
+    .tick  { font-family: 'Courier New', monospace; font-size: 11.5px; fill: #767D85; }
+  </style>
+
+  <rect x="0" y="0" width="880" height="360" fill="#FFFFFF"/>
+  <text x="440" y="32" text-anchor="middle" class="title">Índice UV — leitura do sensor na escala de risco (OMS)</text>
+  <text x="440" y="50" text-anchor="middle" class="small">céu limpo, sol direto — Florianópolis (inverno), 25/07/2026</text>
+
+  <!-- ===== Barra de categorias (x = 60 + uvi*65 ; 0..12) ===== -->
+  <!-- Baixo 0-3 -->
+  <rect x="60"  y="150" width="195" height="46" fill="#3EA255"/>
+  <!-- Moderado 3-6 -->
+  <rect x="255" y="150" width="195" height="46" fill="#F5B301"/>
+  <!-- Alto 6-8 -->
+  <rect x="450" y="150" width="130" height="46" fill="#F57C00"/>
+  <!-- Muito Alto 8-11 -->
+  <rect x="580" y="150" width="195" height="46" fill="#E53935"/>
+  <!-- Extremo 11-12 -->
+  <rect x="775" y="150" width="65"  height="46" fill="#7B1FA2"/>
+
+  <text x="157" y="178" text-anchor="middle" class="cat">BAIXO</text>
+  <text x="352" y="178" text-anchor="middle" class="cat">MODERADO</text>
+  <text x="515" y="178" text-anchor="middle" class="cat">ALTO</text>
+  <text x="677" y="178" text-anchor="middle" class="cat">MUITO ALTO</text>
+  <text x="807" y="182" text-anchor="middle" class="cat" font-size="10">EXTR.</text>
+
+  <!-- ticks do indice 0..11 -->
+  <g>
+    <text x="60"  y="216" text-anchor="middle" class="tick">0</text>
+    <text x="255" y="216" text-anchor="middle" class="tick">3</text>
+    <text x="450" y="216" text-anchor="middle" class="tick">6</text>
+    <text x="580" y="216" text-anchor="middle" class="tick">8</text>
+    <text x="775" y="216" text-anchor="middle" class="tick">11</text>
+  </g>
+  <text x="450" y="238" text-anchor="middle" class="small">índice UV</text>
+
+  <!-- ===== Faixa medida pelo sensor: 3-6 ===== -->
+  <!-- x(3)=255, x(6)=450 -->
+  <path d="M 255 130 L 255 118 L 450 118 L 450 130" fill="none" stroke="#14515E" stroke-width="2"/>
+  <rect x="255" y="118" width="195" height="0.1" fill="none"/>
+  <text x="352" y="108" text-anchor="middle" class="mono" fill="#14515E">sensor: oscilou entre 3 e 6</text>
+  <text x="352" y="93"  text-anchor="middle" class="small">(medição de mão — sem difusor cosseno)</text>
+
+  <!-- ===== Referencia (app): UVI 5 ===== -->
+  <!-- x(5) = 60 + 5*65 = 385 -->
+  <polygon points="385,146 379,134 391,134" fill="#2B3138"/>
+  <line x1="385" y1="196" x2="385" y2="210" stroke="#2B3138" stroke-width="1.4"/>
+  <text x="385" y="270" text-anchor="middle" class="mono">referência (app): 5</text>
+  <text x="385" y="286" text-anchor="middle" class="small">referência meteorológica — pico do dia</text>
+  <line x1="385" y1="252" x2="385" y2="214" stroke="#2B3138" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <!-- ===== Conclusao ===== -->
+</svg>
