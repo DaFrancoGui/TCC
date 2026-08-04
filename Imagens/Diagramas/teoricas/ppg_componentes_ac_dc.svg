@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 900" width="1500" height="900"
+     font-family="DejaVu Sans, Liberation Sans, sans-serif" role="img"
+     aria-label="Figura conceitual com três curvas alinhadas no tempo: sinal PPG bruto com componente DC dominante e pequena pulsação, estimativa DC suave e componente AC pulsátil em escala visual ampliada. Três pulsos são marcados e a relação PPG igual a DC mais AC é indicada.">
+  <defs>
+    <marker id="arrowGraphite" markerWidth="9" markerHeight="9" refX="7.5" refY="4.5" orient="auto">
+      <path d="M0,0 L8,4.5 L0,9 Z" fill="#263238"/>
+    </marker>
+    <style>
+      .title      { font-size: 25px; font-weight: 700; fill: #263238; }
+      .subtitle   { font-size: 14px; font-style: italic; fill: #607178; }
+      .band-title { font-size: 17px; font-weight: 700; fill: #263238; }
+      .band-sub   { font-size: 12px; fill: #607178; }
+      .formula    { font-size: 18px; font-weight: 700; fill: #1565C0; }
+      .axis       { font-size: 11.5px; fill: #607178; }
+      .pulse      { font-size: 12px; font-weight: 700; fill: #263238; }
+      .badge      { font-size: 12px; font-weight: 700; fill: #9A6500; }
+      .legend     { font-size: 12.5px; fill: #263238; }
+      .note       { font-size: 12px; font-style: italic; fill: #607178; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1500" height="900" fill="#FFFFFF"/>
+
+  <text x="750" y="42" text-anchor="middle" class="title">Decomposição conceitual do sinal fotopletismográfico</text>
+  <text x="750" y="68" text-anchor="middle" class="subtitle">valores normalizados — curvas didáticas, sem dados do protótipo</text>
+
+  <rect x="1210" y="24" width="245" height="50" rx="7" fill="#EEF4FB"
+        stroke="#1565C0" stroke-width="1.5"/>
+  <text x="1332.5" y="56" text-anchor="middle" class="formula">PPG = DC + AC</text>
+
+  <!-- Faixas -->
+  <rect x="38" y="108" width="1424" height="210" rx="9" fill="#F7FAFB"
+        stroke="#B8C1C5" stroke-width="1.3"/>
+  <rect x="38" y="338" width="1424" height="210" rx="9" fill="#F5FAFB"
+        stroke="#B8C1C5" stroke-width="1.3"/>
+  <rect x="38" y="568" width="1424" height="210" rx="9" fill="#FEFAF4"
+        stroke="#B8C1C5" stroke-width="1.3"/>
+
+  <!-- Títulos curtos -->
+  <text x="64" y="139" class="band-title">1  Sinal PPG bruto</text>
+  <text x="64" y="160" class="band-sub">amplitude normalizada</text>
+  <text x="64" y="369" class="band-title">2  Estimativa DC suave</text>
+  <text x="64" y="390" class="band-sub">mesma escala do sinal bruto</text>
+  <text x="64" y="599" class="band-title">3  Componente AC pulsátil</text>
+  <text x="64" y="620" class="band-sub">linha de base removida</text>
+
+  <rect x="1238" y="586" width="194" height="35" rx="6" fill="#FFF5D9"
+        stroke="#F9A825" stroke-width="1.4"/>
+  <text x="1335" y="609" text-anchor="middle" class="badge">escala diferente · ampliada</text>
+
+  <!-- Grades e eixos -->
+  <g stroke="#D8E0E3" stroke-width="1">
+    <line x1="260" y1="174" x2="1425" y2="174"/>
+    <line x1="260" y1="232" x2="1425" y2="232"/>
+    <line x1="260" y1="290" x2="1425" y2="290"/>
+    <line x1="260" y1="404" x2="1425" y2="404"/>
+    <line x1="260" y1="462" x2="1425" y2="462"/>
+    <line x1="260" y1="520" x2="1425" y2="520"/>
+    <line x1="260" y1="620" x2="1425" y2="620"/>
+    <line x1="260" y1="675" x2="1425" y2="675"/>
+    <line x1="260" y1="730" x2="1425" y2="730"/>
+  </g>
+  <g stroke="#263238" stroke-width="1.5">
+    <line x1="260" y1="160" x2="260" y2="292"/>
+    <line x1="260" y1="290" x2="1425" y2="290"/>
+    <line x1="260" y1="390" x2="260" y2="522"/>
+    <line x1="260" y1="520" x2="1425" y2="520"/>
+    <line x1="260" y1="608" x2="260" y2="733"/>
+    <line x1="260" y1="675" x2="1425" y2="675"/>
+  </g>
+
+  <!-- Escalas normalizadas -->
+  <text x="247" y="178" text-anchor="end" class="axis">1</text>
+  <text x="247" y="294" text-anchor="end" class="axis">0</text>
+  <text x="247" y="408" text-anchor="end" class="axis">1</text>
+  <text x="247" y="524" text-anchor="end" class="axis">0</text>
+  <text x="247" y="624" text-anchor="end" class="axis">+1</text>
+  <text x="247" y="679" text-anchor="end" class="axis">0</text>
+  <text x="247" y="734" text-anchor="end" class="axis">−1</text>
+
+  <!-- Instantes de três pulsos alinhados -->
+  <g stroke="#8D9A9F" stroke-width="1.2" stroke-dasharray="6 5">
+    <line x1="390" y1="150" x2="390" y2="735"/>
+    <line x1="660" y1="150" x2="660" y2="735"/>
+    <line x1="930" y1="150" x2="930" y2="735"/>
+  </g>
+  <text x="390" y="144" text-anchor="middle" class="pulse">pulso 1</text>
+  <text x="660" y="144" text-anchor="middle" class="pulse">pulso 2</text>
+  <text x="930" y="144" text-anchor="middle" class="pulse">pulso 3</text>
+
+  <!-- 1. PPG bruto: linha de base grande, deriva lenta e pulsação pequena -->
+  <path d="M260 260
+           C300 259 330 258 350 256
+           C365 254 377 238 390 234
+           C404 237 414 249 428 253
+           C442 258 457 260 472 257
+           C488 255 500 253 515 254
+           C560 252 600 248 620 246
+           C635 244 647 228 660 224
+           C674 227 684 239 698 243
+           C712 248 727 250 742 247
+           C758 245 770 243 785 244
+           C830 242 870 238 890 236
+           C905 234 917 218 930 214
+           C944 217 954 229 968 233
+           C982 238 997 240 1012 237
+           C1028 235 1040 233 1055 234
+           C1100 235 1140 238 1160 240
+           C1175 239 1187 225 1200 221
+           C1214 224 1224 236 1238 240
+           C1252 245 1267 247 1282 245
+           C1330 246 1380 250 1425 254"
+        fill="none" stroke="#1565C0" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- 2. Estimativa DC -->
+  <path d="M260 478
+           C430 474 560 462 690 447
+           C790 436 875 431 950 432
+           C1080 434 1225 442 1425 454"
+        fill="none" stroke="#00796B" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- 3. AC ampliada -->
+  <path d="M260 675
+           C320 675 350 675 365 668
+           C375 655 380 620 390 610
+           C405 615 414 648 428 663
+           C445 680 458 695 472 693
+           C488 690 500 675 515 675
+           C590 675 620 675 635 668
+           C645 655 650 620 660 610
+           C675 615 684 648 698 663
+           C715 680 728 695 742 693
+           C758 690 770 675 785 675
+           C860 675 890 675 905 668
+           C915 655 920 620 930 610
+           C945 615 954 648 968 663
+           C985 680 998 695 1012 693
+           C1028 690 1040 675 1055 675
+           C1130 675 1160 675 1175 668
+           C1185 655 1190 620 1200 610
+           C1215 615 1224 648 1238 663
+           C1255 680 1268 695 1282 693
+           C1298 690 1310 675 1425 675"
+        fill="none" stroke="#F9A825" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Marcas dos pulsos -->
+  <g fill="#FFFFFF" stroke="#1565C0" stroke-width="2.2">
+    <circle cx="390" cy="234" r="5"/>
+    <circle cx="660" cy="224" r="5"/>
+    <circle cx="930" cy="214" r="5"/>
+  </g>
+  <g fill="#F9A825" stroke="#FFFFFF" stroke-width="2">
+    <circle cx="390" cy="610" r="6"/>
+    <circle cx="660" cy="610" r="6"/>
+    <circle cx="930" cy="610" r="6"/>
+  </g>
+
+  <!-- Eixo temporal comum -->
+  <line x1="260" y1="796" x2="1428" y2="796" stroke="#263238" stroke-width="1.7"
+        marker-end="url(#arrowGraphite)"/>
+  <text x="1425" y="817" text-anchor="end" class="axis">tempo normalizado</text>
+
+  <!-- Legenda -->
+  <line x1="60" y1="846" x2="105" y2="846" stroke="#1565C0" stroke-width="3.4"/>
+  <text x="118" y="851" class="legend">PPG bruto</text>
+  <line x1="270" y1="846" x2="315" y2="846" stroke="#00796B" stroke-width="4"/>
+  <text x="328" y="851" class="legend">estimativa DC</text>
+  <line x1="510" y1="846" x2="555" y2="846" stroke="#F9A825" stroke-width="3.8"/>
+  <text x="568" y="851" class="legend">AC em escala ampliada</text>
+  <line x1="825" y1="846" x2="870" y2="846" stroke="#8D9A9F" stroke-width="1.2"
+        stroke-dasharray="6 5"/>
+  <text x="883" y="851" class="legend">instantes alinhados</text>
+  <text x="1440" y="851" text-anchor="end" class="note">representação conceitual</text>
+</svg>

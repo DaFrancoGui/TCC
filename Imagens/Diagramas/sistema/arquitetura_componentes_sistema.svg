@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1120 700" font-family="Helvetica, Arial, sans-serif" role="img" aria-label="Diagrama de componentes UML da arquitetura do sistema: nucleo e UI no topo, cinco modulos autocontidos no meio com interface uniforme, e infraestrutura compartilhada (barramento I2C, 1-Wire, NVS) embaixo">
+  <style>
+    .title  { font-size: 17px; fill: #2B3138; font-weight: bold; }
+    .stereo { font-size: 10.5px; fill: #767D85; font-style: italic; }
+    .cname  { font-size: 13.5px; fill: #14515E; font-weight: bold; }
+    .sub    { font-size: 11px; fill: #14515E; font-weight: bold; }
+    .part   { font-size: 10.5px; fill: #767D85; }
+    .iface  { font-size: 11px; fill: #14515E; }
+    .note   { font-size: 10.5px; fill: #767D85; }
+    .red    { font-size: 10.5px; fill: #C4453C; font-weight: bold; }
+    .addr   { font-family: 'Courier New', monospace; font-size: 10px; fill: #767D85; }
+    .leg    { font-size: 11px; fill: #2B3138; }
+  </style>
+
+  <defs>
+    <g id="ci">
+      <rect x="0" y="0" width="18" height="13" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.1"/>
+      <rect x="-4" y="2" width="8" height="3.2" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.1"/>
+      <rect x="-4" y="7" width="8" height="3.2" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.1"/>
+    </g>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="none" stroke="#767D85" stroke-width="1.3"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="700" fill="#FFFFFF"/>
+  <text x="560" y="36" text-anchor="middle" class="title">Arquitetura de componentes do sistema</text>
+
+  <!-- ===================== CAMADA DE TOPO: nucleo + UI ===================== -->
+  <rect x="70" y="66" width="870" height="156" rx="8" fill="#F7FAFB" stroke="#1D7A8C" stroke-width="1.6"/>
+  <text x="88" y="86" class="stereo">«subsistema»</text>
+  <text x="88" y="103" class="cname">Núcleo + UI (orquestração)</text>
+
+  <!-- main.c -->
+  <rect x="90" y="116" width="270" height="92" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.4"/>
+  <use xlink:href="#ci" x="330" y="124"/>
+  <text x="102" y="138" class="stereo">«component»</text>
+  <text x="102" y="155" class="sub">main.c — núcleo</text>
+  <text x="102" y="173" class="part">registro de telas</text>
+  <text x="102" y="188" class="part">loop de despacho (500 ms)</text>
+  <text x="102" y="203" class="part">inicialização não-fatal</text>
+
+  <!-- app.h -->
+  <rect x="390" y="116" width="250" height="92" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.4"/>
+  <use xlink:href="#ci" x="610" y="124"/>
+  <text x="402" y="138" class="stereo">«component»</text>
+  <text x="402" y="155" class="sub">app.h — serviços</text>
+  <text x="402" y="173" class="part">app_register_screen</text>
+  <text x="402" y="188" class="part">app_perf_read</text>
+  <text x="402" y="203" class="part">app_style_btn</text>
+
+  <!-- LVGL / display -->
+  <rect x="670" y="116" width="250" height="92" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.4"/>
+  <use xlink:href="#ci" x="890" y="124"/>
+  <text x="682" y="138" class="stereo">«component»</text>
+  <text x="682" y="155" class="sub">LVGL + esp_lvgl_port</text>
+  <text x="682" y="173" class="part">GC9A01 240×240</text>
+  <text x="682" y="188" class="part">esp_lcd_touch (CHSC6X)</text>
+  <text x="682" y="203" class="part">flush por DMA</text>
+
+  <!-- balls (provided) + linhas modulo->topo -->
+  <g stroke="#B8BDC3" stroke-width="1.2">
+    <line x1="145" y1="300" x2="145" y2="228"/>
+    <line x1="325" y1="300" x2="325" y2="228"/>
+    <line x1="505" y1="300" x2="505" y2="228"/>
+    <line x1="685" y1="300" x2="685" y2="228"/>
+    <line x1="865" y1="300" x2="865" y2="228"/>
+  </g>
+  <g fill="#1D7A8C">
+    <circle cx="145" cy="224" r="6"/>
+    <circle cx="325" cy="224" r="6"/>
+    <circle cx="505" cy="224" r="6"/>
+    <circle cx="685" cy="224" r="6"/>
+    <circle cx="865" cy="224" r="6"/>
+  </g>
+
+  <!-- ===================== MODULOS ===================== -->
+  <!-- M1 Relogio -->
+  <rect x="70" y="300" width="150" height="122" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <use xlink:href="#ci" x="196" y="308"/>
+  <text x="82" y="322" class="stereo">«component»</text>
+  <text x="82" y="340" class="cname">Relógio</text>
+  <text x="82" y="356" class="part">PCF8563 (RTC)</text>
+  <text x="82" y="378" class="part">rtc_pcf8563</text>
+  <text x="82" y="393" class="part">watchface</text>
+  <text x="82" y="408" class="part">config por toque</text>
+
+  <!-- M2 MAX30102 -->
+  <rect x="250" y="300" width="150" height="122" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <use xlink:href="#ci" x="376" y="308"/>
+  <text x="262" y="322" class="stereo">«component»</text>
+  <text x="262" y="340" class="cname">MAX30102</text>
+  <text x="262" y="356" class="part">FC · SpO2 (PPG)</text>
+  <text x="262" y="378" class="part">hw · ppg_filter</text>
+  <text x="262" y="393" class="part">heart_rate · spo2</text>
+  <text x="262" y="408" class="part">ppg_task</text>
+
+  <!-- M3 LTR390 -->
+  <rect x="430" y="300" width="150" height="122" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <use xlink:href="#ci" x="556" y="308"/>
+  <text x="442" y="322" class="stereo">«component»</text>
+  <text x="442" y="340" class="cname">LTR390</text>
+  <text x="442" y="356" class="part">luz · UV</text>
+  <text x="442" y="378" class="part">hw (ADC 20-bit)</text>
+  <text x="442" y="393" class="part">ALS / UVS (excl.)</text>
+  <text x="442" y="408" class="part">task alterna modo</text>
+
+  <!-- M4 MPU-9250 -->
+  <rect x="610" y="300" width="150" height="122" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <use xlink:href="#ci" x="736" y="308"/>
+  <text x="622" y="322" class="stereo">«component»</text>
+  <text x="622" y="340" class="cname">MPU-9250</text>
+  <text x="622" y="356" class="part">bússola · pedômetro</text>
+  <text x="622" y="378" class="part">accel + mag (bypass)</text>
+  <text x="622" y="393" class="part">heading · passos</text>
+  <text x="622" y="408" class="part">calibração</text>
+
+  <!-- M5 DS18B20 -->
+  <rect x="790" y="300" width="150" height="122" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <use xlink:href="#ci" x="916" y="308"/>
+  <text x="802" y="322" class="stereo">«component»</text>
+  <text x="802" y="340" class="cname">DS18B20</text>
+  <text x="802" y="356" class="part">temperatura</text>
+  <text x="802" y="378" class="part">onewire + ds18b20</text>
+  <text x="802" y="393" class="part">temp_task</text>
+
+  <!-- ===================== sockets (required) para baixo ===================== -->
+  <!-- I2C: M1..M4 ; 1-Wire: M5 -->
+  <!-- I2C (teal): M1..M4 -->
+  <g stroke="#1D7A8C" stroke-width="2" fill="none">
+    <path d="M137,420 A 8 8 0 0 0 153,420"/>
+    <path d="M317,420 A 8 8 0 0 0 333,420"/>
+    <path d="M497,420 A 8 8 0 0 0 513,420"/>
+    <path d="M677,420 A 8 8 0 0 0 693,420"/>
+  </g>
+  <g stroke="#B8BDC3" stroke-width="1.2">
+    <line x1="145" y1="428" x2="145" y2="480"/>
+    <line x1="325" y1="428" x2="325" y2="480"/>
+    <line x1="505" y1="428" x2="505" y2="480"/>
+    <line x1="685" y1="428" x2="685" y2="480"/>
+  </g>
+  <!-- 1-Wire (ambar): DS18B20 — interface requerida distinta -->
+  <path d="M855,420 A 9 9 0 0 0 875,420" fill="none" stroke="#C97B1E" stroke-width="2.6"/>
+  <line x1="865" y1="429" x2="865" y2="480" stroke="#C97B1E" stroke-width="1.7"/>
+  <!-- ===================== INFRA COMPARTILHADA ===================== -->
+  <!-- Barramento I2C -->
+  <rect x="70" y="480" width="690" height="80" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <use xlink:href="#ci" x="736" y="488"/>
+  <text x="82" y="502" class="stereo">«component»</text>
+  <text x="82" y="520" class="sub">I²C0 — barramento compartilhado (100 kHz)</text>
+  <text x="82" y="537" class="red">mutex + i2c_recover (recuperação após erro)</text>
+  <text x="82" y="553" class="addr">0x2E touch · 0x51 RTC · 0x53 LTR390 · 0x57 MAX30102 · 0x68 MPU-9250 · 0x0C AK8963</text>
+
+  <!-- 1-Wire / RMT -->
+  <rect x="790" y="480" width="150" height="80" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <use xlink:href="#ci" x="916" y="488"/>
+  <text x="802" y="502" class="stereo">«component»</text>
+  <text x="802" y="520" class="sub">1-Wire / RMT</text>
+  <text x="802" y="537" class="part">GPIO20 (por HW)</text>
+  <text x="802" y="553" class="red">sem (bus, mutex)</text>
+
+  <!-- NVS (persistencia) + rota a partir do MPU -->
+  <rect x="970" y="486" width="130" height="68" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <use xlink:href="#ci" x="1076" y="494"/>
+  <text x="982" y="508" class="stereo">«component»</text>
+  <text x="982" y="525" class="sub">NVS</text>
+  <text x="982" y="542" class="part">calibração bússola</text>
+  <polyline points="720,422 720,450 955,450 955,512 968,512" fill="none" stroke="#767D85" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+
+  <!-- ===================== LEGENDA (notacao UML) ===================== -->
+  <line x1="70" y1="596" x2="1050" y2="596" stroke="#ECECEC" stroke-width="1"/>
+
+  <circle cx="82" cy="618" r="6" fill="#1D7A8C"/>
+  <text x="98" y="622" class="leg">«Módulo» (fornecida): module_init · screen_create · screen_show</text>
+  <use xlink:href="#ci" x="610" y="610"/>
+  <text x="634" y="622" class="leg">«component» = módulo autocontido</text>
+
+  <path d="M74,650 A 8 8 0 0 0 90,650" fill="none" stroke="#1D7A8C" stroke-width="2"/>
+  <text x="100" y="654" class="leg">requerida: I²C (bus, mutex)</text>
+  <path d="M292,650 A 9 9 0 0 0 310,650" fill="none" stroke="#C97B1E" stroke-width="2.6"/>
+  <text x="316" y="654" class="leg">requerida: 1-Wire (DS18B20)</text>
+  <line x1="610" y1="650" x2="652" y2="650" stroke="#767D85" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="662" y="654" class="leg">dependência</text>
+</svg>

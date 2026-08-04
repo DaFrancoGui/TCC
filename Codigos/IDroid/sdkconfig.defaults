@@ -1,0 +1,23 @@
+# Defaults do projeto iDroid — garantem que opcoes criticas sobrevivam
+# a regeneracoes do sdkconfig (ex.: idf.py set-target).
+
+# Alvo
+CONFIG_IDF_TARGET="esp32c6"
+
+# Flash / particoes
+CONFIG_ESPTOOLPY_FLASHSIZE_2MB=y
+CONFIG_PARTITION_TABLE_SINGLE_APP=y
+
+# LVGL — configuracao via Kconfig (LV_CONF_SKIP=y)
+CONFIG_LV_COLOR_DEPTH_16=y
+CONFIG_LV_COLOR_16_SWAP=y
+
+# Fontes Montserrat usadas pela UI (data, menu, sensores)
+CONFIG_LV_FONT_MONTSERRAT_12=y
+CONFIG_LV_FONT_MONTSERRAT_14=y
+CONFIG_LV_FONT_MONTSERRAT_20=y
+CONFIG_LV_MEM_SIZE_KILOBYTES=96
+
+# Watchdog de task com panic: se alguma task monopolizar a CPU (ex.: driver
+# I2C em spin com barramento travado), reinicia o relogio em vez de congelar.
+CONFIG_ESP_TASK_WDT_PANIC=y
