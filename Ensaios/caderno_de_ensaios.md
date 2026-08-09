@@ -296,8 +296,8 @@ deve ser substituído por uma data convencional.
   banda dominante, mas sua contribuição global foi modesta neste registro já pouco energético acima
   de 5 Hz.
 - **Figuras:**
-  - [PNG — síntese](../../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_15_73s.png) ·
-    [SVG](../../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_15_73s.svg) — IR bruto e
+  - [PNG — síntese](../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_15_73s.png) ·
+    [SVG](../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_15_73s.svg) — IR bruto e
     estimativa DC entre 15 e 73 s, acompanhados do espectro antes/depois no recorte de 30 a 40 s.
 - **Rastreabilidade:** log original, CSVs e script de geração permanecem em
   `Codigos/Teste_de_componentes/MAX30102/`.
@@ -475,7 +475,7 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
 
 ### Conceituais e de arquitetura
 
-- **Atrasos relativos × referência periódica absoluta** — [PNG](../Imagens/diagramas/teoricas/tick_atrasos.png) · [SVG](../Imagens/diagramas/teoricas/tick_atrasos.svg)
+- **Atrasos relativos × referência periódica absoluta** — [PNG](../Imagens/Diagramas/teoricas/tick_atrasos.png) · [SVG](../Imagens/Diagramas/teoricas/tick_atrasos.svg)
   - *Mostra:* duas linhas do tempo conceituais sobre a mesma grade de ticks e seis períodos. Na
     primeira, cada espera começa após a execução anterior e o deslocamento se acumula; na segunda,
     as liberações permanecem alinhadas aos instantes ideais apesar da variação da execução.
@@ -483,31 +483,38 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
     execução desloca progressivamente as liberações, e a referência temporal periódica absoluta,
     que preserva o alinhamento aos instantes ideais do período."
 
-- **I²C open-drain e subida RC** — [PNG](../Imagens/diagramas/teoricas/i2c_open_drain_rc.png) · [SVG](../Imagens/diagramas/teoricas/i2c_open_drain_rc.svg)
+- **I²C open-drain e subida RC** — [PNG](../Imagens/Diagramas/teoricas/i2c_open_drain_rc.png) · [SVG](../Imagens/Diagramas/teoricas/i2c_open_drain_rc.svg)
   - *Mostra:* o circuito equivalente de uma linha SDA com resistor de pull-up, capacitância de
     barramento e dois estágios open-drain, além da subida exponencial após a liberação e do efeito
     qualitativo de aumentar `R_pull-up` ou `C_bus`. Figura conceitual baseada na NXP UM10204.
   - *Legenda:* "Operação elétrica de uma linha I²C em dreno aberto e resposta temporal de sua
     subida: qualquer dispositivo pode forçar o nível baixo, enquanto o nível alto resulta da
     liberação coletiva e do carregamento da capacitância do barramento pelo resistor de pull-up."
+  - *Revisão visual:* as setas do painel elétrico foram retificadas; a comparação RC passou a usar
+    dois caminhos ortogonais independentes e as caixas de `τ` foram separadas da legenda e do
+    subtítulo.
 
-- **Geometria do display circular** — [PNG](../Imagens/diagramas/teoricas/display_circular_geometria.png) · [SVG](../Imagens/diagramas/teoricas/display_circular_geometria.svg)
+- **Geometria do display circular** — [PNG](../Imagens/Diagramas/teoricas/display_circular_geometria.png) · [SVG](../Imagens/Diagramas/teoricas/display_circular_geometria.svg)
   - *Mostra:* a matriz lógica de 240 × 240 pixels configurada no firmware, o círculo físico com
     centro e raio aproximados, a origem e o sentido dos eixos, os cantos não visíveis, uma zona
     segura conceitual e o recorte de um objeto periférico.
   - *Legenda:* "Relação geométrica entre a matriz lógica quadrada e a área física circular do
     display: elementos centrais permanecem visíveis, enquanto objetos próximos aos cantos podem
     ser recortados apesar de possuírem coordenadas válidas na matriz."
+  - *Revisão visual:* valores e descrições foram alinhados em colunas com espaçamento fixo; os itens
+    da legenda também passaram a compartilhar os mesmos eixos nas duas linhas.
 
-- **Componentes AC e DC do sinal PPG** — [PNG](../Imagens/diagramas/teoricas/ppg_componentes_ac_dc.png) · [SVG](../Imagens/diagramas/teoricas/ppg_componentes_ac_dc.svg)
+- **Componentes AC e DC do sinal PPG** — [PNG](../Imagens/Diagramas/teoricas/ppg_componentes_ac_dc.png) · [SVG](../Imagens/Diagramas/teoricas/ppg_componentes_ac_dc.svg)
   - *Mostra:* três curvas didáticas alinhadas no tempo: sinal PPG bruto normalizado, estimativa
     suave da componente DC e componente AC pulsátil após remoção da linha de base, apresentada em
     escala visual ampliada. Os valores não pertencem ao protótipo.
   - *Legenda:* "Decomposição conceitual do sinal fotopletismográfico em uma componente DC dominante
     e lentamente variável e uma componente AC pulsátil de menor amplitude, ampliada visualmente
     para evidenciar os pulsos sem implicar a remoção de todos os artefatos."
+  - *Revisão visual:* a relação `PPG = DC + AC` foi mantida como expressão sem caixa, em linha
+    própria abaixo do subtítulo, evitando conflito com o título.
 
-- **Calibração magnética: hard-iron e soft-iron** — [PNG](../Imagens/diagramas/teoricas/calibracao_magnetica.png) · [SVG](../Imagens/diagramas/teoricas/calibracao_magnetica.svg)
+- **Calibração magnética: hard-iron e soft-iron** — [PNG](../Imagens/Diagramas/teoricas/calibracao_magnetica.png) · [SVG](../Imagens/Diagramas/teoricas/calibracao_magnetica.svg)
   - *Mostra:* três planos cartesianos de mesma escala com pontos sintéticos: nuvem ideal circular,
     translação por hard-iron e deformação elíptica por hard-iron + soft-iron, seguida da correção
     aproximadamente circular e centrada. Também distingue a correção diagonal do modelo matricial.
@@ -515,8 +522,10 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
     magnéticas: a correção diagonal recentra e ajusta as escalas por eixo, mas não remove
     acoplamentos ou rotações entre eixos, que exigem uma transformação matricial completa."
   - *Fonte técnica:* elaborado pelo autor com base em Renaudin, Afzal e Lachapelle (2010).
+  - *Revisão visual:* as identificações de centro, offsets, escalas e correção foram movidas para
+    áreas próprias abaixo dos gráficos 2 e 3, sem cruzar eixos ou nuvens de pontos.
 
-- **Mapa de navegação executável do iDroid** — [PNG](../Imagens/diagramas/teoricas/mapa_navegacao.png) · [SVG](../Imagens/diagramas/teoricas/mapa_navegacao.svg)
+- **Mapa de navegação executável do protótipo** — [PNG](../Imagens/Diagramas/teoricas/mapa_navegacao.png) · [SVG](../Imagens/Diagramas/teoricas/mapa_navegacao.svg)
   - *Mostra:* a watchface, as quatro páginas de menu na ordem executável e os destinos de cada
     página: MAX30102 e temperatura; luz e UV; bússola e pedômetro; ajustes de hora e data. A
     calibração aparece como tela auxiliar da bússola, com todos os caminhos de retorno.
@@ -525,7 +534,7 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
     configuração, mantendo o retorno ao respectivo contexto de origem."
   - *Fonte técnica:* elaborado pelo autor a partir dos callbacks e destinos de tela do firmware.
 
-- **Máquina de estados do LTR390** — [PNG](../Imagens/diagramas/teoricas/ltr390_maquina_estados.png) · [SVG](../Imagens/diagramas/teoricas/ltr390_maquina_estados.svg)
+- **Máquina de estados do LTR390** — [PNG](../Imagens/Diagramas/teoricas/ltr390_maquina_estados.png) · [SVG](../Imagens/Diagramas/teoricas/ltr390_maquina_estados.svg)
   - *Mostra:* a seleção de ALS ou UVS conforme a tela ativa, o desvio que evita uma reconfiguração
     quando o sensor já está no modo solicitado, o descarte de três leituras após cada troca e os
     contextos EMA independentes e preservados para lux e UVI. O retorno apenas torna a tarefa
@@ -534,8 +543,10 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
     ou UVS e, quando há troca, três leituras são descartadas antes da aquisição filtrada, mantendo
     estados EMA independentes para iluminância e índice UV."
   - *Fonte técnica:* elaborado pelo autor a partir de `ltr390_screen.c` e `ltr390_process.c`.
+  - *Revisão visual:* os estados foram alargados e a faixa ganhou altura adicional entre aquisição,
+    condição de validade, publicação para a interface e laços de retorno.
 
-- **Calibração da bússola no dispositivo** — [PNG](../Imagens/diagramas/teoricas/calibracao_bussola_ondevice.png) · [SVG](../Imagens/diagramas/teoricas/calibracao_bussola_ondevice.svg)
+- **Calibração da bússola no dispositivo** — [PNG](../Imagens/Diagramas/teoricas/calibracao_bussola_ondevice.png) · [SVG](../Imagens/Diagramas/teoricas/calibracao_bussola_ondevice.svg)
   - *Mostra:* coleta guiada por 12 setores, atualização dos extremos nos três eixos, critérios de
     cobertura e amplitude, cálculo e aplicação de offsets e escalas diagonais, persistência e carga
     do blob na NVS e o caminho de cancelamento que preserva a calibração anterior. O cálculo de
@@ -546,8 +557,10 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
     soft-iron ou de inclinação."
   - *Fonte técnica:* elaborado pelo autor a partir de `mpu9250_screen.c` e
     `compass_process.c`.
+  - *Revisão visual:* o canvas e os dois painéis foram ampliados; coleta, cálculo, aplicação,
+    persistência e pipeline de heading receberam caixas maiores e mais espaço entre etapas.
 
-- **Método incremental de desenvolvimento e integração** — [PNG](../Imagens/diagramas/teoricas/metodo_incremental.png) · [SVG](../Imagens/diagramas/teoricas/metodo_incremental.svg)
+- **Método incremental de desenvolvimento e integração** — [PNG](../Imagens/Diagramas/teoricas/metodo_incremental.png) · [SVG](../Imagens/Diagramas/teoricas/metodo_incremental.svg)
   - *Mostra:* o percurso do estudo da documentação ao teste standalone, separação de
     responsabilidades, adaptação ao contrato modular, integração e regressão, com retornos às
     etapas apropriadas após o diagnóstico de conflitos. As cores distinguem evidências de teste
@@ -561,8 +574,10 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
     regressão e stress tests compõem o repertório de verificação; o diagrama não classifica o
     processo como metodologia ágil nem afirma a execução de ensaios não documentados.
   - *Fonte técnica:* elaborado pelo autor a partir da seção de método de desenvolvimento.
+  - *Revisão visual:* títulos dos passos 1, 2 e 4 foram afastados dos círculos numerados; os números
+    7 e 9 e os selos de evidência foram uniformizados.
 
-- **Instrumentação empregada nos ensaios** — [PNG](../Imagens/diagramas/teoricas/instrumentacao_ensaios.png) · [SVG](../Imagens/diagramas/teoricas/instrumentacao_ensaios.svg)
+- **Instrumentação empregada nos ensaios** — [PNG](../Imagens/Diagramas/teoricas/instrumentacao_ensaios.png) · [SVG](../Imagens/Diagramas/teoricas/instrumentacao_ensaios.svg)
   - *Mostra:* o protótipo iDroid e os arranjos efetivamente empregados para alimentação, gravação e
     monitoramento serial, medição elétrica, comparação de PPG, temperatura e heading, observação do
     pedômetro e estímulos funcionais dos canais de luz e UV. Linhas sólidas representam conexões
@@ -575,7 +590,7 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
   - *Fonte técnica:* elaborado pelo autor a partir das subseções de instrumentos, montagem e
     metodologia dos ensaios e dos registros do caderno de ensaios.
 
-- **Plataforma × aplicação demonstradora** — [PNG](../Imagens/diagramas/teoricas/plataforma_aplicacao.png) · [SVG](../Imagens/diagramas/teoricas/plataforma_aplicacao.svg)
+- **Plataforma × aplicação demonstradora** — [PNG](../Imagens/Diagramas/teoricas/plataforma_aplicacao.png) · [SVG](../Imagens/Diagramas/teoricas/plataforma_aplicacao.svg)
   - *Mostra:* três faixas horizontais — aplicação demonstradora (seis módulos), plataforma modular
     (contrato, núcleo, serviços I²C/LVGL/NVS e FreeRTOS) e hardware; setas de **integração**
     (módulos → contrato) e de **acesso** (serviços → hardware). Figura conceitual, sem dados,
@@ -589,7 +604,7 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
     se integram pelo contrato uniforme; os serviços intermediam o acesso ao hardware."
   - *Uso:* Introdução (§Definição do problema) e abertura do Desenvolvimento.
 
-- **Contrato modular (genérico)** — [PNG](../Imagens/diagramas/teoricas/contrato_modular.png) · [SVG](../Imagens/diagramas/teoricas/contrato_modular.svg)
+- **Contrato modular (genérico)** — [PNG](../Imagens/Diagramas/teoricas/contrato_modular.png) · [SVG](../Imagens/Diagramas/teoricas/contrato_modular.svg)
   - *Mostra:* núcleo, área de **contrato público** (inicializar, criar tela, exibir/atualizar,
     informar disponibilidade) e três módulos genéricos A, B e C; dentro de cada um, estado privado,
     aquisição/driver, processamento e apresentação atrás de uma fronteira de encapsulamento. Os
@@ -606,7 +621,7 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
     genérica: **não** reproduz a arquitetura do firmware, e a composição dos módulos é explícita,
     sem registro dinâmico.
 
-- **Ciclo de vida de um módulo** — [PNG](../Imagens/diagramas/teoricas/ciclo_vida_modulo.png) · [SVG](../Imagens/diagramas/teoricas/ciclo_vida_modulo.svg)
+- **Ciclo de vida de um módulo** — [PNG](../Imagens/Diagramas/teoricas/ciclo_vida_modulo.png) · [SVG](../Imagens/Diagramas/teoricas/ciclo_vida_modulo.svg)
   - *Mostra:* fluxograma em três fases. **1 · Inicialização (uma vez, no boot):** o núcleo chama a
     inicialização, decisão "o hardware respondeu?", caminho disponível (marca + cria a tarefa quando
     aplicável) e caminho indisponível (marca + não cria tarefa, sem novas tentativas); os dois
@@ -632,8 +647,10 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
   - *Uso:* Desenvolvimento (§Contrato dos módulos / §Ciclo de vida dos módulos / §Inicialização não
     fatal) — atende ao comentário editorial que pede caminhos distintos para sucesso e sensor
     ausente, ambos chegando a uma tela capaz de informar o estado.
+  - *Revisão visual:* a área de aquisição foi alargada, a nota interna removida e os estados de
+    leitura e espera redistribuídos, sem alterar o fluxo representado.
 
-- **Integração de um novo sensor** — [PNG](../../Imagens/Diagramas/sistema/integracao_novo_sensor.png) · [SVG](../../Imagens/Diagramas/sistema/integracao_novo_sensor.svg)
+- **Integração de um novo sensor** — [PNG](../Imagens/Diagramas/sistema/integracao_novo_sensor.png) · [SVG](../Imagens/Diagramas/sistema/integracao_novo_sensor.svg)
   - *Mostra:* o procedimento confirmado na implementação corrente: definição dos requisitos e teste
     isolado; criação de driver, processamento e tela; uso de serviços compartilhados quando
     aplicável; composição explícita em `main.c`; ligação ao menu e ao registro de telas; atualização
@@ -645,10 +662,11 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
     funções existentes."
   - *Uso:* Desenvolvimento (§Ciclo de vida dos módulos), como orientação prática para extensão da
     plataforma.
-  - *Revisão visual:* o avanço do passo 7 foi desviado do cabeçalho da etapa de verificação, e a
-    seta de retorno passou a iniciar na base da ponta, sem prolongar o tracejado sob o marcador.
+  - *Revisão visual:* caixas, círculos numerados, títulos e rotas foram redimensionados; o avanço do
+    passo 7 foi desviado do cabeçalho da etapa de verificação e a seta de retorno passou a iniciar
+    na base da ponta, sem prolongar o tracejado sob o marcador.
 
-- **Pedômetro: limiar, histerese e intervalo mínimo** — [PNG](../Imagens/diagramas/teoricas/pedometro_limiar.png) · [SVG](../Imagens/diagramas/teoricas/pedometro_limiar.svg) · [gerador](../Imagens/diagramas/teoricas/gen_pedometro_limiar.py)
+- **Pedômetro: limiar, histerese e intervalo mínimo** — [PNG](../Imagens/Diagramas/teoricas/pedometro_limiar.png) · [SVG](../Imagens/Diagramas/teoricas/pedometro_limiar.svg) · [gerador](../Imagens/Diagramas/teoricas/gen_pedometro_limiar.py)
   - *Mostra:* forma de onda didática com magnitude bruta (cinza) e após EMA (teal), linha de limiar,
     faixa de histerese, quatro cruzamentos contados como passo, a janela de intervalo mínimo após
     cada passo, um pico pequeno que entra na faixa de histerese sem cruzar o limiar (rejeitado por
@@ -669,7 +687,7 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
   - *Uso:* Fundamentação Teórica (§Marcha e pedometria). O comentário editorial do capítulo pede
     explicitamente que esta figura **não** use dados do protótipo.
 
-- **PPG: transmissiva × reflexiva** — [PNG](../Imagens/diagramas/teoricas/ppg_transmissiva_reflexiva.png) · [SVG](../Imagens/diagramas/teoricas/ppg_transmissiva_reflexiva.svg)
+- **PPG: transmissiva × reflexiva** — [PNG](../Imagens/Diagramas/teoricas/ppg_transmissiva_reflexiva.png) · [SVG](../Imagens/Diagramas/teoricas/ppg_transmissiva_reflexiva.svg)
   - *Mostra:* dois esquemas ópticos lado a lado. Transmissiva: LED e fotodetector em faces opostas,
     com a luz atravessando o tecido (dedo, lóbulo da orelha). Reflexiva: dois emissores e o
     fotodetector na mesma face, com trajetos curvos que penetram, espalham e retornam ao detector
@@ -691,8 +709,10 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
   - *Uso:* Fundamentação Teórica (§Sensoriamento óptico biomédico — Fotopletismografia). Desenho
     próprio a partir de Allen (2007) e Tamura et al. (2014); **não** reproduz figuras dos artigos nem
     da folha de dados, não representa anatomia e não faz afirmação clínica.
+  - *Revisão visual:* o rótulo sobre a interface de contato foi removido para não competir com os
+    trajetos de luz emitida e detectada.
 
-- **Inversão e herança de prioridade** — [PNG](../Imagens/diagramas/teoricas/inversao_prioridade.png) · [SVG](../Imagens/diagramas/teoricas/inversao_prioridade.svg)
+- **Inversão e herança de prioridade** — [PNG](../Imagens/Diagramas/teoricas/inversao_prioridade.png) · [SVG](../Imagens/Diagramas/teoricas/inversao_prioridade.svg)
   - *Mostra:* diagrama temporal comparativo com tarefas alta, média e baixa e uma linha de mutex.
     No painel A (sem herança) a baixa retém o mutex, a alta bloqueia ao solicitá-lo e a média a
     preempta, prolongando o bloqueio; no painel B (com herança) a baixa herda a prioridade da alta,
@@ -706,66 +726,76 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
   - *Uso:* Fundamentação Teórica (§Sincronização e exclusão mútua / §Inversão de prioridade e
     herança). Os dois painéis compartilham o mesmo eixo e o mesmo trabalho total, mudando apenas a
     ordem de execução.
+  - *Revisão visual:* rótulos de inversão, bloqueio e região crítica foram reposicionados; a nota que
+    competia com a legenda foi removida, preservando apenas as informações essenciais do diagrama.
 
-- **Arquitetura de componentes do sistema** — [PNG](../Imagens/diagramas/sistema/arquitetura_componentes_sistema.png) · [SVG](../Imagens/diagramas/sistema/arquitetura_componentes_sistema.svg)
+- **Arquitetura de componentes do sistema** — [PNG](../Imagens/Diagramas/sistema/arquitetura_componentes_sistema.png) · [SVG](../Imagens/Diagramas/sistema/arquitetura_componentes_sistema.svg)
   - *Mostra:* diagrama de componentes UML — núcleo e UI no topo, cinco módulos autocontidos com
     interface uniforme ao centro, infraestrutura compartilhada (I²C, 1-Wire, NVS) na base.
   - *Legenda:* "Arquitetura de componentes da plataforma: os módulos expõem a mesma interface ao
     núcleo e dependem apenas da infraestrutura compartilhada, sem dependências entre si."
 
-- **Grafo de dependências do firmware** — [PNG](../Imagens/diagramas/sistema/dependencias_firmware.png) · [SVG](../Imagens/diagramas/sistema/dependencias_firmware.svg)
+- **Grafo de dependências do firmware** — [PNG](../Imagens/Diagramas/sistema/dependencias_firmware.png) · [SVG](../Imagens/Diagramas/sistema/dependencias_firmware.svg)
   - *Mostra:* dependências reais extraídas do código — o núcleo compõe os módulos, os módulos
     registram telas pelo contrato `app.h`, os drivers I²C compartilham a rotina de recuperação e o
     pedômetro reutiliza o driver do MPU-9250.
-  - *Legenda:* "Dependências efetivas do firmware. O acoplamento entre módulos ocorre apenas pelo
-    contrato e pelos serviços compartilhados; o reúso do driver do MPU-9250 por bússola e pedômetro
-    é a única dependência comum entre submódulos."
+  - *Legenda:* "Dependências efetivas do firmware. O núcleo realiza a composição explícita e os
+    módulos usam o contrato e os serviços comuns; bússola e pedômetro acessam, respectivamente, o
+    magnetômetro e o acelerômetro pelo mesmo driver físico, sem dependência do pedômetro em relação
+    ao processamento de rumo."
+  - *Revisão visual:* as conexões curvas foram substituídas por trajetos retilíneos e ortogonais; a
+    ligação ambígua entre pedômetro e bússola foi removida e o compartilhamento de `mpu9250_hw`
+    passou a ser explicitado na infraestrutura.
 
-- **Mapa de tarefas FreeRTOS** — [PNG](../Imagens/diagramas/sistema/freertos_tasks.png) · [SVG](../Imagens/diagramas/sistema/freertos_tasks.svg)
+- **Mapa de tarefas FreeRTOS** — [PNG](../Imagens/Diagramas/sistema/freertos_tasks.png) · [SVG](../Imagens/Diagramas/sistema/freertos_tasks.svg)
   - *Mostra:* tarefas e prioridades (LVGL 4, sensores 3, screenshot 2, laço de despacho 1, idle 0),
     o mutex de I²C e o repasse de dados por variáveis `volatile`, em configuração unicore.
   - *Legenda:* "Modelo de concorrência da plataforma: tarefas independentes de aquisição, prioridade
     superior para a interface gráfica e acesso ao barramento I²C serializado por exclusão mútua."
+  - *Revisão visual:* cartões e linhas de texto redimensionados; os períodos ativo/inativo foram
+    abreviados sem alteração dos valores para evitar vazamento entre tarefas adjacentes.
 
-- **Recuperação do I²C após NACK** — [PNG](../Imagens/diagramas/sistema/i2c_recuperacao_nack.png) · [SVG](../Imagens/diagramas/sistema/i2c_recuperacao_nack.svg)
+- **Recuperação do I²C após NACK** — [PNG](../Imagens/Diagramas/sistema/i2c_recuperacao_nack.png) · [SVG](../Imagens/Diagramas/sistema/i2c_recuperacao_nack.svg)
   - *Mostra:* fluxograma da transação — toma o mutex, executa a transação e, em caso de falha,
     chama `i2c_recover_bus` (com `bus_reset`) **antes** de liberar o mutex, devolvendo o erro ao módulo.
   - *Legenda:* "Fluxo de recuperação do barramento I²C. A recuperação ocorre dentro da região de
     exclusão mútua, de modo que nenhum outro módulo transacione sobre um barramento em recuperação."
 
-- **Mapa de ligações do XIAO ESP32-C6** — [PNG](../Imagens/diagramas/sistema/mapa_ligacoes.png) · [SVG](../Imagens/diagramas/sistema/mapa_ligacoes.svg)
+- **Mapa de ligações do XIAO ESP32-C6** — [PNG](../Imagens/Diagramas/sistema/mapa_ligacoes.png) · [SVG](../Imagens/Diagramas/sistema/mapa_ligacoes.svg)
   - *Mostra:* SPI para o display GC9A01, I²C compartilhado com seis dispositivos, 1-Wire no GPIO20
     para o DS18B20 e a entrada ADC no GPIO0 para a bateria.
   - *Legenda:* "Mapa de ligações do protótipo: um barramento I²C compartilhado por seis endereços,
     além dos transportes dedicados de display, temperatura e leitura de bateria."
+  - *Revisão visual:* GPIO16 e GPIO2 foram removidos; a legenda foi afastada do monitoramento da
+    bateria e as conexões foram preservadas com a nova altura do canvas.
 
 ### Diagramas de módulo (um por subsistema)
 
-- **Módulo MAX30102 (PPG)** — [PNG](../Imagens/diagramas/max30102/max30102_modulo.png) · [SVG](../Imagens/diagramas/max30102/max30102_modulo.svg)
+- **Módulo MAX30102 (PPG)** — [PNG](../Imagens/Diagramas/max30102/max30102_modulo.png) · [SVG](../Imagens/Diagramas/max30102/max30102_modulo.svg)
   - *Mostra:* interface do módulo para o núcleo, pipeline PPG interno (driver, filtro, `heart_rate`,
     `spo2`) na `ppg_task`, variáveis `volatile` de saída e tela LVGL; requer o barramento I²C.
   - *Legenda:* "Estrutura interna do módulo de fotopletismografia: todo o processamento permanece
     encapsulado na tarefa do módulo, que expõe ao núcleo apenas o contrato uniforme."
 
-- **Módulo DS18B20 (temperatura)** — [PNG](../Imagens/diagramas/ds18b20/ds18b20_modulo.png) · [SVG](../Imagens/diagramas/ds18b20/ds18b20_modulo.svg)
+- **Módulo DS18B20 (temperatura)** — [PNG](../Imagens/Diagramas/ds18b20/ds18b20_modulo.png) · [SVG](../Imagens/Diagramas/ds18b20/ds18b20_modulo.svg)
   - *Mostra:* interface do módulo, driver 1-Wire, `temp_task` com filtro e tela LVGL, com o
     transporte 1-Wire destacado em âmbar por ser distinto do I²C.
   - *Legenda:* "Módulo de temperatura sobre transporte 1-Wire, evidenciando que o contrato de módulos
     independe do barramento utilizado."
 
-- **Módulo LTR390 (luz e UV)** — [PNG](../Imagens/diagramas/ltr390/ltr390_modulo.png) · [SVG](../Imagens/diagramas/ltr390/ltr390_modulo.svg)
+- **Módulo LTR390 (luz e UV)** — [PNG](../Imagens/Diagramas/ltr390/ltr390_modulo.png) · [SVG](../Imagens/Diagramas/ltr390/ltr390_modulo.svg)
   - *Mostra:* driver com modos ALS e UVS mutuamente exclusivos, conversões feitas na tarefa e as
     duas telas (luz e UV) atendidas pelo mesmo módulo.
   - *Legenda:* "Módulo de luz e índice UV: a alternância entre os modos exclusivos do sensor é
     tratada internamente e não é visível ao núcleo nem às demais telas."
 
-- **Módulo MPU-9250 (bússola e pedômetro)** — [PNG](../Imagens/diagramas/mpu9250/mpu9250_modulo.png) · [SVG](../Imagens/diagramas/mpu9250/mpu9250_modulo.svg)
+- **Módulo MPU-9250 (bússola e pedômetro)** — [PNG](../Imagens/Diagramas/mpu9250/mpu9250_modulo.png) · [SVG](../Imagens/Diagramas/mpu9250/mpu9250_modulo.svg)
   - *Mostra:* driver comum (acelerômetro + magnetômetro via *bypass*) ramificando em dois
     submódulos com telas próprias; a calibração da bússola depende da NVS.
   - *Legenda:* "Reúso de um mesmo driver por dois módulos funcionais independentes, cada um com sua
     tarefa e sua tela; a calibração da bússola é persistida em memória não volátil."
 
-- **Módulo Relógio (PCF8563)** — [PNG](../Imagens/diagramas/round_display/relogio_modulo.png) · [SVG](../Imagens/diagramas/round_display/relogio_modulo.svg)
+- **Módulo Relógio (PCF8563)** — [PNG](../Imagens/Diagramas/round_display/relogio_modulo.png) · [SVG](../Imagens/Diagramas/round_display/relogio_modulo.svg)
   - *Mostra:* interface do módulo, driver do RTC e watchface com ajuste por toque (leitura e
     gravação da hora); requer o barramento I²C.
   - *Legenda:* "Módulo de relógio: única tela que também escreve no dispositivo, ao ajustar a hora
@@ -776,43 +806,43 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
 > As figuras desta subseção representam **testes funcionais e verificações de plausibilidade**,
 > conforme a regra de rigor deste caderno; nenhuma delas sustenta alegação de validação.
 
-- **LTR390 — índice UV na escala de risco (§1)** — [PNG](../Imagens/diagramas/ltr390/ltr390_uv_escala_risco.png) · [SVG](../Imagens/diagramas/ltr390/ltr390_uv_escala_risco.svg)
+- **LTR390 — índice UV na escala de risco (§1)** — [PNG](../Imagens/Diagramas/ltr390/ltr390_uv_escala_risco.png) · [SVG](../Imagens/Diagramas/ltr390/ltr390_uv_escala_risco.svg)
   - *Mostra:* leitura do sensor (3–6) e referência do aplicativo meteorológico (5) sobre as faixas
     de risco da OMS. Revisada para retirar a explicação conclusiva e o endereço da fonte de dentro
     da imagem; a interpretação permanece no texto acadêmico.
   - *Legenda:* "Índice UV medido pelo dispositivo comparado à referência meteorológica sobre a escala
     de risco da OMS. A dispersão observada decorre da geometria de medição, sem difusor cosseno."
 
-- **LTR390 — iluminância em escala logarítmica (§2)** — [PNG](../Imagens/diagramas/ltr390/ltr390_lux_escala_log.png) · [SVG](../Imagens/diagramas/ltr390/ltr390_lux_escala_log.svg)
+- **LTR390 — iluminância em escala logarítmica (§2)** — [PNG](../Imagens/Diagramas/ltr390/ltr390_lux_escala_log.png) · [SVG](../Imagens/Diagramas/ltr390/ltr390_lux_escala_log.svg)
   - *Mostra:* iluminância de 0 a ~52 k lux em escala logarítmica sobre faixas de referência, com o
     teto de saturação assinalado.
   - *Legenda:* "Iluminância medida em diferentes ambientes, em escala logarítmica. A saturação em
     torno de 52 k lux é limitação conhecida da configuração adotada (ganho 3×, 18 bits)."
 
-- **MAX30102 — FC × referência (§5)** — [PNG](../Imagens/diagramas/max30102/max30102_fc_vs_referencia.png) · [SVG](../Imagens/diagramas/max30102/max30102_fc_vs_referencia.svg)
+- **MAX30102 — FC × referência (§5)** — [PNG](../Imagens/Diagramas/max30102/max30102_fc_vs_referencia.png) · [SVG](../Imagens/Diagramas/max30102/max30102_fc_vs_referencia.svg)
   - *Mostra:* frequência cardíaca do dispositivo ao longo do tempo sobreposta à faixa de referência
     do oxímetro de dedo.
   - *Legenda:* "Frequência cardíaca estimada pelo dispositivo comparada à faixa observada no oxímetro
     de consumo. Trata-se de verificação de plausibilidade, não de validação clínica."
 
-- **MAX30102 — condicionamento do PPG, 15–73 s (§5)** — [PNG](../../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_15_73s.png) · [SVG](../../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_15_73s.svg)
+- **MAX30102 — condicionamento do PPG, 15–73 s (§5)** — [PNG](../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_15_73s.png) · [SVG](../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_15_73s.svg)
   - *Mostra:* canal IR bruto e estimativa DC no intervalo de 15 a 73 s, seguidos do conteúdo espectral
     de `IR bruto − DC` e da saída passa-baixa no recorte de 30 a 40 s.
   - *Legenda:* "Linha de base do canal infravermelho e comparação espectral antes e depois do
     passa-baixa nos intervalos analisados."
 
-- **MAX30102 — condicionamento do PPG, zoom 30–40 s (§5)** — [PNG](../../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_zoom_30_40s.png) · [SVG](../../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_zoom_30_40s.svg)
+- **MAX30102 — condicionamento do PPG, zoom 30–40 s (§5)** — [PNG](../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_zoom_30_40s.png) · [SVG](../Imagens/Diagramas/max30102/max30102_ppg_condicionamento_zoom_30_40s.svg)
   - *Uso:* arquivo intermediário preservado para rastreabilidade; não inserido na versão consolidada
     da monografia nem na apresentação.
 
-- **MPU-9250 — pedômetro em 100 m (§6)** — [PNG](../Imagens/diagramas/mpu9250/mpu9250_pedometro_passos.png) · [SVG](../Imagens/diagramas/mpu9250/mpu9250_pedometro_passos.svg)
+- **MPU-9250 — pedômetro em 100 m (§6)** — [PNG](../Imagens/Diagramas/mpu9250/mpu9250_pedometro_passos.png) · [SVG](../Imagens/Diagramas/mpu9250/mpu9250_pedometro_passos.svg)
   - *Mostra:* passos contados na ida e na volta pelo protótipo e pelo Amazfit Active 2, contra a
     contagem manual de 140. Rótulos revisados para a terminologia final da monografia.
   - *Legenda:* "Contagem de passos em percurso de 100 m, comparada à contagem manual e a um
     dispositivo comercial. N = 2 percursos, um sujeito e um ritmo: teste funcional, sem
     caracterização estatística."
 
-- **MPU-9250 — bússola × referência magnética (§7)** — [PNG](../Imagens/diagramas/mpu9250/mpu9250_bussola_declinacao.png) · [SVG](../Imagens/diagramas/mpu9250/mpu9250_bussola_declinacao.svg)
+- **MPU-9250 — bússola × referência magnética (§7)** — [PNG](../Imagens/Diagramas/mpu9250/mpu9250_bussola_declinacao.png) · [SVG](../Imagens/Diagramas/mpu9250/mpu9250_bussola_declinacao.svg)
   - *Mostra:* heading do dispositivo e da bússola Norvix DC45-2 em duas direções; a faixa âmbar
     representa a **diferença observada**, não a declinação magnética. A legenda interna foi revisada
     para identificar explicitamente a versão de ensaio sem a declinação fixa do firmware corrente.
@@ -820,7 +850,7 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
     direções. A diferença observada não é decomposta entre declinação, interferência da montagem e
     limitação da referência."
 
-- **DS18B20 — temperatura × referência (§8)** — [PNG](../Imagens/diagramas/ds18b20/ds18b20_temp_vs_referencia.png) · [SVG](../Imagens/diagramas/ds18b20/ds18b20_temp_vs_referencia.svg)
+- **DS18B20 — temperatura × referência (§8)** — [PNG](../Imagens/Diagramas/ds18b20/ds18b20_temp_vs_referencia.png) · [SVG](../Imagens/Diagramas/ds18b20/ds18b20_temp_vs_referencia.svg)
   - *Mostra:* leitura do DS18B20 e de um termo-higrômetro comercial com as respectivas faixas de
     tolerância, que se sobrepõem.
   - *Uso na monografia:* **não inserir** na versão consolidada. A faixa de ±1 °C do comparador foi
@@ -829,33 +859,33 @@ instrumentos de referência (`*_comercial.webp`), capturas de tela do display e 
   - *Legenda:* "Temperatura ambiente medida pelo dispositivo e por um termo-higrômetro de consumo. A
     sobreposição das faixas de tolerância indica concordância dentro da incerteza dos instrumentos."
 
-- **DS18B20 — resposta dinâmica (§10)** — [PNG](../Imagens/diagramas/ds18b20/ds18b20_resposta_dinamica.png) · [SVG](../Imagens/diagramas/ds18b20/ds18b20_resposta_dinamica.svg)
+- **DS18B20 — resposta dinâmica (§10)** — [PNG](../Imagens/Diagramas/ds18b20/ds18b20_resposta_dinamica.png) · [SVG](../Imagens/Diagramas/ds18b20/ds18b20_resposta_dinamica.svg)
   - *Mostra:* transientes a partir de 23 °C — resfriamento no freezer até 3,3 °C em 2 min e
     aquecimento junto à chama até 70 °C em 30 s.
   - *Legenda:* "Resposta dinâmica do sensor de temperatura nos dois sentidos. O ensaio caracteriza
     acompanhamento de transientes, não acurácia; o aquecimento foi interrompido a 70 °C para
     preservar o encapsulamento do probe."
 
-- **PCF8563 — manutenção da hora (§9)** — [PNG](../Imagens/diagramas/round_display/relogio_rtc_sequencia.png) · [SVG](../Imagens/diagramas/round_display/relogio_rtc_sequencia.svg)
+- **PCF8563 — manutenção da hora (§9)** — [PNG](../Imagens/Diagramas/round_display/relogio_rtc_sequencia.png) · [SVG](../Imagens/Diagramas/round_display/relogio_rtc_sequencia.svg)
   - *Mostra:* diagrama de sequência do ajuste da hora, contagem pelo cristal, 24 h com o sistema
     desligado sustentado pela CR927, religamento e conferência com atraso de 2 s. O rótulo da
     interface foi revisado de “watchface” para “tela principal”.
   - *Legenda:* "Manutenção da hora pelo RTC com o sistema desligado. O atraso de aproximadamente 2 s
     em 24 h é compatível com a tolerância típica de um cristal de 32,768 kHz."
 
-- **Bateria — consumo por cenário (§4)** — [PNG](../Imagens/diagramas/bateria/bateria_consumo_por_cenario.png) · [SVG](../Imagens/diagramas/bateria/bateria_consumo_por_cenario.svg)
+- **Bateria — consumo por cenário (§4)** — [PNG](../Imagens/Diagramas/bateria/bateria_consumo_por_cenario.png) · [SVG](../Imagens/Diagramas/bateria/bateria_consumo_por_cenario.svg)
   - *Mostra:* corrente medida na placa final por cenário de uso, de 110 mA em repouso a 210 mA
     medindo frequência cardíaca. A referência de 110 mA foi renomeada como “tela principal”.
   - *Legenda:* "Consumo de corrente por cenário de uso, medido na placa final. O pico corresponde à
     medição de frequência cardíaca, somando os emissores do sensor ao custo de CPU do processamento."
 
-- **Bateria — projeção de autonomia (§4, derivada)** — [PNG](../Imagens/diagramas/bateria/bateria_autonomia_sleep_projecao.png) · [SVG](../Imagens/diagramas/bateria/bateria_autonomia_sleep_projecao.svg)
+- **Bateria — projeção de autonomia (§4, derivada)** — [PNG](../Imagens/Diagramas/bateria/bateria_autonomia_sleep_projecao.png) · [SVG](../Imagens/Diagramas/bateria/bateria_autonomia_sleep_projecao.svg)
   - *Mostra:* autonomia em escala logarítmica, do estado atual (~9 h) a cerca de três meses com
     modo de baixo consumo. **Figura derivada** do orçamento de corrente, não de ensaio de descarga.
   - *Legenda:* "Projeção de autonomia a partir do orçamento de corrente medido, assumindo capacidade
     útil de aproximadamente 1000 mAh. Trata-se de estimativa, não de medição por descarga completa."
 
-- **Bateria — divisor de tensão no XIAO (§3, setup)** — [PNG](../Imagens/diagramas/bateria/divisor_bateria_xiao.png) · [SVG](../Imagens/diagramas/bateria/divisor_bateria_xiao.svg)
+- **Bateria — divisor de tensão no XIAO (§3, setup)** — [PNG](../Imagens/Diagramas/bateria/divisor_bateria_xiao.png) · [SVG](../Imagens/Diagramas/bateria/divisor_bateria_xiao.svg)
   - *Mostra:* esquema do divisor resistivo que leva a tensão da bateria à entrada ADC do
     XIAO ESP32-C6.
   - *Legenda:* "Divisor de tensão empregado na leitura do estado de carga. A estimativa é baseada em

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 960" width="1300" height="960" font-family="DejaVu Sans" role="img" aria-label="Diagrama temporal comparativo de inversao de prioridade com tres tarefas e uma linha de mutex. No painel A, sem heranca, a tarefa baixa retem o mutex, a tarefa alta bloqueia ao solicita-lo e a tarefa media preempta a baixa, prolongando indiretamente o bloqueio. No painel B, com heranca, a tarefa baixa herda a prioridade da alta, conclui a regiao critica sem ser preemptada, libera o mutex e retorna a prioridade original, e o bloqueio da alta limita-se ao tempo da regiao critica">
   <style>
-    .title   { font-size: 19px; fill: #2B3138; font-weight: bold; }
-    .subtitle{ font-size: 11.5px; fill: #767D85; font-style: italic; }
-    .ptitle  { font-size: 14px; fill: #2B3138; font-weight: bold; }
-    .psub    { font-size: 10.5px; fill: #767D85; font-style: italic; }
-    .rowtl   { font-size: 11.5px; fill: #2B3138; font-weight: bold; }
-    .rowsub  { font-size: 9px; fill: #767D85; }
-    .blk     { font-size: 9.5px; }
-    .brk     { font-size: 10.5px; fill: #2B3138; font-weight: bold; }
-    .brksub  { font-size: 9.5px; fill: #767D85; font-style: italic; }
-    .warn    { font-size: 10px; fill: #C4453C; font-weight: bold; }
-    .note    { font-size: 9.5px; fill: #767D85; font-style: italic; }
-    .leg     { font-size: 10.5px; fill: #2B3138; }
-    .axis    { font-size: 9.5px; fill: #767D85; }
+    .title   { font-size: 25.65px; fill: #2B3138; font-weight: bold; }
+    .subtitle{ font-size: 15.53px; fill: #767D85; font-style: italic; }
+    .ptitle  { font-size: 18.90px; fill: #2B3138; font-weight: bold; }
+    .psub    { font-size: 14.18px; fill: #767D85; font-style: italic; }
+    .rowtl   { font-size: 15.53px; fill: #2B3138; font-weight: bold; }
+    .rowsub  { font-size: 12.15px; fill: #767D85; }
+    .blk     { font-size: 12.83px; }
+    .brk     { font-size: 14.18px; fill: #2B3138; font-weight: bold; }
+    .brksub  { font-size: 12.83px; fill: #767D85; font-style: italic; }
+    .warn    { font-size: 13.50px; fill: #C4453C; font-weight: bold; }
+    .note    { font-size: 12.83px; fill: #767D85; font-style: italic; }
+    .leg     { font-size: 14.18px; fill: #2B3138; }
+    .axis    { font-size: 12.83px; fill: #767D85; }
   </style>
 
   <rect x="0" y="0" width="1300" height="960" fill="#FFFFFF"/>
@@ -24,12 +24,12 @@
   <!-- ==================================================================== -->
   <!-- PAINEL A — SEM HERANCA                                               -->
   <!-- ==================================================================== -->
-  <rect x="30" y="88" width="1240" height="350" rx="8" fill="#FCFCFC" stroke="#B8BDC3" stroke-width="1.2"/>
+  <rect x="30" y="88" width="1240" height="350" rx="8" fill="#FCFCFC" stroke="#B8BDC3" stroke-width="1.32"/>
   <text x="44" y="112" class="ptitle">Painel A — sem herança de prioridade</text>
   <text x="44" y="130" class="psub">a tarefa média, que não usa o mutex, preempta a baixa e prolonga indiretamente o bloqueio da alta</text>
 
   <!-- guias verticais -->
-  <g stroke="#E4E6E8" stroke-width="1" stroke-dasharray="4 4">
+  <g stroke="#E4E6E8" stroke-width="1.10" stroke-dasharray="4 4">
     <line x1="290" y1="140" x2="290" y2="362"/>
     <line x1="380" y1="140" x2="380" y2="362"/>
     <line x1="470" y1="140" x2="470" y2="362"/>
@@ -48,66 +48,66 @@
   <text x="192" y="349" text-anchor="end" class="rowtl">Mutex</text>
 
   <!-- trilhos -->
-  <g fill="#FFFFFF" stroke="#ECEDEE" stroke-width="1">
+  <g fill="#FFFFFF" stroke="#ECEDEE" stroke-width="1.10">
     <rect x="200" y="140" width="980" height="48"/>
     <rect x="200" y="200" width="980" height="48"/>
     <rect x="200" y="260" width="980" height="48"/>
   </g>
 
   <!-- linha ALTA -->
-  <rect x="380" y="140" width="90" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.4"/>
-  <rect x="470" y="140" width="360" height="48" rx="3" fill="#C7CCD1" stroke="#767D85" stroke-width="1.4"/>
+  <rect x="380" y="140" width="90" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.54"/>
+  <rect x="470" y="140" width="360" height="48" rx="3" fill="#C7CCD1" stroke="#767D85" stroke-width="1.54"/>
   <text x="650" y="169" text-anchor="middle" class="blk" fill="#2B3138">bloqueada</text>
-  <rect x="830" y="140" width="150" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.4"/>
+  <rect x="830" y="140" width="150" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.54"/>
   <text x="905" y="169" text-anchor="middle" class="blk" fill="#8A5510">região crítica</text>
 
   <!-- linha MEDIA -->
-  <rect x="560" y="200" width="180" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.4"/>
+  <rect x="560" y="200" width="180" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.54"/>
   <text x="650" y="223" text-anchor="middle" class="blk" fill="#14515E">executando</text>
   <text x="650" y="237" text-anchor="middle" class="blk" fill="#14515E">(não usa o mutex)</text>
 
   <!-- linha BAIXA -->
-  <rect x="200" y="260" width="90" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.4"/>
-  <rect x="290" y="260" width="90" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.4"/>
-  <rect x="380" y="260" width="90" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.4"/>
-  <rect x="470" y="260" width="90" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.4"/>
-  <rect x="560" y="260" width="180" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.4"/>
+  <rect x="200" y="260" width="90" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.54"/>
+  <rect x="290" y="260" width="90" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.54"/>
+  <rect x="380" y="260" width="90" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.54"/>
+  <rect x="470" y="260" width="90" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.54"/>
+  <rect x="560" y="260" width="180" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.54"/>
   <text x="650" y="289" text-anchor="middle" class="blk" fill="#767D85">pronta (preemptada)</text>
-  <rect x="740" y="260" width="90" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.4"/>
-  <rect x="830" y="260" width="150" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.4"/>
+  <rect x="740" y="260" width="90" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.54"/>
+  <rect x="830" y="260" width="150" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.54"/>
   <text x="905" y="289" text-anchor="middle" class="blk" fill="#767D85">pronta</text>
-  <rect x="980" y="260" width="100" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.4"/>
+  <rect x="980" y="260" width="100" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.54"/>
 
   <!-- linha MUTEX -->
-  <rect x="290" y="326" width="540" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <rect x="290" y="326" width="540" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.76"/>
   <text x="425" y="349" text-anchor="middle" class="blk" fill="#14515E">retido pela tarefa baixa</text>
-  <rect x="830" y="326" width="150" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <rect x="830" y="326" width="150" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.76"/>
   <text x="905" y="349" text-anchor="middle" class="blk" fill="#14515E">retido pela alta</text>
 
   <!-- destaque da inversao nao controlada -->
-  <rect x="560" y="140" width="180" height="222" rx="4" fill="none" stroke="#C4453C" stroke-width="1.8" stroke-dasharray="6 4"/>
-  <text x="650" y="134" text-anchor="middle" class="warn">inversão não controlada</text>
+  <rect x="560" y="140" width="180" height="222" rx="4" fill="none" stroke="#C4453C" stroke-width="1.98" stroke-dasharray="6 4"/>
+  <text x="1100" y="132" text-anchor="end" class="warn">inversão não controlada</text>
 
   <!-- colchete do bloqueio -->
-  <line x1="470" y1="386" x2="830" y2="386" stroke="#2B3138" stroke-width="1.4"/>
-  <line x1="470" y1="378" x2="470" y2="394" stroke="#2B3138" stroke-width="1.4"/>
-  <line x1="830" y1="378" x2="830" y2="394" stroke="#2B3138" stroke-width="1.4"/>
+  <line x1="470" y1="386" x2="830" y2="386" stroke="#2B3138" stroke-width="1.54"/>
+  <line x1="470" y1="378" x2="470" y2="394" stroke="#2B3138" stroke-width="1.54"/>
+  <line x1="830" y1="378" x2="830" y2="394" stroke="#2B3138" stroke-width="1.54"/>
   <text x="650" y="410" text-anchor="middle" class="brk">bloqueio da tarefa alta</text>
   <text x="650" y="425" text-anchor="middle" class="brksub">região crítica da baixa + prolongamento causado pela média</text>
 
   <!-- eixo -->
-  <line x1="200" y1="452" x2="1172" y2="452" stroke="#B8BDC3" stroke-width="1.2"/>
+  <line x1="200" y1="452" x2="1172" y2="452" stroke="#B8BDC3" stroke-width="1.32"/>
   <polygon points="1172,447 1172,457 1182,452" fill="#B8BDC3"/>
   <text x="192" y="456" text-anchor="end" class="axis">tempo (sem escala)</text>
 
   <!-- ==================================================================== -->
   <!-- PAINEL B — COM HERANCA                                               -->
   <!-- ==================================================================== -->
-  <rect x="30" y="490" width="1240" height="350" rx="8" fill="#FCFCFC" stroke="#B8BDC3" stroke-width="1.2"/>
+  <rect x="30" y="490" width="1240" height="350" rx="8" fill="#FCFCFC" stroke="#B8BDC3" stroke-width="1.32"/>
   <text x="44" y="514" class="ptitle">Painel B — com herança de prioridade</text>
   <text x="44" y="532" class="psub">a baixa herda a prioridade da alta, conclui a região crítica sem ser preemptada e devolve o recurso</text>
 
-  <g stroke="#E4E6E8" stroke-width="1" stroke-dasharray="4 4">
+  <g stroke="#E4E6E8" stroke-width="1.10" stroke-dasharray="4 4">
     <line x1="290" y1="542" x2="290" y2="764"/>
     <line x1="380" y1="542" x2="380" y2="764"/>
     <line x1="470" y1="542" x2="470" y2="764"/>
@@ -124,81 +124,80 @@
   <text x="192" y="700" text-anchor="end" class="rowsub">prioridade menor</text>
   <text x="192" y="751" text-anchor="end" class="rowtl">Mutex</text>
 
-  <g fill="#FFFFFF" stroke="#ECEDEE" stroke-width="1">
+  <g fill="#FFFFFF" stroke="#ECEDEE" stroke-width="1.10">
     <rect x="200" y="542" width="980" height="48"/>
     <rect x="200" y="602" width="980" height="48"/>
     <rect x="200" y="662" width="980" height="48"/>
   </g>
 
   <!-- linha ALTA -->
-  <rect x="380" y="542" width="90" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.4"/>
-  <rect x="470" y="542" width="180" height="48" rx="3" fill="#C7CCD1" stroke="#767D85" stroke-width="1.4"/>
+  <rect x="380" y="542" width="90" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.54"/>
+  <rect x="470" y="542" width="180" height="48" rx="3" fill="#C7CCD1" stroke="#767D85" stroke-width="1.54"/>
   <text x="560" y="571" text-anchor="middle" class="blk" fill="#2B3138">bloqueada</text>
-  <rect x="650" y="542" width="150" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.4"/>
+  <rect x="650" y="542" width="150" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.54"/>
   <text x="725" y="571" text-anchor="middle" class="blk" fill="#8A5510">região crítica</text>
 
   <!-- linha MEDIA -->
-  <rect x="560" y="602" width="240" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.4"/>
+  <rect x="560" y="602" width="240" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.54"/>
   <text x="680" y="625" text-anchor="middle" class="blk" fill="#767D85">pronta — não preempta</text>
   <text x="680" y="639" text-anchor="middle" class="blk" fill="#767D85">a baixa com prioridade herdada</text>
-  <rect x="800" y="602" width="180" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.4"/>
+  <rect x="800" y="602" width="180" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.54"/>
   <text x="890" y="631" text-anchor="middle" class="blk" fill="#14515E">executando</text>
 
   <!-- linha BAIXA -->
-  <rect x="200" y="662" width="90" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.4"/>
-  <rect x="290" y="662" width="90" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.4"/>
-  <rect x="380" y="662" width="90" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.4"/>
-  <rect x="470" y="662" width="180" height="48" rx="3" fill="#F7E2C6" stroke="#8A5510" stroke-width="2.4"/>
+  <rect x="200" y="662" width="90" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.54"/>
+  <rect x="290" y="662" width="90" height="48" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.54"/>
+  <rect x="380" y="662" width="90" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.54"/>
+  <rect x="470" y="662" width="180" height="48" rx="3" fill="#F7E2C6" stroke="#8A5510" stroke-width="2.64"/>
   <text x="560" y="685" text-anchor="middle" class="blk" fill="#8A5510">região crítica</text>
   <text x="560" y="699" text-anchor="middle" class="blk" fill="#8A5510">prioridade herdada da alta</text>
-  <rect x="650" y="662" width="330" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.4"/>
+  <rect x="650" y="662" width="330" height="48" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.54"/>
   <text x="815" y="691" text-anchor="middle" class="blk" fill="#767D85">pronta</text>
-  <rect x="980" y="662" width="100" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.4"/>
+  <rect x="980" y="662" width="100" height="48" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.54"/>
 
   <!-- linha MUTEX -->
-  <rect x="290" y="728" width="360" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <rect x="290" y="728" width="360" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.76"/>
   <text x="470" y="751" text-anchor="middle" class="blk" fill="#14515E">retido pela tarefa baixa</text>
-  <rect x="650" y="728" width="150" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <rect x="650" y="728" width="150" height="36" rx="5" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.76"/>
   <text x="725" y="751" text-anchor="middle" class="blk" fill="#14515E">retido pela alta</text>
 
   <!-- anotacao da devolucao da prioridade -->
-  <line x1="650" y1="764" x2="650" y2="782" stroke="#767D85" stroke-width="1.2"/>
+  <line x1="650" y1="764" x2="650" y2="782" stroke="#767D85" stroke-width="1.32"/>
   <text x="658" y="786" class="note">libera o mutex e retorna à prioridade original</text>
 
   <!-- colchete do bloqueio -->
-  <line x1="470" y1="800" x2="650" y2="800" stroke="#2B3138" stroke-width="1.4"/>
-  <line x1="470" y1="792" x2="470" y2="808" stroke="#2B3138" stroke-width="1.4"/>
-  <line x1="650" y1="792" x2="650" y2="808" stroke="#2B3138" stroke-width="1.4"/>
-  <text x="560" y="824" text-anchor="middle" class="brk">bloqueio da tarefa alta</text>
-  <text x="880" y="824" text-anchor="middle" class="brksub">limitado à região crítica: o tempo inerente ao recurso compartilhado permanece</text>
+  <line x1="470" y1="800" x2="650" y2="800" stroke="#2B3138" stroke-width="1.54"/>
+  <line x1="470" y1="792" x2="470" y2="808" stroke="#2B3138" stroke-width="1.54"/>
+  <line x1="650" y1="792" x2="650" y2="808" stroke="#2B3138" stroke-width="1.54"/>
+  <text x="560" y="820" text-anchor="middle" class="brk">bloqueio da tarefa alta</text>
+  <text x="830" y="836" text-anchor="middle" class="brksub">limitado à região crítica: o tempo inerente ao recurso compartilhado permanece</text>
 
   <!-- eixo -->
-  <line x1="200" y1="854" x2="1172" y2="854" stroke="#B8BDC3" stroke-width="1.2"/>
+  <line x1="200" y1="854" x2="1172" y2="854" stroke="#B8BDC3" stroke-width="1.32"/>
   <polygon points="1172,849 1172,859 1182,854" fill="#B8BDC3"/>
   <text x="192" y="858" text-anchor="end" class="axis">tempo (sem escala)</text>
 
   <!-- ==================================================================== -->
   <!-- LEGENDA                                                              -->
   <!-- ==================================================================== -->
-  <line x1="30" y1="882" x2="1270" y2="882" stroke="#B8BDC3" stroke-width="1"/>
+  <line x1="30" y1="882" x2="1270" y2="882" stroke="#B8BDC3" stroke-width="1.10"/>
 
-  <rect x="40" y="900" width="28" height="14" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.4"/>
+  <rect x="40" y="900" width="28" height="14" rx="3" fill="#CFE4E8" stroke="#1D7A8C" stroke-width="1.54"/>
   <text x="76" y="911" class="leg">executando</text>
 
-  <rect x="240" y="900" width="28" height="14" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.4"/>
+  <rect x="240" y="900" width="28" height="14" rx="3" fill="#F7E2C6" stroke="#C97B1E" stroke-width="1.54"/>
   <text x="276" y="911" class="leg">executando na região crítica (mutex retido)</text>
 
-  <rect x="600" y="900" width="28" height="14" rx="3" fill="#C7CCD1" stroke="#767D85" stroke-width="1.4"/>
+  <rect x="600" y="900" width="28" height="14" rx="3" fill="#C7CCD1" stroke="#767D85" stroke-width="1.54"/>
   <text x="636" y="911" class="leg">bloqueada — aguarda o mutex</text>
 
-  <rect x="880" y="900" width="28" height="14" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.4"/>
+  <rect x="880" y="900" width="28" height="14" rx="3" fill="#F0F1F2" stroke="#B8BDC3" stroke-width="1.54"/>
   <text x="916" y="911" class="leg">pronta — aguarda o processador</text>
 
-  <rect x="40" y="928" width="28" height="14" rx="3" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
+  <rect x="40" y="928" width="28" height="14" rx="3" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.76"/>
   <text x="76" y="939" class="leg">mutex retido pela tarefa indicada</text>
 
-  <rect x="380" y="928" width="28" height="14" rx="3" fill="none" stroke="#C4453C" stroke-width="1.8" stroke-dasharray="4 3"/>
+  <rect x="380" y="928" width="28" height="14" rx="3" fill="none" stroke="#C4453C" stroke-width="1.98" stroke-dasharray="4 3"/>
   <text x="416" y="939" class="leg">intervalo de inversão não controlada, evitável pela herança</text>
 
-  <text x="1270" y="939" text-anchor="end" class="note">a herança encurta o bloqueio; não substitui a limitação da região crítica</text>
 </svg>

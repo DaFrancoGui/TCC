@@ -1,63 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 620" font-family="Helvetica" role="img" aria-label="Mapa de ligacoes do XIAO ESP32-C6: SPI para o display GC9A01, I2C compartilhado para 6 dispositivos, 1-Wire no GPIO20 para o DS18B20 e ADC no GPIO0 para bateria">
-<rect x="0" y="0" width="920" height="620" fill="#FFFFFF"/>
-<text x="460" y="32" text-anchor="middle" font-family="Helvetica" font-size="15" fill="#2B3138" font-weight="bold">Mapa de ligações — XIAO ESP32-C6 (confirmado no firmware)</text>
-<rect x="70" y="120" width="180" height="410" rx="6" fill="#F7FAFB" stroke="#1D7A8C" stroke-width="1.8"/>
-<text x="160" y="148" text-anchor="middle" font-family="Helvetica" font-size="13" fill="#14515E" font-weight="bold">XIAO ESP32-C6</text>
-<text x="160" y="164" text-anchor="middle" font-family="Helvetica" font-size="10" fill="#767D85">RISC-V · 160 MHz</text>
-<text x="238" y="186" text-anchor="end" font-family="monospace" font-size="10" fill="#5B6BA6" font-weight="bold">GPIO18  MOSI</text>
-<circle cx="250" cy="182" r="3.5" fill="#5B6BA6"/>
-<text x="238" y="208" text-anchor="end" font-family="monospace" font-size="10" fill="#5B6BA6" font-weight="bold">GPIO19  SCLK</text>
-<circle cx="250" cy="204" r="3.5" fill="#5B6BA6"/>
-<text x="238" y="230" text-anchor="end" font-family="monospace" font-size="10" fill="#5B6BA6" font-weight="bold">GPIO1   CS</text>
-<circle cx="250" cy="226" r="3.5" fill="#5B6BA6"/>
-<text x="238" y="252" text-anchor="end" font-family="monospace" font-size="10" fill="#5B6BA6" font-weight="bold">GPIO21  DC</text>
-<circle cx="250" cy="248" r="3.5" fill="#5B6BA6"/>
-<text x="238" y="274" text-anchor="end" font-family="monospace" font-size="10" fill="#767D85" font-weight="bold">GPIO17  INT</text>
-<circle cx="250" cy="270" r="3.5" fill="#767D85"/>
-<text x="238" y="310" text-anchor="end" font-family="monospace" font-size="10" fill="#1D7A8C" font-weight="bold">GPIO22  SDA</text>
-<circle cx="250" cy="306" r="3.5" fill="#1D7A8C"/>
-<text x="238" y="332" text-anchor="end" font-family="monospace" font-size="10" fill="#1D7A8C" font-weight="bold">GPIO23  SCL</text>
-<circle cx="250" cy="328" r="3.5" fill="#1D7A8C"/>
-<text x="238" y="368" text-anchor="end" font-family="monospace" font-size="10" fill="#C97B1E" font-weight="bold">GPIO20  DATA</text>
-<circle cx="250" cy="364" r="3.5" fill="#C97B1E"/>
-<text x="238" y="408" text-anchor="end" font-family="monospace" font-size="10" fill="#6F7F43" font-weight="bold">GPIO0   BAT_ADC</text>
-<circle cx="250" cy="404" r="3.5" fill="#6F7F43"/>
-<text x="238" y="448" text-anchor="end" font-family="monospace" font-size="10" fill="#9AA0A6">GPIO16 livre · GPIO2 evitado</text>
-<rect x="560" y="152" width="320" height="96" rx="6" fill="#EDF4F6" stroke="#5B6BA6" stroke-width="1.5"/>
-<text x="574" y="174" text-anchor="start" font-family="Helvetica" font-size="12.5" fill="#14515E" font-weight="bold">Seeed Round Display</text>
-<text x="574" y="192" text-anchor="start" font-family="Helvetica" font-size="10.5" fill="#767D85">GC9A01 240×240 (SPI2 · 40 MHz, modo 0)</text>
-<text x="574" y="210" text-anchor="start" font-family="Helvetica" font-size="10" fill="#767D85">backlight sempre ligado (D6 inoperante)</text>
-<text x="574" y="232" text-anchor="start" font-family="Helvetica" font-size="10" fill="#767D85" font-style="italic">abriga: touch CHSC6X + RTC PCF8563 (no I²C →)</text>
-<rect x="560" y="288" width="320" height="100" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.5"/>
-<text x="574" y="310" text-anchor="start" font-family="Helvetica" font-size="12.5" fill="#14515E" font-weight="bold">Barramento I²C0 · 100 kHz</text>
-<text x="574" y="328" text-anchor="start" font-family="Helvetica" font-size="10" fill="#767D85">SDA = GPIO22 · SCL = GPIO23 · mutex + i2c_recover</text>
-<text x="574" y="350" text-anchor="start" font-family="monospace" font-size="10.5" fill="#14515E">touch 0x2E · RTC 0x51 · LTR390 0x53</text>
-<text x="574" y="366" text-anchor="start" font-family="monospace" font-size="10.5" fill="#14515E">MAX30102 0x57 · MPU-9250 0x68 · AK8963 0x0C</text>
-<text x="574" y="382" text-anchor="start" font-family="Helvetica" font-size="9.5" fill="#767D85" font-style="italic">(AK8963 via bypass do MPU)</text>
-<rect x="560" y="420" width="320" height="56" rx="6" fill="#EDF4F6" stroke="#C97B1E" stroke-width="1.5"/>
-<text x="574" y="442" text-anchor="start" font-family="Helvetica" font-size="12" fill="#14515E" font-weight="bold">DS18B20  (1-Wire / RMT — GPIO20)</text>
-<text x="574" y="460" text-anchor="start" font-family="Helvetica" font-size="10" fill="#767D85">pull-up 4,7 kΩ (DATA→3,3 V) · 12-bit</text>
-<rect x="560" y="492" width="320" height="52" rx="6" fill="#EDF4F6" stroke="#6F7F43" stroke-width="1.5"/>
-<text x="574" y="513" text-anchor="start" font-family="Helvetica" font-size="12" fill="#14515E" font-weight="bold">Monitoramento da bateria  (ADC — GPIO0)</text>
-<text x="574" y="531" text-anchor="start" font-family="Helvetica" font-size="10" fill="#767D85">divisor resistivo 1:2 · tensão e estado de carga</text>
-<line x1="252" y1="182" x2="558" y2="174" stroke="#5B6BA6" stroke-width="1.8"/>
-<line x1="252" y1="204" x2="558" y2="190" stroke="#5B6BA6" stroke-width="1.8"/>
-<line x1="252" y1="226" x2="558" y2="206" stroke="#5B6BA6" stroke-width="1.8"/>
-<line x1="252" y1="248" x2="558" y2="222" stroke="#5B6BA6" stroke-width="1.8"/>
-<line x1="252" y1="270" x2="558" y2="238" stroke="#767D85" stroke-width="1.6" stroke-dasharray="5 3"/>
-<line x1="252" y1="306" x2="558" y2="322" stroke="#1D7A8C" stroke-width="2"/>
-<line x1="252" y1="328" x2="558" y2="340" stroke="#1D7A8C" stroke-width="2"/>
-<line x1="252" y1="364" x2="558" y2="446" stroke="#C97B1E" stroke-width="2.4"/>
-<line x1="252" y1="404" x2="558" y2="518" stroke="#6F7F43" stroke-width="2.2"/>
-<line x1="70" y1="580" x2="102" y2="580" stroke="#5B6BA6" stroke-width="2.6"/>
-<text x="110" y="584" text-anchor="start" font-family="Helvetica" font-size="11" fill="#767D85">SPI</text>
-<line x1="180" y1="580" x2="212" y2="580" stroke="#767D85" stroke-width="1.8" stroke-dasharray="5 3"/>
-<text x="220" y="584" text-anchor="start" font-family="Helvetica" font-size="11" fill="#767D85">Touch INT</text>
-<line x1="330" y1="580" x2="362" y2="580" stroke="#1D7A8C" stroke-width="2.6"/>
-<text x="370" y="584" text-anchor="start" font-family="Helvetica" font-size="11" fill="#767D85">I²C 100 kHz</text>
-<line x1="500" y1="580" x2="532" y2="580" stroke="#C97B1E" stroke-width="2.6"/>
-<text x="540" y="584" text-anchor="start" font-family="Helvetica" font-size="11" fill="#767D85">1-Wire / RMT</text>
-<line x1="680" y1="580" x2="712" y2="580" stroke="#6F7F43" stroke-width="2.6"/>
-<text x="720" y="584" text-anchor="start" font-family="Helvetica" font-size="11" fill="#767D85">ADC bateria</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 650" font-family="Helvetica" role="img" aria-label="Mapa de ligacoes do XIAO ESP32-C6: SPI para o display GC9A01, I2C compartilhado para 6 dispositivos, 1-Wire no GPIO20 para o DS18B20 e ADC no GPIO0 para bateria">
+<rect x="0" y="0" width="920" height="650" fill="#FFFFFF"/>
+<text x="460" y="32" text-anchor="middle" font-family="Helvetica" font-size="20.25" fill="#2B3138" font-weight="bold">Mapa de ligações — XIAO ESP32-C6 (confirmado no firmware)</text>
+<rect x="50" y="120" width="210" height="410" rx="6" fill="#F7FAFB" stroke="#1D7A8C" stroke-width="1.98"/>
+<text x="155" y="148" text-anchor="middle" font-family="Helvetica" font-size="17.55" fill="#14515E" font-weight="bold">XIAO ESP32-C6</text>
+<text x="155" y="164" text-anchor="middle" font-family="Helvetica" font-size="13.50" fill="#767D85">RISC-V · 160 MHz</text>
+<text x="248" y="186" text-anchor="end" font-family="monospace" font-size="13.50" fill="#5B6BA6" font-weight="bold">GPIO18  MOSI</text>
+<circle cx="260" cy="182" r="3.5" fill="#5B6BA6"/>
+<text x="248" y="208" text-anchor="end" font-family="monospace" font-size="13.50" fill="#5B6BA6" font-weight="bold">GPIO19  SCLK</text>
+<circle cx="260" cy="204" r="3.5" fill="#5B6BA6"/>
+<text x="248" y="230" text-anchor="end" font-family="monospace" font-size="13.50" fill="#5B6BA6" font-weight="bold">GPIO1   CS</text>
+<circle cx="260" cy="226" r="3.5" fill="#5B6BA6"/>
+<text x="248" y="252" text-anchor="end" font-family="monospace" font-size="13.50" fill="#5B6BA6" font-weight="bold">GPIO21  DC</text>
+<circle cx="260" cy="248" r="3.5" fill="#5B6BA6"/>
+<text x="248" y="274" text-anchor="end" font-family="monospace" font-size="13.50" fill="#767D85" font-weight="bold">GPIO17  INT</text>
+<circle cx="260" cy="270" r="3.5" fill="#767D85"/>
+<text x="248" y="310" text-anchor="end" font-family="monospace" font-size="13.50" fill="#1D7A8C" font-weight="bold">GPIO22  SDA</text>
+<circle cx="260" cy="306" r="3.5" fill="#1D7A8C"/>
+<text x="248" y="332" text-anchor="end" font-family="monospace" font-size="13.50" fill="#1D7A8C" font-weight="bold">GPIO23  SCL</text>
+<circle cx="260" cy="328" r="3.5" fill="#1D7A8C"/>
+<text x="248" y="368" text-anchor="end" font-family="monospace" font-size="13.50" fill="#C97B1E" font-weight="bold">GPIO20  DATA</text>
+<circle cx="260" cy="364" r="3.5" fill="#C97B1E"/>
+<text x="248" y="408" text-anchor="end" font-family="monospace" font-size="13.50" fill="#6F7F43" font-weight="bold">GPIO0   BAT_ADC</text>
+<circle cx="260" cy="404" r="3.5" fill="#6F7F43"/>
+<rect x="500" y="142" width="400" height="116" rx="6" fill="#EDF4F6" stroke="#5B6BA6" stroke-width="1.65"/>
+<text x="516" y="166" text-anchor="start" font-family="Helvetica" font-size="16.88" fill="#14515E" font-weight="bold">Seeed Round Display</text>
+<text x="516" y="188" text-anchor="start" font-family="Helvetica" font-size="14.18" fill="#767D85">GC9A01 240×240 (SPI2 · 40 MHz, modo 0)</text>
+<text x="516" y="210" text-anchor="start" font-family="Helvetica" font-size="13.50" fill="#767D85">backlight sempre ligado (D6 inoperante)</text>
+<text x="516" y="236" text-anchor="start" font-family="Helvetica" font-size="13.50" fill="#767D85" font-style="italic">abriga touch CHSC6X e RTC PCF8563</text>
+<rect x="500" y="282" width="400" height="122" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.65"/>
+<text x="516" y="306" text-anchor="start" font-family="Helvetica" font-size="16.88" fill="#14515E" font-weight="bold">Barramento I²C0 · 100 kHz</text>
+<text x="516" y="328" text-anchor="start" font-family="Helvetica" font-size="13.50" fill="#767D85">SDA = GPIO22 · SCL = GPIO23</text>
+<text x="516" y="348" text-anchor="start" font-family="Helvetica" font-size="13.50" fill="#767D85">mutex compartilhado + i2c_recover</text>
+<text x="516" y="370" text-anchor="start" font-family="monospace" font-size="13.50" fill="#14515E">touch 0x2E · RTC 0x51 · LTR390 0x53</text>
+<text x="516" y="388" text-anchor="start" font-family="monospace" font-size="13.50" fill="#14515E">MAX30102 0x57 · MPU 0x68 · AK8963 0x0C</text>
+<rect x="500" y="424" width="400" height="68" rx="6" fill="#EDF4F6" stroke="#C97B1E" stroke-width="1.65"/>
+<text x="516" y="450" text-anchor="start" font-family="Helvetica" font-size="16.20" fill="#14515E" font-weight="bold">DS18B20 (1-Wire / RMT — GPIO20)</text>
+<text x="516" y="474" text-anchor="start" font-family="Helvetica" font-size="13.50" fill="#767D85">pull-up 4,7 kΩ (DATA→3,3 V) · 12-bit</text>
+<rect x="500" y="510" width="400" height="62" rx="6" fill="#EDF4F6" stroke="#6F7F43" stroke-width="1.65"/>
+<text x="516" y="536" text-anchor="start" font-family="Helvetica" font-size="15.53" fill="#14515E" font-weight="bold">Monitoramento da bateria (ADC — GPIO0)</text>
+<text x="516" y="558" text-anchor="start" font-family="Helvetica" font-size="13.50" fill="#767D85">divisor resistivo 1:2 · tensão e estado de carga</text>
+<line x1="262" y1="182" x2="498" y2="166" stroke="#5B6BA6" stroke-width="1.98"/>
+<line x1="262" y1="204" x2="498" y2="184" stroke="#5B6BA6" stroke-width="1.98"/>
+<line x1="262" y1="226" x2="498" y2="202" stroke="#5B6BA6" stroke-width="1.98"/>
+<line x1="262" y1="248" x2="498" y2="220" stroke="#5B6BA6" stroke-width="1.98"/>
+<line x1="262" y1="270" x2="498" y2="238" stroke="#767D85" stroke-width="1.76" stroke-dasharray="5 3"/>
+<line x1="262" y1="306" x2="498" y2="324" stroke="#1D7A8C" stroke-width="2.20"/>
+<line x1="262" y1="328" x2="498" y2="344" stroke="#1D7A8C" stroke-width="2.20"/>
+<line x1="262" y1="364" x2="498" y2="458" stroke="#C97B1E" stroke-width="2.64"/>
+<line x1="262" y1="404" x2="498" y2="540" stroke="#6F7F43" stroke-width="2.42"/>
+<line x1="70" y1="615" x2="102" y2="615" stroke="#5B6BA6" stroke-width="2.86"/>
+<text x="110" y="619" text-anchor="start" font-family="Helvetica" font-size="14.85" fill="#767D85">SPI</text>
+<line x1="180" y1="615" x2="212" y2="615" stroke="#767D85" stroke-width="1.98" stroke-dasharray="5 3"/>
+<text x="220" y="619" text-anchor="start" font-family="Helvetica" font-size="14.85" fill="#767D85">Touch INT</text>
+<line x1="330" y1="615" x2="362" y2="615" stroke="#1D7A8C" stroke-width="2.86"/>
+<text x="370" y="619" text-anchor="start" font-family="Helvetica" font-size="14.85" fill="#767D85">I²C 100 kHz</text>
+<line x1="500" y1="615" x2="532" y2="615" stroke="#C97B1E" stroke-width="2.86"/>
+<text x="540" y="619" text-anchor="start" font-family="Helvetica" font-size="14.85" fill="#767D85">1-Wire / RMT</text>
+<line x1="680" y1="615" x2="712" y2="615" stroke="#6F7F43" stroke-width="2.86"/>
+<text x="720" y="619" text-anchor="start" font-family="Helvetica" font-size="14.85" fill="#767D85">ADC bateria</text>
 </svg>

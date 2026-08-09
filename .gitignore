@@ -4,9 +4,14 @@ sdkconfig.old
 dependencies.lock
 managed_components/
 
-# Arduino reference libraries
+# Documentação publicada seletivamente
 docs/
-#Rascunho/
+!docs/
+docs/*
+!docs/README.md
+!docs/problemas_solucoes/
+!docs/problemas_solucoes/**
+Rascunho/
 
 # Python
 *.pyc

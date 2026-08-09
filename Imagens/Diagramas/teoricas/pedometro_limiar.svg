@@ -1,117 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1420 566" width="1420" height="566" font-family="DejaVu Sans" role="img" aria-label="Forma de onda didatica de deteccao de passos: magnitude bruta da aceleracao em cinza, sinal apos filtro EMA em teal, limiar com faixa de historese, quatro cruzamentos aceitos como passos, janelas de intervalo minimo apos cada passo, um pico pequeno rejeitado por amplitude e um cruzamento rejeitado por ocorrer cedo demais; ao lado, o fluxo magnitude, EMA, limiar e histerese, intervalo minimo e incremento da contagem">
 <rect x="0" y="0" width="1420" height="566" fill="#FFFFFF"/>
-<text x="710" y="38" text-anchor="middle" font-size="19" font-weight="bold" fill="#2B3138">Detecção de passos por limiar, histerese e intervalo mínimo</text>
-<text x="710" y="60" text-anchor="middle" font-size="11.5" font-style="italic" fill="#767D85">figura conceitual — sinal sintético, sem dados medidos</text>
-<text x="710" y="80" text-anchor="middle" font-size="10.5" fill="#2B3138">parâmetros desta implementação (pedometer_process.h), não constantes universais: EMA α = 0,2 a 50 Hz · limiar 1,15 g · histerese 0,05 g · intervalo mínimo 300 ms</text>
+<text x="710" y="38" text-anchor="middle" font-size="25.65" font-weight="bold" fill="#2B3138">Detecção de passos por limiar, histerese e intervalo mínimo</text>
+<text x="710" y="60" text-anchor="middle" font-size="15.53" font-style="italic" fill="#767D85">figura conceitual — sinal sintético, sem dados medidos</text>
+<text x="710" y="80" text-anchor="middle" font-size="14.18" fill="#2B3138">parâmetros desta implementação (pedometer_process.h), não constantes universais: EMA α = 0,2 a 50 Hz · limiar 1,15 g · histerese 0,05 g · intervalo mínimo 300 ms</text>
 <rect x="195" y="112" width="82" height="340" fill="#F0F1F2"/>
 <rect x="359" y="112" width="82" height="340" fill="#F0F1F2"/>
 <rect x="606" y="112" width="82" height="340" fill="#F0F1F2"/>
 <rect x="863" y="112" width="82" height="340" fill="#F0F1F2"/>
 <rect x="96" y="269" width="904" height="21" fill="#F7E2C6" fill-opacity="0.55"/>
-<line x1="96" y1="418" x2="1000" y2="418" stroke="#ECECEC" stroke-width="1"/>
-<text x="88" y="422" text-anchor="end" font-size="9.5" fill="#767D85">0,8 g</text>
-<line x1="96" y1="376" x2="1000" y2="376" stroke="#ECECEC" stroke-width="1"/>
-<text x="88" y="380" text-anchor="end" font-size="9.5" fill="#767D85">0,9 g</text>
-<line x1="96" y1="333" x2="1000" y2="333" stroke="#ECECEC" stroke-width="1"/>
-<text x="88" y="337" text-anchor="end" font-size="9.5" fill="#767D85">1,0 g</text>
-<line x1="96" y1="290" x2="1000" y2="290" stroke="#ECECEC" stroke-width="1"/>
-<text x="88" y="294" text-anchor="end" font-size="9.5" fill="#767D85">1,1 g</text>
-<line x1="96" y1="248" x2="1000" y2="248" stroke="#ECECEC" stroke-width="1"/>
-<text x="88" y="252" text-anchor="end" font-size="9.5" fill="#767D85">1,2 g</text>
-<line x1="96" y1="205" x2="1000" y2="205" stroke="#ECECEC" stroke-width="1"/>
-<text x="88" y="209" text-anchor="end" font-size="9.5" fill="#767D85">1,3 g</text>
-<line x1="96" y1="163" x2="1000" y2="163" stroke="#ECECEC" stroke-width="1"/>
-<text x="88" y="167" text-anchor="end" font-size="9.5" fill="#767D85">1,4 g</text>
-<line x1="96" y1="120" x2="1000" y2="120" stroke="#ECECEC" stroke-width="1"/>
-<text x="88" y="124" text-anchor="end" font-size="9.5" fill="#767D85">1,5 g</text>
-<line x1="96" y1="112" x2="96" y2="452" stroke="#ECECEC" stroke-width="1"/>
-<text x="96" y="470" text-anchor="middle" font-size="9.5" fill="#767D85">0,0</text>
-<line x1="233" y1="112" x2="233" y2="452" stroke="#ECECEC" stroke-width="1"/>
-<text x="233" y="470" text-anchor="middle" font-size="9.5" fill="#767D85">0,5</text>
-<line x1="370" y1="112" x2="370" y2="452" stroke="#ECECEC" stroke-width="1"/>
-<text x="370" y="470" text-anchor="middle" font-size="9.5" fill="#767D85">1,0</text>
-<line x1="507" y1="112" x2="507" y2="452" stroke="#ECECEC" stroke-width="1"/>
-<text x="507" y="470" text-anchor="middle" font-size="9.5" fill="#767D85">1,5</text>
-<line x1="644" y1="112" x2="644" y2="452" stroke="#ECECEC" stroke-width="1"/>
-<text x="644" y="470" text-anchor="middle" font-size="9.5" fill="#767D85">2,0</text>
-<line x1="781" y1="112" x2="781" y2="452" stroke="#ECECEC" stroke-width="1"/>
-<text x="781" y="470" text-anchor="middle" font-size="9.5" fill="#767D85">2,5</text>
-<line x1="918" y1="112" x2="918" y2="452" stroke="#ECECEC" stroke-width="1"/>
-<text x="918" y="470" text-anchor="middle" font-size="9.5" fill="#767D85">3,0</text>
-<text x="548" y="490" text-anchor="middle" font-size="10" fill="#767D85">tempo (s)</text>
-<line x1="96" y1="112" x2="96" y2="452" stroke="#B8BDC3" stroke-width="1.2"/>
-<line x1="96" y1="452" x2="1000" y2="452" stroke="#B8BDC3" stroke-width="1.2"/>
-<line x1="96" y1="269" x2="1000" y2="269" stroke="#C97B1E" stroke-width="1.8"/>
-<line x1="96" y1="291" x2="1000" y2="291" stroke="#C97B1E" stroke-width="1.4" stroke-dasharray="6 4"/>
-<text x="992" y="261" text-anchor="end" font-size="10" fill="#8A5510">limiar 1,15 g</text>
-<text x="992" y="307" text-anchor="end" font-size="10" fill="#8A5510">retorno 1,10 g</text>
-<polyline points="96,327 101,334 107,337 112,323 118,336 123,336 129,334 134,332 140,336 145,325 151,331 156,341 162,319 167,325 173,299 178,259 184,239 189,184 195,152 200,141 206,148 211,181 217,235 222,280 227,308 233,352 238,358 244,382 249,417 255,414 260,433 266,425 271,401 277,389 282,372 288,356 293,347 299,347 304,325 310,334 315,337 321,322 326,340 332,316 337,294 343,274 348,225 354,187 359,156 364,142 370,155 375,224 381,302 386,380 392,436 397,394 403,346 408,285 414,211 419,180 425,158 430,171 436,214 441,264 447,294 452,322 458,339 463,323 469,341 474,337 480,337 485,368 490,369 496,390 501,410 507,416 512,423 518,426 523,412 529,384 534,379 540,348 545,342 551,350 556,328 562,340 567,332 573,318 578,320 584,302 589,271 595,231 600,190 606,140 611,140 616,157 622,179 627,244 633,270 638,304 644,343 649,354 655,381 660,397 666,404 671,402 677,410 682,394 688,377 693,377 699,340 704,340 710,336 715,313 721,316 726,289 732,265 737,253 742,249 748,251 753,274 759,298 764,299 770,333 775,341 781,352 786,387 792,382 797,396 803,402 808,392 814,388 819,379 825,361 830,338 836,333 841,296 847,272 852,243 858,177 863,156 869,136 874,143 879,193 885,233 890,274 896,308 901,335 907,346 912,379 918,398 923,400 929,427 934,409 940,403 945,402 951,372 956,365 962,350 967,337 973,332 978,340 984,334 989,331 995,342 1000,320" fill="none" stroke="#B8BDC3" stroke-width="1.2"/>
-<polyline points="96,332 101,332 107,333 112,331 118,332 123,333 129,333 134,333 140,333 145,332 151,332 156,334 162,331 167,330 173,323 178,311 184,296 189,274 195,249 200,228 206,212 211,206 217,212 222,225 227,242 233,264 238,283 244,302 249,325 255,343 260,361 266,374 271,379 277,381 282,379 288,375 293,369 299,365 304,357 310,352 315,349 321,344 326,343 332,338 337,329 343,318 348,299 354,277 359,253 364,231 370,215 375,217 381,234 386,263 392,298 397,317 403,323 408,315 414,294 419,271 425,249 430,233 436,229 441,236 447,248 452,262 458,278 463,287 469,298 474,306 480,312 485,323 490,332 496,344 501,357 507,369 512,380 518,389 523,394 529,392 534,389 540,381 545,373 551,369 556,360 562,356 567,351 573,345 578,340 584,332 589,320 595,302 600,280 606,252 611,229 616,215 622,208 627,215 633,226 638,242 644,262 649,280 655,301 660,320 666,337 671,350 677,362 682,368 688,370 693,371 699,365 704,360 710,355 715,347 721,341 726,330 732,317 737,304 742,293 748,285 753,283 759,286 764,288 770,297 775,306 781,315 786,330 792,340 797,351 803,362 808,368 814,372 819,373 825,371 830,364 836,358 841,346 847,331 852,313 858,286 863,260 869,235 874,217 879,212 885,216 890,228 896,244 901,262 907,279 912,299 918,319 923,335 929,353 934,364 940,372 945,378 951,377 956,374 962,370 967,363 973,357 978,354 984,350 989,346 995,345 1000,340" fill="none" stroke="#1D7A8C" stroke-width="2.2"/>
-<line x1="195" y1="249" x2="195" y2="452" stroke="#1D7A8C" stroke-width="1.4" stroke-dasharray="3 3"/>
+<line x1="96" y1="418" x2="1000" y2="418" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="88" y="422" text-anchor="end" font-size="12.83" fill="#767D85">0,8 g</text>
+<line x1="96" y1="376" x2="1000" y2="376" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="88" y="380" text-anchor="end" font-size="12.83" fill="#767D85">0,9 g</text>
+<line x1="96" y1="333" x2="1000" y2="333" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="88" y="337" text-anchor="end" font-size="12.83" fill="#767D85">1,0 g</text>
+<line x1="96" y1="290" x2="1000" y2="290" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="88" y="294" text-anchor="end" font-size="12.83" fill="#767D85">1,1 g</text>
+<line x1="96" y1="248" x2="1000" y2="248" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="88" y="252" text-anchor="end" font-size="12.83" fill="#767D85">1,2 g</text>
+<line x1="96" y1="205" x2="1000" y2="205" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="88" y="209" text-anchor="end" font-size="12.83" fill="#767D85">1,3 g</text>
+<line x1="96" y1="163" x2="1000" y2="163" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="88" y="167" text-anchor="end" font-size="12.83" fill="#767D85">1,4 g</text>
+<line x1="96" y1="120" x2="1000" y2="120" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="88" y="124" text-anchor="end" font-size="12.83" fill="#767D85">1,5 g</text>
+<line x1="96" y1="112" x2="96" y2="452" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="96" y="470" text-anchor="middle" font-size="12.83" fill="#767D85">0,0</text>
+<line x1="233" y1="112" x2="233" y2="452" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="233" y="470" text-anchor="middle" font-size="12.83" fill="#767D85">0,5</text>
+<line x1="370" y1="112" x2="370" y2="452" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="370" y="470" text-anchor="middle" font-size="12.83" fill="#767D85">1,0</text>
+<line x1="507" y1="112" x2="507" y2="452" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="507" y="470" text-anchor="middle" font-size="12.83" fill="#767D85">1,5</text>
+<line x1="644" y1="112" x2="644" y2="452" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="644" y="470" text-anchor="middle" font-size="12.83" fill="#767D85">2,0</text>
+<line x1="781" y1="112" x2="781" y2="452" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="781" y="470" text-anchor="middle" font-size="12.83" fill="#767D85">2,5</text>
+<line x1="918" y1="112" x2="918" y2="452" stroke="#ECECEC" stroke-width="1.10"/>
+<text x="918" y="470" text-anchor="middle" font-size="12.83" fill="#767D85">3,0</text>
+<text x="548" y="490" text-anchor="middle" font-size="13.50" fill="#767D85">tempo (s)</text>
+<line x1="96" y1="112" x2="96" y2="452" stroke="#B8BDC3" stroke-width="1.32"/>
+<line x1="96" y1="452" x2="1000" y2="452" stroke="#B8BDC3" stroke-width="1.32"/>
+<line x1="96" y1="269" x2="1000" y2="269" stroke="#C97B1E" stroke-width="1.98"/>
+<line x1="96" y1="291" x2="1000" y2="291" stroke="#C97B1E" stroke-width="1.54" stroke-dasharray="6 4"/>
+<text x="992" y="261" text-anchor="end" font-size="13.50" fill="#8A5510">limiar 1,15 g</text>
+<text x="992" y="307" text-anchor="end" font-size="13.50" fill="#8A5510">retorno 1,10 g</text>
+<polyline points="96,327 101,334 107,337 112,323 118,336 123,336 129,334 134,332 140,336 145,325 151,331 156,341 162,319 167,325 173,299 178,259 184,239 189,184 195,152 200,141 206,148 211,181 217,235 222,280 227,308 233,352 238,358 244,382 249,417 255,414 260,433 266,425 271,401 277,389 282,372 288,356 293,347 299,347 304,325 310,334 315,337 321,322 326,340 332,316 337,294 343,274 348,225 354,187 359,156 364,142 370,155 375,224 381,302 386,380 392,436 397,394 403,346 408,285 414,211 419,180 425,158 430,171 436,214 441,264 447,294 452,322 458,339 463,323 469,341 474,337 480,337 485,368 490,369 496,390 501,410 507,416 512,423 518,426 523,412 529,384 534,379 540,348 545,342 551,350 556,328 562,340 567,332 573,318 578,320 584,302 589,271 595,231 600,190 606,140 611,140 616,157 622,179 627,244 633,270 638,304 644,343 649,354 655,381 660,397 666,404 671,402 677,410 682,394 688,377 693,377 699,340 704,340 710,336 715,313 721,316 726,289 732,265 737,253 742,249 748,251 753,274 759,298 764,299 770,333 775,341 781,352 786,387 792,382 797,396 803,402 808,392 814,388 819,379 825,361 830,338 836,333 841,296 847,272 852,243 858,177 863,156 869,136 874,143 879,193 885,233 890,274 896,308 901,335 907,346 912,379 918,398 923,400 929,427 934,409 940,403 945,402 951,372 956,365 962,350 967,337 973,332 978,340 984,334 989,331 995,342 1000,320" fill="none" stroke="#B8BDC3" stroke-width="1.32"/>
+<polyline points="96,332 101,332 107,333 112,331 118,332 123,333 129,333 134,333 140,333 145,332 151,332 156,334 162,331 167,330 173,323 178,311 184,296 189,274 195,249 200,228 206,212 211,206 217,212 222,225 227,242 233,264 238,283 244,302 249,325 255,343 260,361 266,374 271,379 277,381 282,379 288,375 293,369 299,365 304,357 310,352 315,349 321,344 326,343 332,338 337,329 343,318 348,299 354,277 359,253 364,231 370,215 375,217 381,234 386,263 392,298 397,317 403,323 408,315 414,294 419,271 425,249 430,233 436,229 441,236 447,248 452,262 458,278 463,287 469,298 474,306 480,312 485,323 490,332 496,344 501,357 507,369 512,380 518,389 523,394 529,392 534,389 540,381 545,373 551,369 556,360 562,356 567,351 573,345 578,340 584,332 589,320 595,302 600,280 606,252 611,229 616,215 622,208 627,215 633,226 638,242 644,262 649,280 655,301 660,320 666,337 671,350 677,362 682,368 688,370 693,371 699,365 704,360 710,355 715,347 721,341 726,330 732,317 737,304 742,293 748,285 753,283 759,286 764,288 770,297 775,306 781,315 786,330 792,340 797,351 803,362 808,368 814,372 819,373 825,371 830,364 836,358 841,346 847,331 852,313 858,286 863,260 869,235 874,217 879,212 885,216 890,228 896,244 901,262 907,279 912,299 918,319 923,335 929,353 934,364 940,372 945,378 951,377 956,374 962,370 967,363 973,357 978,354 984,350 989,346 995,345 1000,340" fill="none" stroke="#1D7A8C" stroke-width="2.42"/>
+<line x1="195" y1="249" x2="195" y2="452" stroke="#1D7A8C" stroke-width="1.54" stroke-dasharray="3 3"/>
 <circle cx="195" cy="249" r="5.5" fill="#1D7A8C"/>
-<circle cx="195" cy="225" r="9" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.4"/>
-<text x="195" y="229" text-anchor="middle" font-size="10" font-weight="bold" fill="#14515E">1</text>
-<line x1="359" y1="253" x2="359" y2="452" stroke="#1D7A8C" stroke-width="1.4" stroke-dasharray="3 3"/>
+<circle cx="195" cy="225" r="9" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.54"/>
+<text x="195" y="229" text-anchor="middle" font-size="13.50" font-weight="bold" fill="#14515E">1</text>
+<line x1="359" y1="253" x2="359" y2="452" stroke="#1D7A8C" stroke-width="1.54" stroke-dasharray="3 3"/>
 <circle cx="359" cy="253" r="5.5" fill="#1D7A8C"/>
-<circle cx="359" cy="229" r="9" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.4"/>
-<text x="359" y="233" text-anchor="middle" font-size="10" font-weight="bold" fill="#14515E">2</text>
-<line x1="606" y1="252" x2="606" y2="452" stroke="#1D7A8C" stroke-width="1.4" stroke-dasharray="3 3"/>
+<circle cx="359" cy="229" r="9" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.54"/>
+<text x="359" y="233" text-anchor="middle" font-size="13.50" font-weight="bold" fill="#14515E">2</text>
+<line x1="606" y1="252" x2="606" y2="452" stroke="#1D7A8C" stroke-width="1.54" stroke-dasharray="3 3"/>
 <circle cx="606" cy="252" r="5.5" fill="#1D7A8C"/>
-<circle cx="606" cy="228" r="9" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.4"/>
-<text x="606" y="232" text-anchor="middle" font-size="10" font-weight="bold" fill="#14515E">3</text>
-<line x1="863" y1="260" x2="863" y2="452" stroke="#1D7A8C" stroke-width="1.4" stroke-dasharray="3 3"/>
+<circle cx="606" cy="228" r="9" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.54"/>
+<text x="606" y="232" text-anchor="middle" font-size="13.50" font-weight="bold" fill="#14515E">3</text>
+<line x1="863" y1="260" x2="863" y2="452" stroke="#1D7A8C" stroke-width="1.54" stroke-dasharray="3 3"/>
 <circle cx="863" cy="260" r="5.5" fill="#1D7A8C"/>
-<circle cx="863" cy="236" r="9" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.4"/>
-<text x="863" y="240" text-anchor="middle" font-size="10" font-weight="bold" fill="#14515E">4</text>
-<circle cx="425" cy="249" r="5.5" fill="#FFFFFF" stroke="#2B3138" stroke-width="2"/>
-<line x1="425" y1="241" x2="451" y2="215" stroke="#2B3138" stroke-width="1"/>
-<text x="455" y="213" font-size="9.5" fill="#2B3138">rejeitado:</text>
-<text x="455" y="225" font-size="9.5" fill="#2B3138">intervalo mínimo</text>
-<circle cx="753" cy="283" r="5.5" fill="#FFFFFF" stroke="#2B3138" stroke-width="2"/>
-<line x1="753" y1="275" x2="777" y2="251" stroke="#2B3138" stroke-width="1"/>
-<text x="781" y="249" font-size="9.5" fill="#2B3138">rejeitado:</text>
-<text x="781" y="261" font-size="9.5" fill="#2B3138">amplitude</text>
-<line x1="195" y1="126" x2="277" y2="126" stroke="#2B3138" stroke-width="1.2"/>
-<line x1="195" y1="120" x2="195" y2="132" stroke="#2B3138" stroke-width="1.2"/>
-<line x1="277" y1="120" x2="277" y2="132" stroke="#2B3138" stroke-width="1.2"/>
-<text x="236" y="120" text-anchor="middle" font-size="9.5" fill="#2B3138">300 ms</text>
-<text x="1046" y="100" font-size="12" font-weight="bold" fill="#2B3138">Fluxo por amostra</text>
-<rect x="1046" y="112" width="300" height="52" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
-<text x="1196" y="133" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#14515E">magnitude |a|</text>
-<text x="1196" y="150" text-anchor="middle" font-size="9.5" fill="#767D85">√(x² + y² + z²)</text>
-<line x1="1196" y1="164" x2="1196" y2="177" stroke="#1D7A8C" stroke-width="1.8"/>
+<circle cx="863" cy="236" r="9" fill="#FFFFFF" stroke="#1D7A8C" stroke-width="1.54"/>
+<text x="863" y="240" text-anchor="middle" font-size="13.50" font-weight="bold" fill="#14515E">4</text>
+<circle cx="425" cy="249" r="5.5" fill="#FFFFFF" stroke="#2B3138" stroke-width="2.20"/>
+<line x1="425" y1="241" x2="451" y2="215" stroke="#2B3138" stroke-width="1.10"/>
+<text x="455" y="213" font-size="12.83" fill="#2B3138">rejeitado:</text>
+<text x="455" y="225" font-size="12.83" fill="#2B3138">intervalo mínimo</text>
+<circle cx="753" cy="283" r="5.5" fill="#FFFFFF" stroke="#2B3138" stroke-width="2.20"/>
+<line x1="753" y1="275" x2="777" y2="251" stroke="#2B3138" stroke-width="1.10"/>
+<text x="781" y="249" font-size="12.83" fill="#2B3138">rejeitado:</text>
+<text x="781" y="261" font-size="12.83" fill="#2B3138">amplitude</text>
+<line x1="195" y1="126" x2="277" y2="126" stroke="#2B3138" stroke-width="1.32"/>
+<line x1="195" y1="120" x2="195" y2="132" stroke="#2B3138" stroke-width="1.32"/>
+<line x1="277" y1="120" x2="277" y2="132" stroke="#2B3138" stroke-width="1.32"/>
+<text x="236" y="120" text-anchor="middle" font-size="12.83" fill="#2B3138">300 ms</text>
+<text x="1046" y="100" font-size="16.20" font-weight="bold" fill="#2B3138">Fluxo por amostra</text>
+<rect x="1046" y="112" width="300" height="52" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.76"/>
+<text x="1196" y="133" text-anchor="middle" font-size="15.53" font-weight="bold" fill="#14515E">magnitude |a|</text>
+<text x="1196" y="150" text-anchor="middle" font-size="12.83" fill="#767D85">√(x² + y² + z²)</text>
+<line x1="1196" y1="164" x2="1196" y2="177" stroke="#1D7A8C" stroke-width="1.98"/>
 <polygon points="1190,176 1202,176 1196,186" fill="#1D7A8C"/>
-<rect x="1046" y="186" width="300" height="52" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
-<text x="1196" y="207" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#14515E">filtro EMA</text>
-<text x="1196" y="224" text-anchor="middle" font-size="9.5" fill="#767D85">α = 0,2</text>
-<line x1="1196" y1="238" x2="1196" y2="251" stroke="#1D7A8C" stroke-width="1.8"/>
+<rect x="1046" y="186" width="300" height="52" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.76"/>
+<text x="1196" y="207" text-anchor="middle" font-size="15.53" font-weight="bold" fill="#14515E">filtro EMA</text>
+<text x="1196" y="224" text-anchor="middle" font-size="12.83" fill="#767D85">α = 0,2</text>
+<line x1="1196" y1="238" x2="1196" y2="251" stroke="#1D7A8C" stroke-width="1.98"/>
 <polygon points="1190,250 1202,250 1196,260" fill="#1D7A8C"/>
-<rect x="1046" y="260" width="300" height="52" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
-<text x="1196" y="281" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#14515E">limiar e histerese</text>
-<text x="1196" y="298" text-anchor="middle" font-size="9.5" fill="#767D85">1,15 g · retorno em 1,10 g</text>
-<line x1="1196" y1="312" x2="1196" y2="325" stroke="#1D7A8C" stroke-width="1.8"/>
+<rect x="1046" y="260" width="300" height="52" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.76"/>
+<text x="1196" y="281" text-anchor="middle" font-size="15.53" font-weight="bold" fill="#14515E">limiar e histerese</text>
+<text x="1196" y="298" text-anchor="middle" font-size="12.83" fill="#767D85">1,15 g · retorno em 1,10 g</text>
+<line x1="1196" y1="312" x2="1196" y2="325" stroke="#1D7A8C" stroke-width="1.98"/>
 <polygon points="1190,324 1202,324 1196,334" fill="#1D7A8C"/>
-<rect x="1046" y="334" width="300" height="52" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.6"/>
-<text x="1196" y="355" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#14515E">intervalo mínimo</text>
-<text x="1196" y="372" text-anchor="middle" font-size="9.5" fill="#767D85">300 ms desde o último passo</text>
-<line x1="1196" y1="386" x2="1196" y2="399" stroke="#1D7A8C" stroke-width="1.8"/>
+<rect x="1046" y="334" width="300" height="52" rx="6" fill="#EDF4F6" stroke="#1D7A8C" stroke-width="1.76"/>
+<text x="1196" y="355" text-anchor="middle" font-size="15.53" font-weight="bold" fill="#14515E">intervalo mínimo</text>
+<text x="1196" y="372" text-anchor="middle" font-size="12.83" fill="#767D85">300 ms desde o último passo</text>
+<line x1="1196" y1="386" x2="1196" y2="399" stroke="#1D7A8C" stroke-width="1.98"/>
 <polygon points="1190,398 1202,398 1196,408" fill="#1D7A8C"/>
-<rect x="1046" y="408" width="300" height="52" rx="6" fill="#DCEBEE" stroke="#1D7A8C" stroke-width="1.6"/>
-<text x="1196" y="439" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#14515E">incrementa a contagem</text>
-<line x1="40" y1="502" x2="1380" y2="502" stroke="#B8BDC3" stroke-width="1"/>
-<line x1="60" y1="528" x2="96" y2="528" stroke="#B8BDC3" stroke-width="1.2"/>
-<text x="106" y="532" font-size="10.5" fill="#2B3138">magnitude bruta</text>
-<line x1="266" y1="528" x2="302" y2="528" stroke="#1D7A8C" stroke-width="2.2"/>
-<text x="312" y="532" font-size="10.5" fill="#2B3138">magnitude após EMA</text>
-<line x1="500" y1="528" x2="536" y2="528" stroke="#C97B1E" stroke-width="1.8"/>
-<text x="546" y="532" font-size="10.5" fill="#2B3138">limiar</text>
+<rect x="1046" y="408" width="300" height="52" rx="6" fill="#DCEBEE" stroke="#1D7A8C" stroke-width="1.76"/>
+<text x="1196" y="439" text-anchor="middle" font-size="15.53" font-weight="bold" fill="#14515E">incrementa a contagem</text>
+<line x1="40" y1="502" x2="1380" y2="502" stroke="#B8BDC3" stroke-width="1.10"/>
+<line x1="60" y1="528" x2="96" y2="528" stroke="#B8BDC3" stroke-width="1.32"/>
+<text x="106" y="532" font-size="14.18" fill="#2B3138">magnitude bruta</text>
+<line x1="266" y1="528" x2="302" y2="528" stroke="#1D7A8C" stroke-width="2.42"/>
+<text x="312" y="532" font-size="14.18" fill="#2B3138">magnitude após EMA</text>
+<line x1="500" y1="528" x2="536" y2="528" stroke="#C97B1E" stroke-width="1.98"/>
+<text x="546" y="532" font-size="14.18" fill="#2B3138">limiar</text>
 <rect x="628" y="521" width="36" height="14" fill="#F7E2C6"/>
-<text x="674" y="532" font-size="10.5" fill="#2B3138">faixa de histerese</text>
+<text x="674" y="532" font-size="14.18" fill="#2B3138">faixa de histerese</text>
 <circle cx="836" cy="528" r="5.5" fill="#1D7A8C"/>
-<text x="850" y="532" font-size="10.5" fill="#2B3138">passo contado</text>
-<circle cx="1006" cy="528" r="5.5" fill="#FFFFFF" stroke="#2B3138" stroke-width="2"/>
-<text x="1020" y="532" font-size="10.5" fill="#2B3138">cruzamento não contado</text>
+<text x="850" y="532" font-size="14.18" fill="#2B3138">passo contado</text>
+<circle cx="1006" cy="528" r="5.5" fill="#FFFFFF" stroke="#2B3138" stroke-width="2.20"/>
+<text x="1020" y="532" font-size="14.18" fill="#2B3138">cruzamento não contado</text>
 <rect x="1206" y="521" width="36" height="14" fill="#F0F1F2"/>
-<text x="1252" y="532" font-size="10.5" fill="#2B3138">intervalo mínimo</text>
+<text x="1252" y="532" font-size="14.18" fill="#2B3138">intervalo mínimo</text>
 </svg>

@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1140" width="1600" height="1140"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1250" width="1800" height="1250"
      font-family="DejaVu Sans, Liberation Sans, sans-serif" role="img"
      aria-label="Fluxograma da calibração da bússola executada no iDroid. O usuário inicia a coleta por doze setores, o firmware atualiza mínimos e máximos, verifica cobertura e amplitudes, calcula offsets e escalas diagonais, aplica a calibração em memória e a grava na NVS. No boot, um blob com leitura e tamanho válidos é carregado. O cálculo de heading aparece em uma faixa separada.">
   <style>
-    .title       { font-size: 26px; font-weight: 700; fill: #263238; }
-    .subtitle    { font-size: 14px; font-style: italic; fill: #607178; }
-    .lane        { font-size: 18px; font-weight: 700; fill: #263238; }
-    .state-title { font-size: 15px; font-weight: 700; fill: #263238; }
-    .state-text  { font-size: 12.5px; fill: #263238; }
-    .small       { font-size: 11.5px; fill: #607178; }
-    .edge        { font-size: 11.5px; font-weight: 700; fill: #607178; }
-    .code        { font-size: 12px; fill: #263238; }
-    .accent      { font-size: 12.5px; font-weight: 700; fill: #00796B; }
-    .warn        { font-size: 12.5px; font-weight: 700; fill: #9A6500; }
-    .legend      { font-size: 12.5px; fill: #263238; }
+    .title       { font-size: 35.10px; font-weight: 700; fill: #263238; }
+    .subtitle    { font-size: 18.90px; font-style: italic; fill: #607178; }
+    .lane        { font-size: 24.30px; font-weight: 700; fill: #263238; }
+    .state-title { font-size: 20.25px; font-weight: 700; fill: #263238; }
+    .state-text  { font-size: 16.88px; fill: #263238; }
+    .small       { font-size: 15.53px; fill: #607178; }
+    .edge        { font-size: 15.53px; font-weight: 700; fill: #607178; }
+    .code        { font-size: 16.20px; fill: #263238; }
+    .accent      { font-size: 16.88px; font-weight: 700; fill: #00796B; }
+    .warn        { font-size: 16.88px; font-weight: 700; fill: #9A6500; }
+    .legend      { font-size: 16.88px; fill: #263238; }
   </style>
 
-  <rect x="0" y="0" width="1600" height="1140" fill="#FFFFFF"/>
-  <text x="800" y="42" text-anchor="middle" class="title">Calibração da bússola executada no dispositivo</text>
-  <text x="800" y="69" text-anchor="middle" class="subtitle">fluxo confirmado no firmware integrado · calibração separada do cálculo de heading</text>
+  <rect x="0" y="0" width="1800" height="1250" fill="#FFFFFF"/>
+  <text x="900" y="42" text-anchor="middle" class="title">Calibração da bússola executada no dispositivo</text>
+  <text x="900" y="69" text-anchor="middle" class="subtitle">fluxo confirmado no firmware integrado · calibração separada do cálculo de heading</text>
 
   <!-- Faixas principais -->
-  <rect x="35" y="105" width="1000" height="965" rx="12" fill="#F8FAFB"
-        stroke="#B8C1C5" stroke-width="1.3"/>
-  <rect x="1065" y="105" width="500" height="965" rx="12" fill="#F8FAFB"
-        stroke="#B8C1C5" stroke-width="1.3"/>
-  <rect x="35" y="105" width="1000" height="48" rx="12" fill="#EEF4FB"/>
-  <rect x="1065" y="105" width="500" height="48" rx="12" fill="#EDF7F5"/>
-  <text x="535" y="136" text-anchor="middle" class="lane">A · CALIBRAÇÃO ON-DEVICE</text>
-  <text x="1315" y="136" text-anchor="middle" class="lane">B · APLICAÇÃO E HEADING</text>
+  <rect x="35" y="105" width="1120" height="1055" rx="12" fill="#F8FAFB"
+        stroke="#B8C1C5" stroke-width="1.43"/>
+  <rect x="1185" y="105" width="580" height="1055" rx="12" fill="#F8FAFB"
+        stroke="#B8C1C5" stroke-width="1.43"/>
+  <rect x="35" y="105" width="1120" height="48" rx="12" fill="#EEF4FB"/>
+  <rect x="1185" y="105" width="580" height="48" rx="12" fill="#EDF7F5"/>
+  <text x="595" y="136" text-anchor="middle" class="lane">A · CALIBRAÇÃO ON-DEVICE</text>
+  <text x="1475" y="136" text-anchor="middle" class="lane">B · APLICAÇÃO E HEADING</text>
 
   <!-- Início da calibração -->
-  <rect x="90" y="175" width="400" height="66" rx="9" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.7"/>
-  <text x="290" y="201" text-anchor="middle" class="state-title">USUÁRIO TOCA “CALIBRAR”</text>
-  <text x="290" y="225" text-anchor="middle" class="code">g_mode = MPU_CAL · abre scr_cal</text>
+  <rect x="90" y="175" width="460" height="66" rx="9" fill="#FFFFFF"
+        stroke="#263238" stroke-width="1.87"/>
+  <text x="320" y="201" text-anchor="middle" class="state-title">USUÁRIO TOCA “CALIBRAR”</text>
+  <text x="320" y="225" text-anchor="middle" class="code">g_mode = MPU_CAL · abre scr_cal</text>
 
-  <rect x="90" y="270" width="400" height="72" rx="9" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.7"/>
-  <text x="290" y="296" text-anchor="middle" class="state-title">ZERAR ACUMULADOR</text>
-  <text x="290" y="319" text-anchor="middle" class="code">min=+∞ · max=−∞ · mask=0 · samples=0</text>
+  <rect x="90" y="270" width="460" height="72" rx="9" fill="#FFFFFF"
+        stroke="#263238" stroke-width="1.87"/>
+  <text x="320" y="296" text-anchor="middle" class="state-title">ZERAR ACUMULADOR</text>
+  <text x="320" y="319" text-anchor="middle" class="code">min=+∞ · max=−∞ · mask=0 · samples=0</text>
 
-  <line x1="290" y1="241" x2="290" y2="260" stroke="#263238" stroke-width="2"/>
-  <path d="M290 270 L284 259 L296 259 Z" fill="#263238"/>
+  <line x1="320" y1="241" x2="320" y2="260" stroke="#263238" stroke-width="2.20"/>
+  <path d="M320 270 L314 259 L326 259 Z" fill="#263238"/>
 
   <!-- Coleta -->
-  <rect x="70" y="375" width="440" height="172" rx="10" fill="#EEF4FB"
-        stroke="#1565C0" stroke-width="1.9"/>
-  <text x="290" y="402" text-anchor="middle" class="state-title">COLETA ORIENTADA PELOS 12 GOMOS</text>
+  <rect x="70" y="375" width="510" height="190" rx="10" fill="#EEF4FB"
+        stroke="#1565C0" stroke-width="2.09"/>
+  <text x="325" y="402" text-anchor="middle" class="state-title">COLETA ORIENTADA PELOS 12 GOMOS</text>
 
   <!-- 12 setores esquemáticos -->
-  <circle cx="165" cy="470" r="54" fill="#FFFFFF" stroke="#B8C1C5" stroke-width="1.2"/>
-  <g fill="#FFFFFF" stroke="#1565C0" stroke-width="1.6">
+  <circle cx="165" cy="470" r="54" fill="#FFFFFF" stroke="#B8C1C5" stroke-width="1.32"/>
+  <g fill="#FFFFFF" stroke="#1565C0" stroke-width="1.76">
     <circle cx="165" cy="414" r="5"/><circle cx="193" cy="421" r="5"/>
     <circle cx="213" cy="442" r="5"/><circle cx="221" cy="470" r="5"/>
     <circle cx="213" cy="498" r="5"/><circle cx="193" cy="519" r="5"/>
@@ -64,161 +64,165 @@
   <text x="250" y="440" class="state-text">• amostra após ajuste ASA</text>
   <text x="250" y="465" class="state-text">• atualiza min/max de x, y e z</text>
   <text x="250" y="490" class="state-text">• setor calculado no plano x–y</text>
-  <text x="250" y="515" class="small">marca após N ≥ 10 e (Δx ≥ 4 ou Δy ≥ 4)</text>
+  <text x="250" y="512" class="small">marca após N ≥ 10 e</text>
+  <text x="250" y="532" class="small">(Δx ≥ 4 ou Δy ≥ 4)</text>
 
-  <line x1="290" y1="342" x2="290" y2="365" stroke="#263238" stroke-width="2"/>
-  <path d="M290 375 L284 364 L296 364 Z" fill="#263238"/>
+  <line x1="320" y1="342" x2="320" y2="365" stroke="#263238" stroke-width="2.20"/>
+  <path d="M320 375 L314 364 L326 364 Z" fill="#263238"/>
 
   <!-- Validação básica -->
-  <path d="M290 580 L480 650 L290 720 L100 650 Z" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.8"/>
-  <text x="290" y="628" text-anchor="middle" class="state-title">COLETA CONCLUÍDA?</text>
-  <text x="290" y="652" text-anchor="middle" class="state-text">12/12 setores</text>
-  <text x="290" y="676" text-anchor="middle" class="state-text">Δx ≥ 12 µT e Δy ≥ 12 µT</text>
+  <path d="M325 600 L550 675 L325 750 L100 675 Z" fill="#FFFFFF"
+        stroke="#263238" stroke-width="1.98"/>
+  <text x="325" y="653" text-anchor="middle" class="state-title">COLETA CONCLUÍDA?</text>
+  <text x="325" y="677" text-anchor="middle" class="state-text">12/12 setores</text>
+  <text x="325" y="701" text-anchor="middle" class="state-text">Δx ≥ 12 µT e Δy ≥ 12 µT</text>
 
-  <line x1="290" y1="547" x2="290" y2="570" stroke="#263238" stroke-width="2"/>
-  <path d="M290 580 L284 569 L296 569 Z" fill="#263238"/>
+  <line x1="325" y1="565" x2="325" y2="590" stroke="#263238" stroke-width="2.20"/>
+  <path d="M325 600 L319 589 L331 589 Z" fill="#263238"/>
 
   <!-- Laço de coleta -->
-  <path d="M100 650 L55 650 L55 460 L60 460" fill="none"
-        stroke="#1565C0" stroke-width="2"/>
-  <path d="M70 460 L59 454 L59 466 Z" fill="#1565C0"/>
-  <text x="66" y="635" class="edge">não</text>
+  <path d="M100 675 L55 675 L55 470 L60 470" fill="none"
+        stroke="#1565C0" stroke-width="2.20"/>
+  <path d="M70 470 L59 464 L59 476 Z" fill="#1565C0"/>
+  <text x="66" y="660" class="edge">não</text>
 
   <!-- Cancelamento -->
-  <rect x="565" y="360" width="410" height="118" rx="9" fill="#FEFAF1"
-        stroke="#F9A825" stroke-width="1.9"/>
-  <text x="770" y="389" text-anchor="middle" class="state-title">CANCELAR</text>
-  <text x="770" y="414" text-anchor="middle" class="code">g_mode = MPU_COMPASS</text>
-  <text x="770" y="438" text-anchor="middle" class="state-text">sem calcular, aplicar ou gravar</text>
-  <text x="770" y="460" text-anchor="middle" class="warn">calibração ativa anterior permanece</text>
-  <line x1="510" y1="445" x2="555" y2="445" stroke="#F9A825" stroke-width="2"/>
-  <path d="M565 445 L554 439 L554 451 Z" fill="#F9A825"/>
-  <text x="537" y="435" text-anchor="middle" class="edge">CANCELAR</text>
+  <rect x="640" y="360" width="470" height="118" rx="9" fill="#FEFAF1"
+        stroke="#F9A825" stroke-width="2.09"/>
+  <text x="875" y="389" text-anchor="middle" class="state-title">CANCELAR</text>
+  <text x="875" y="414" text-anchor="middle" class="code">g_mode = MPU_COMPASS</text>
+  <text x="875" y="438" text-anchor="middle" class="state-text">sem calcular, aplicar ou gravar</text>
+  <text x="875" y="460" text-anchor="middle" class="warn">calibração ativa anterior permanece</text>
+  <line x1="580" y1="445" x2="630" y2="445" stroke="#F9A825" stroke-width="2.20"/>
+  <path d="M640 445 L629 439 L629 451 Z" fill="#F9A825"/>
+  <text x="605" y="435" text-anchor="middle" class="edge">CANCELAR</text>
 
   <!-- Cálculo dos parâmetros -->
-  <rect x="565" y="555" width="410" height="142" rx="9" fill="#EEF4FB"
-        stroke="#1565C0" stroke-width="1.9"/>
-  <text x="770" y="583" text-anchor="middle" class="state-title">CALCULAR OFFSETS E ESCALAS</text>
-  <text x="590" y="611" class="code">off[i]   = (max[i] + min[i]) / 2</text>
-  <text x="590" y="638" class="code">range[i] = (max[i] − min[i]) / 2</text>
-  <text x="590" y="665" class="code">scale[i] = max(range) / range[i]</text>
-  <text x="770" y="687" text-anchor="middle" class="small">se range[i] ≤ 0,001 → scale[i] = 1</text>
+  <rect x="640" y="575" width="470" height="150" rx="9" fill="#EEF4FB"
+        stroke="#1565C0" stroke-width="2.09"/>
+  <text x="875" y="605" text-anchor="middle" class="state-title">CALCULAR OFFSETS E ESCALAS</text>
+  <text x="675" y="634" class="code">off[i]   = (max[i] + min[i]) / 2</text>
+  <text x="675" y="662" class="code">range[i] = (max[i] − min[i]) / 2</text>
+  <text x="675" y="690" class="code">scale[i] = max(range) / range[i]</text>
+  <text x="875" y="714" text-anchor="middle" class="small">se range[i] ≤ 0,001 → scale[i] = 1</text>
 
-  <line x1="480" y1="650" x2="555" y2="650" stroke="#263238" stroke-width="2"/>
-  <path d="M565 650 L554 644 L554 656 Z" fill="#263238"/>
-  <text x="518" y="641" text-anchor="middle" class="edge">sim</text>
+  <line x1="550" y1="675" x2="630" y2="675" stroke="#263238" stroke-width="2.20"/>
+  <path d="M640 675 L629 669 L629 681 Z" fill="#263238"/>
+  <text x="590" y="666" text-anchor="middle" class="edge">sim</text>
 
   <!-- Aplicação em RAM -->
-  <rect x="565" y="730" width="410" height="78" rx="9" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.9"/>
-  <text x="770" y="758" text-anchor="middle" class="state-title">APLICAR EM RAM</text>
-  <text x="770" y="783" text-anchor="middle" class="code">compass_set_cal(&amp;cal) · reinicia filtro</text>
+  <rect x="640" y="760" width="470" height="82" rx="9" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="2.09"/>
+  <text x="875" y="790" text-anchor="middle" class="state-title">APLICAR EM RAM</text>
+  <text x="875" y="817" text-anchor="middle" class="code">compass_set_cal(&amp;cal) · reinicia filtro</text>
 
   <!-- Persistência -->
-  <rect x="565" y="840" width="410" height="92" rx="9" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.8"/>
-  <text x="770" y="868" text-anchor="middle" class="state-title">PERSISTIR EM NVS</text>
-  <text x="770" y="893" text-anchor="middle" class="code">namespace “compass” · chave “cal”</text>
-  <text x="770" y="916" text-anchor="middle" class="state-text">nvs_set_blob → nvs_commit</text>
+  <rect x="640" y="875" width="470" height="96" rx="9" fill="#FFFFFF"
+        stroke="#263238" stroke-width="1.98"/>
+  <text x="875" y="905" text-anchor="middle" class="state-title">PERSISTIR EM NVS</text>
+  <text x="875" y="932" text-anchor="middle" class="code">namespace “compass” · chave “cal”</text>
+  <text x="875" y="956" text-anchor="middle" class="state-text">nvs_set_blob → nvs_commit</text>
 
-  <rect x="565" y="965" width="410" height="70" rx="9" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.8"/>
-  <text x="770" y="991" text-anchor="middle" class="state-title">CONCLUIR E RETORNAR</text>
-  <text x="770" y="1016" text-anchor="middle" class="code">s_calibrated=true · g_cal_finished=true</text>
+  <rect x="640" y="1005" width="470" height="74" rx="9" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="1.98"/>
+  <text x="875" y="1033" text-anchor="middle" class="state-title">CONCLUIR E RETORNAR</text>
+  <text x="875" y="1058" text-anchor="middle" class="code">s_calibrated=true · g_cal_finished=true</text>
 
   <!-- Fluxo vertical após cálculo -->
-  <g stroke="#263238" stroke-width="2" fill="#263238">
-    <line x1="770" y1="697" x2="770" y2="720"/>
-    <path d="M770 730 L764 719 L776 719 Z"/>
-    <line x1="770" y1="808" x2="770" y2="830"/>
-    <path d="M770 840 L764 829 L776 829 Z"/>
-    <line x1="770" y1="932" x2="770" y2="955"/>
-    <path d="M770 965 L764 954 L776 954 Z"/>
+  <g stroke="#263238" stroke-width="2.20" fill="#263238">
+    <line x1="875" y1="725" x2="875" y2="750"/>
+    <path d="M875 760 L869 749 L881 749 Z"/>
+    <line x1="875" y1="842" x2="875" y2="865"/>
+    <path d="M875 875 L869 864 L881 864 Z"/>
+    <line x1="875" y1="971" x2="875" y2="995"/>
+    <path d="M875 1005 L869 994 L881 994 Z"/>
   </g>
 
   <!-- Boot e NVS -->
-  <rect x="1135" y="175" width="360" height="62" rx="9" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.7"/>
+  <g transform="translate(165 0)">
+  <rect x="1105" y="175" width="420" height="62" rx="9" fill="#FFFFFF"
+        stroke="#263238" stroke-width="1.87"/>
   <text x="1315" y="201" text-anchor="middle" class="state-title">BOOT DO MÓDULO</text>
   <text x="1315" y="222" text-anchor="middle" class="state-text">inicializa NVS e procura “compass/cal”</text>
 
   <path d="M1315 265 L1480 325 L1315 385 L1150 325 Z" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.8"/>
+        stroke="#263238" stroke-width="1.98"/>
   <text x="1315" y="311" text-anchor="middle" class="state-title">BLOB ACEITO?</text>
   <text x="1315" y="336" text-anchor="middle" class="state-text">nvs_get_blob = OK</text>
   <text x="1315" y="358" text-anchor="middle" class="state-text">tamanho = sizeof(cal)</text>
 
-  <rect x="1095" y="420" width="210" height="80" rx="9" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.8"/>
-  <text x="1200" y="448" text-anchor="middle" class="state-title">CARREGAR</text>
-  <text x="1200" y="473" text-anchor="middle" class="code">compass_set_cal()</text>
-  <text x="1200" y="492" text-anchor="middle" class="small">sem checagem numérica adicional</text>
+  <rect x="1075" y="415" width="250" height="97" rx="9" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="1.98"/>
+  <text x="1200" y="442" text-anchor="middle" class="state-title">CARREGAR</text>
+  <text x="1200" y="466" text-anchor="middle" class="code">compass_set_cal()</text>
+  <text x="1200" y="488" text-anchor="middle" class="small">sem checagem numérica</text>
+  <text x="1200" y="506" text-anchor="middle" class="small">adicional</text>
 
-  <rect x="1325" y="420" width="210" height="80" rx="9" fill="#FEFAF1"
-        stroke="#F9A825" stroke-width="1.8"/>
-  <text x="1430" y="448" text-anchor="middle" class="state-title">SEM BLOB</text>
-  <text x="1430" y="473" text-anchor="middle" class="code">off=0 · scale=1</text>
-  <text x="1430" y="492" text-anchor="middle" class="small">parâmetros padrão</text>
+  <rect x="1305" y="415" width="250" height="97" rx="9" fill="#FEFAF1"
+        stroke="#F9A825" stroke-width="1.98"/>
+  <text x="1430" y="442" text-anchor="middle" class="state-title">SEM BLOB</text>
+  <text x="1430" y="470" text-anchor="middle" class="code">off=0 · scale=1</text>
+  <text x="1430" y="497" text-anchor="middle" class="small">parâmetros padrão</text>
 
-  <line x1="1315" y1="237" x2="1315" y2="255" stroke="#263238" stroke-width="2"/>
+  <line x1="1315" y1="237" x2="1315" y2="255" stroke="#263238" stroke-width="2.20"/>
   <path d="M1315 265 L1309 254 L1321 254 Z" fill="#263238"/>
   <path d="M1315 385 L1315 400 L1200 400 L1200 410" fill="none"
-        stroke="#263238" stroke-width="2"/>
-  <path d="M1200 420 L1194 409 L1206 409 Z" fill="#263238"/>
+        stroke="#263238" stroke-width="2.20"/>
+  <path d="M1200 415 L1194 404 L1206 404 Z" fill="#263238"/>
   <path d="M1315 400 L1430 400 L1430 410" fill="none"
-        stroke="#263238" stroke-width="2"/>
-  <path d="M1430 420 L1424 409 L1436 409 Z" fill="#263238"/>
+        stroke="#263238" stroke-width="2.20"/>
+  <path d="M1430 415 L1424 404 L1436 404 Z" fill="#263238"/>
   <text x="1188" y="397" text-anchor="end" class="edge">sim</text>
   <text x="1442" y="397" class="edge">não</text>
 
   <!-- Calibração ativa: convergência do boot, aplicação e cancelamento -->
-  <rect x="1155" y="535" width="320" height="76" rx="9" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="2"/>
+  <rect x="1125" y="535" width="380" height="76" rx="9" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="2.20"/>
   <text x="1315" y="564" text-anchor="middle" class="state-title">CALIBRAÇÃO ATIVA · s_cal</text>
   <text x="1315" y="589" text-anchor="middle" class="state-text">carregada, recém-calculada ou padrão</text>
 
-  <path d="M1200 500 L1200 520 L1285 520 L1285 525" fill="none"
-        stroke="#00796B" stroke-width="1.9"/>
+  <path d="M1200 512 L1200 520 L1285 520 L1285 525" fill="none"
+        stroke="#00796B" stroke-width="2.09"/>
   <path d="M1285 535 L1279 524 L1291 524 Z" fill="#00796B"/>
-  <path d="M1430 500 L1430 520 L1345 520 L1345 525" fill="none"
-        stroke="#F9A825" stroke-width="1.9"/>
+  <path d="M1430 512 L1430 520 L1345 520 L1345 525" fill="none"
+        stroke="#F9A825" stroke-width="2.09"/>
   <path d="M1345 535 L1339 524 L1351 524 Z" fill="#F9A825"/>
 
   <!-- Entrada da nova calibração e cancelamento -->
   <path d="M975 769 L1080 769 L1080 573 L1145 573" fill="none"
-        stroke="#00796B" stroke-width="2.2"/>
+        stroke="#00796B" stroke-width="2.42"/>
   <path d="M1155 573 L1144 567 L1144 579 Z" fill="#00796B"/>
   <path d="M975 419 L1048 419 L1048 553 L1145 553" fill="none"
-        stroke="#F9A825" stroke-width="2" stroke-dasharray="7 5"/>
+        stroke="#F9A825" stroke-width="2.20" stroke-dasharray="7 5"/>
   <path d="M1155 553 L1144 547 L1144 559 Z" fill="#F9A825"/>
   <text x="1038" y="520" text-anchor="end" class="edge">sem alteração</text>
 
   <!-- Pipeline de heading -->
-  <rect x="1120" y="645" width="390" height="66" rx="9" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.7"/>
+  <rect x="1095" y="645" width="440" height="66" rx="9" fill="#FFFFFF"
+        stroke="#263238" stroke-width="1.87"/>
   <text x="1315" y="671" text-anchor="middle" class="state-title">LEITURA DO MAGNETÔMETRO</text>
   <text x="1315" y="695" text-anchor="middle" class="state-text">mx, my, mz → conversão para µT com ASA</text>
 
-  <rect x="1100" y="745" width="430" height="96" rx="9" fill="#EEF4FB"
-        stroke="#1565C0" stroke-width="1.9"/>
+  <rect x="1075" y="745" width="480" height="96" rx="9" fill="#EEF4FB"
+        stroke="#1565C0" stroke-width="2.09"/>
   <text x="1315" y="773" text-anchor="middle" class="state-title">CORREÇÃO DIAGONAL</text>
   <text x="1315" y="800" text-anchor="middle" class="code">fx = (ux − off[x]) × scale[x]</text>
   <text x="1315" y="824" text-anchor="middle" class="code">fy = (uy − off[y]) × scale[y]</text>
 
-  <rect x="1100" y="875" width="430" height="94" rx="9" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.9"/>
+  <rect x="1075" y="875" width="480" height="94" rx="9" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="2.09"/>
   <text x="1315" y="903" text-anchor="middle" class="state-title">CÁLCULO DE HEADING</text>
   <text x="1315" y="928" text-anchor="middle" class="state-text">atan2 → orientação da montagem → declinação</text>
   <text x="1315" y="951" text-anchor="middle" class="state-text">normalização angular → filtro circular → UI</text>
 
-  <rect x="1090" y="992" width="450" height="58" rx="9" fill="#FEFAF1"
-        stroke="#F9A825" stroke-width="1.8"/>
-  <text x="1315" y="1017" text-anchor="middle" class="warn">LIMITES DA CORREÇÃO IMPLEMENTADA</text>
-  <text x="1315" y="1039" text-anchor="middle" class="state-text">escala diagonal ≠ soft-iron completo · sem tilt compensation</text>
+  <rect x="1065" y="985" width="500" height="76" rx="9" fill="#FEFAF1"
+        stroke="#F9A825" stroke-width="1.98"/>
+  <text x="1315" y="1010" text-anchor="middle" class="warn">LIMITES DA CORREÇÃO IMPLEMENTADA</text>
+  <text x="1315" y="1032" text-anchor="middle" class="state-text">escala diagonal ≠ soft-iron completo</text>
+  <text x="1315" y="1053" text-anchor="middle" class="state-text">sem compensação de inclinação</text>
 
   <!-- Setas do pipeline -->
-  <g stroke="#263238" stroke-width="2" fill="#263238">
+  <g stroke="#263238" stroke-width="2.20" fill="#263238">
     <line x1="1315" y1="611" x2="1315" y2="635"/>
     <path d="M1315 645 L1309 634 L1321 634 Z"/>
     <line x1="1315" y1="711" x2="1315" y2="735"/>
@@ -226,15 +230,16 @@
     <line x1="1315" y1="841" x2="1315" y2="865"/>
     <path d="M1315 875 L1309 864 L1321 864 Z"/>
   </g>
+  </g>
 
   <!-- Legenda -->
-  <rect x="215" y="1090" width="28" height="19" rx="3" fill="#EEF4FB"
-        stroke="#1565C0" stroke-width="1.5"/>
-  <text x="255" y="1105" class="legend">coleta e cálculo</text>
-  <rect x="570" y="1090" width="28" height="19" rx="3" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.5"/>
-  <text x="610" y="1105" class="legend">parâmetros aplicados</text>
-  <rect x="955" y="1090" width="28" height="19" rx="3" fill="#FEFAF1"
-        stroke="#F9A825" stroke-width="1.5"/>
-  <text x="995" y="1105" class="legend">validação, cancelamento ou limite</text>
+  <rect x="300" y="1190" width="28" height="19" rx="3" fill="#EEF4FB"
+        stroke="#1565C0" stroke-width="1.65"/>
+  <text x="340" y="1205" class="legend">coleta e cálculo</text>
+  <rect x="720" y="1190" width="28" height="19" rx="3" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="1.65"/>
+  <text x="760" y="1205" class="legend">parâmetros aplicados</text>
+  <rect x="1160" y="1190" width="28" height="19" rx="3" fill="#FEFAF1"
+        stroke="#F9A825" stroke-width="1.65"/>
+  <text x="1200" y="1205" class="legend">validação, cancelamento ou limite</text>
 </svg>
