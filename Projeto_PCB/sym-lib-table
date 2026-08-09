@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "ESP32C6")(type "KiCad")(uri "/home/hexagon/Documents/PCB_TCC/eita/Library.pretty")(options "")(descr ""))
+)
