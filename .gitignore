@@ -12,6 +12,7 @@ docs/*
 !docs/problemas_solucoes/
 !docs/problemas_solucoes/**
 Rascunho/
+Apresentacao/
 
 # Python
 *.pyc
