@@ -1,114 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 990" width="1500" height="990"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1060" width="1500" height="1060"
      font-family="DejaVu Sans, Liberation Sans, sans-serif" role="img"
      aria-label="Máquina de estados conceitual baseada no firmware integrado do LTR390. Sem tela ativa, a tarefa aguarda. A tela de luz solicita ALS e a tela UV solicita UVS. Quando o modo difere do atual, o sensor é reconfigurado e três leituras são descartadas antes da aquisição e da filtragem independente de cada canal.">
   <style>
-    .title       { font-size: 25px; font-weight: 700; fill: #263238; }
-    .subtitle    { font-size: 14px; font-style: italic; fill: #607178; }
-    .lane        { font-size: 17px; font-weight: 700; fill: #263238; }
-    .state-title { font-size: 16px; font-weight: 700; fill: #263238; }
-    .state-text  { font-size: 13px; fill: #263238; }
-    .small       { font-size: 11.5px; fill: #607178; }
-    .edge        { font-size: 12px; font-weight: 700; fill: #607178; }
-    .mode        { font-size: 12px; font-weight: 700; fill: #00796B; }
-    .settle      { font-size: 12px; font-weight: 700; fill: #9A6500; }
-    .output      { font-size: 13px; font-weight: 700; fill: #00796B; }
-    .legend      { font-size: 12.5px; fill: #263238; }
+    .title       { font-size: 33.75px; font-weight: 700; fill: #263238; }
+    .subtitle    { font-size: 18.90px; font-style: italic; fill: #607178; }
+    .lane        { font-size: 22.95px; font-weight: 700; fill: #263238; }
+    .state-title { font-size: 21.60px; font-weight: 700; fill: #263238; }
+    .state-text  { font-size: 17.55px; fill: #263238; }
+    .small       { font-size: 15.53px; fill: #607178; }
+    .edge        { font-size: 16.20px; font-weight: 700; fill: #607178; }
+    .mode        { font-size: 16.20px; font-weight: 700; fill: #00796B; }
+    .settle      { font-size: 16.20px; font-weight: 700; fill: #9A6500; }
+    .output      { font-size: 17.55px; font-weight: 700; fill: #00796B; }
+    .legend      { font-size: 16.88px; fill: #263238; }
   </style>
 
-  <rect x="0" y="0" width="1500" height="990" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="1500" height="1060" fill="#FFFFFF"/>
   <text x="750" y="42" text-anchor="middle" class="title">Máquina de estados do módulo LTR390</text>
   <text x="750" y="69" text-anchor="middle" class="subtitle">fluxo confirmado no firmware integrado · o modo acompanha somente a tela ativa</text>
 
   <!-- Estado sem tela ativa -->
   <rect x="540" y="100" width="420" height="92" rx="10" fill="#F8FAFB"
-        stroke="#263238" stroke-width="1.8"/>
+        stroke="#263238" stroke-width="1.98"/>
   <text x="750" y="130" text-anchor="middle" class="state-title">INATIVO · NENHUMA TELA LTR390</text>
   <text x="750" y="155" text-anchor="middle" class="state-text">g_active = LTR_NONE · tarefa aguarda</text>
   <text x="750" y="177" text-anchor="middle" class="small">o modo já configurado no sensor é preservado</text>
 
   <!-- Faixas -->
-  <rect x="40" y="220" width="680" height="665" rx="12" fill="#F7FAFC"
-        stroke="#B8C1C5" stroke-width="1.2"/>
-  <rect x="780" y="220" width="680" height="665" rx="12" fill="#F7FAFC"
-        stroke="#B8C1C5" stroke-width="1.2"/>
+  <rect x="40" y="220" width="680" height="725" rx="12" fill="#F7FAFC"
+        stroke="#B8C1C5" stroke-width="1.32"/>
+  <rect x="780" y="220" width="680" height="725" rx="12" fill="#F7FAFC"
+        stroke="#B8C1C5" stroke-width="1.32"/>
   <rect x="40" y="220" width="680" height="42" rx="12" fill="#EEF4FB"/>
   <rect x="780" y="220" width="680" height="42" rx="12" fill="#EDF7F5"/>
   <text x="380" y="247" text-anchor="middle" class="lane">TELA DE LUZ · CANAL ALS</text>
   <text x="1120" y="247" text-anchor="middle" class="lane">TELA UV · CANAL UVS</text>
 
   <!-- Solicitações da UI -->
-  <rect x="235" y="282" width="290" height="70" rx="9" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.6"/>
+  <rect x="200" y="282" width="360" height="70" rx="9" fill="#FFFFFF"
+        stroke="#263238" stroke-width="1.76"/>
   <text x="380" y="309" text-anchor="middle" class="state-title">TELA LUZ ATIVA</text>
   <text x="380" y="334" text-anchor="middle" class="state-text">g_active = LTR_LUX → solicita ALS</text>
 
-  <rect x="975" y="282" width="290" height="70" rx="9" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.6"/>
+  <rect x="940" y="282" width="360" height="70" rx="9" fill="#FFFFFF"
+        stroke="#263238" stroke-width="1.76"/>
   <text x="1120" y="309" text-anchor="middle" class="state-title">TELA UV ATIVA</text>
   <text x="1120" y="334" text-anchor="middle" class="state-text">g_active = LTR_UV → solicita UVS</text>
 
   <!-- Decisões -->
   <path d="M380 375 L510 425 L380 475 L250 425 Z" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.7"/>
+        stroke="#263238" stroke-width="1.87"/>
   <text x="380" y="421" text-anchor="middle" class="state-title">modo atual</text>
   <text x="380" y="442" text-anchor="middle" class="state-text">já é ALS?</text>
 
   <path d="M1120 375 L1250 425 L1120 475 L990 425 Z" fill="#FFFFFF"
-        stroke="#263238" stroke-width="1.7"/>
+        stroke="#263238" stroke-width="1.87"/>
   <text x="1120" y="421" text-anchor="middle" class="state-title">modo atual</text>
   <text x="1120" y="442" text-anchor="middle" class="state-text">já é UVS?</text>
 
   <!-- Configuração do modo -->
-  <rect x="250" y="500" width="260" height="68" rx="9" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.8"/>
+  <rect x="215" y="500" width="330" height="68" rx="9" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="1.98"/>
   <text x="380" y="527" text-anchor="middle" class="state-title">CONFIGURAR ALS</text>
   <text x="380" y="551" text-anchor="middle" class="mode">MAIN_CTRL + ganho do canal</text>
 
-  <rect x="990" y="500" width="260" height="68" rx="9" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.8"/>
+  <rect x="955" y="500" width="330" height="68" rx="9" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="1.98"/>
   <text x="1120" y="527" text-anchor="middle" class="state-title">CONFIGURAR UVS</text>
   <text x="1120" y="551" text-anchor="middle" class="mode">MAIN_CTRL + ganho do canal</text>
 
   <!-- Settling -->
-  <rect x="225" y="594" width="310" height="92" rx="9" fill="#FEFAF1"
-        stroke="#F9A825" stroke-width="2"/>
+  <rect x="200" y="594" width="360" height="92" rx="9" fill="#FEFAF1"
+        stroke="#F9A825" stroke-width="2.20"/>
   <text x="380" y="620" text-anchor="middle" class="state-title">SETTLING ALS</text>
   <text x="380" y="645" text-anchor="middle" class="settle">3 leituras descartadas</text>
   <text x="380" y="668" text-anchor="middle" class="small">sem atualizar a EMA ALS</text>
 
-  <rect x="965" y="594" width="310" height="92" rx="9" fill="#FEFAF1"
-        stroke="#F9A825" stroke-width="2"/>
+  <rect x="940" y="594" width="360" height="92" rx="9" fill="#FEFAF1"
+        stroke="#F9A825" stroke-width="2.20"/>
   <text x="1120" y="620" text-anchor="middle" class="state-title">SETTLING UVS</text>
   <text x="1120" y="645" text-anchor="middle" class="settle">3 leituras descartadas</text>
   <text x="1120" y="668" text-anchor="middle" class="small">sem atualizar a EMA UVS</text>
 
   <!-- Aquisição e filtros independentes -->
-  <rect x="190" y="718" width="380" height="88" rx="9" fill="#EEF4FB"
-        stroke="#1565C0" stroke-width="1.9"/>
+  <rect x="140" y="718" width="480" height="88" rx="9" fill="#EEF4FB"
+        stroke="#1565C0" stroke-width="2.09"/>
   <text x="380" y="745" text-anchor="middle" class="state-title">AQUISIÇÃO ALS</text>
   <text x="380" y="770" text-anchor="middle" class="state-text">leitura válida → conversão → EMA de lux</text>
   <text x="380" y="791" text-anchor="middle" class="small">contexto ALS independente e preservado</text>
 
-  <rect x="930" y="718" width="380" height="88" rx="9" fill="#EEF4FB"
-        stroke="#1565C0" stroke-width="1.9"/>
+  <rect x="880" y="718" width="480" height="88" rx="9" fill="#EEF4FB"
+        stroke="#1565C0" stroke-width="2.09"/>
   <text x="1120" y="745" text-anchor="middle" class="state-title">AQUISIÇÃO UVS</text>
   <text x="1120" y="770" text-anchor="middle" class="state-text">leitura válida → conversão → EMA de UVI</text>
   <text x="1120" y="791" text-anchor="middle" class="small">contexto UVS independente e preservado</text>
 
   <!-- Valores publicados -->
-  <rect x="245" y="830" width="270" height="54" rx="27" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.8"/>
-  <text x="380" y="853" text-anchor="middle" class="output">VALOR PARA A UI</text>
-  <text x="380" y="871" text-anchor="middle" class="small">g_lux · g_lux_valid</text>
+  <rect x="220" y="850" width="320" height="54" rx="27" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="1.98"/>
+  <text x="380" y="873" text-anchor="middle" class="output">VALOR PARA A UI</text>
+  <text x="380" y="891" text-anchor="middle" class="small">g_lux · g_lux_valid</text>
 
-  <rect x="985" y="830" width="270" height="54" rx="27" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.8"/>
-  <text x="1120" y="853" text-anchor="middle" class="output">VALOR PARA A UI</text>
-  <text x="1120" y="871" text-anchor="middle" class="small">g_uvi · g_uvi_valid</text>
+  <rect x="960" y="850" width="320" height="54" rx="27" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="1.98"/>
+  <text x="1120" y="873" text-anchor="middle" class="output">VALOR PARA A UI</text>
+  <text x="1120" y="891" text-anchor="middle" class="small">g_uvi · g_uvi_valid</text>
 
   <!-- Ramificação a partir do estado inativo -->
-  <g stroke="#263238" stroke-width="2" fill="none">
+  <g stroke="#263238" stroke-width="2.20" fill="none">
     <path d="M650 192 L650 208 L380 208 L380 272"/>
     <path d="M850 192 L850 208 L1120 208 L1120 272"/>
   </g>
@@ -117,7 +117,7 @@
   <text x="1008" y="204" text-anchor="middle" class="edge">abrir UV</text>
 
   <!-- Fluxo vertical -->
-  <g stroke="#263238" stroke-width="1.9" fill="none">
+  <g stroke="#263238" stroke-width="2.09" fill="none">
     <line x1="380" y1="352" x2="380" y2="365"/>
     <line x1="1120" y1="352" x2="1120" y2="365"/>
     <line x1="380" y1="475" x2="380" y2="490"/>
@@ -137,55 +137,55 @@
   <text x="1135" y="491" class="edge">não</text>
 
   <!-- Bypass quando o modo já coincide -->
-  <path d="M250 425 L115 425 L115 762 L180 762" fill="none"
-        stroke="#00796B" stroke-width="2"/>
-  <path d="M180 762 L169 756 L169 768 Z" fill="#00796B"/>
+  <path d="M250 425 L115 425 L115 762 L130 762" fill="none"
+        stroke="#00796B" stroke-width="2.20"/>
+  <path d="M140 762 L129 756 L129 768 Z" fill="#00796B"/>
   <text x="126" y="414" class="edge">sim · sem troca</text>
 
-  <path d="M1250 425 L1385 425 L1385 762 L1320 762" fill="none"
-        stroke="#00796B" stroke-width="2"/>
-  <path d="M1320 762 L1331 756 L1331 768 Z" fill="#00796B"/>
+  <path d="M1250 425 L1385 425 L1385 762 L1370 762" fill="none"
+        stroke="#00796B" stroke-width="2.20"/>
+  <path d="M1360 762 L1371 756 L1371 768 Z" fill="#00796B"/>
   <text x="1374" y="414" text-anchor="end" class="edge">sim · sem troca</text>
 
   <!-- Publicação e ciclo de aquisição -->
-  <line x1="380" y1="806" x2="380" y2="820" stroke="#00796B" stroke-width="2"/>
-  <path d="M380 830 L374 819 L386 819 Z" fill="#00796B"/>
-  <line x1="1120" y1="806" x2="1120" y2="820" stroke="#00796B" stroke-width="2"/>
-  <path d="M1120 830 L1114 819 L1126 819 Z" fill="#00796B"/>
-  <text x="360" y="822" text-anchor="end" class="edge">valid &amp;&amp; !settling</text>
-  <text x="1140" y="822" class="edge">valid &amp;&amp; !settling</text>
+  <line x1="380" y1="806" x2="380" y2="840" stroke="#00796B" stroke-width="2.20"/>
+  <path d="M380 850 L374 839 L386 839 Z" fill="#00796B"/>
+  <line x1="1120" y1="806" x2="1120" y2="840" stroke="#00796B" stroke-width="2.20"/>
+  <path d="M1120 850 L1114 839 L1126 839 Z" fill="#00796B"/>
+  <text x="397" y="832" text-anchor="start" class="edge">valid &amp;&amp; !settling</text>
+  <text x="1137" y="832" text-anchor="start" class="edge">valid &amp;&amp; !settling</text>
 
-  <path d="M515 857 L600 857 L600 748 L580 748" fill="none"
-        stroke="#1565C0" stroke-width="1.6"/>
-  <path d="M580 748 L591 742 L591 754 Z" fill="#1565C0"/>
-  <path d="M985 857 L900 857 L900 748 L920 748" fill="none"
-        stroke="#1565C0" stroke-width="1.6"/>
-  <path d="M920 748 L909 742 L909 754 Z" fill="#1565C0"/>
-  <text x="607" y="833" class="small">próximo ciclo</text>
-  <text x="893" y="833" text-anchor="end" class="small">próximo ciclo</text>
+  <path d="M540 877 L650 877 L650 748 L630 748" fill="none"
+        stroke="#1565C0" stroke-width="1.76"/>
+  <path d="M620 748 L631 742 L631 754 Z" fill="#1565C0"/>
+  <path d="M960 877 L850 877 L850 748 L870 748" fill="none"
+        stroke="#1565C0" stroke-width="1.76"/>
+  <path d="M880 748 L869 742 L869 754 Z" fill="#1565C0"/>
+  <text x="650" y="918" class="small">novo ciclo</text>
+  <text x="850" y="918" text-anchor="end" class="small">novo ciclo</text>
 
   <!-- Retorno ao menu -->
-  <path d="M245 857 L72 857 L72 146 L530 146" fill="none"
-        stroke="#263238" stroke-width="1.9"/>
+  <path d="M220 877 L72 877 L72 146 L530 146" fill="none"
+        stroke="#263238" stroke-width="2.09"/>
   <path d="M530 146 L519 140 L519 152 Z" fill="#263238"/>
-  <text x="82" y="838" class="edge">VOLTAR → LTR_NONE</text>
+  <text x="82" y="700" class="edge">VOLTAR AO MENU</text>
 
-  <path d="M1255 857 L1428 857 L1428 146 L970 146" fill="none"
-        stroke="#263238" stroke-width="1.9"/>
+  <path d="M1280 877 L1428 877 L1428 146 L970 146" fill="none"
+        stroke="#263238" stroke-width="2.09"/>
   <path d="M970 146 L981 140 L981 152 Z" fill="#263238"/>
-  <text x="1418" y="838" text-anchor="end" class="edge">VOLTAR → LTR_NONE</text>
+  <text x="1418" y="700" text-anchor="end" class="edge">VOLTAR AO MENU</text>
 
   <!-- Legenda -->
-  <rect x="160" y="940" width="25" height="18" rx="3" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.5"/>
-  <text x="196" y="954" class="legend">modo do sensor</text>
-  <rect x="485" y="940" width="25" height="18" rx="3" fill="#FEFAF1"
-        stroke="#F9A825" stroke-width="1.5"/>
-  <text x="521" y="954" class="legend">settling · descarte</text>
-  <rect x="815" y="940" width="25" height="18" rx="3" fill="#EEF4FB"
-        stroke="#1565C0" stroke-width="1.5"/>
-  <text x="851" y="954" class="legend">aquisição e filtro</text>
-  <rect x="1135" y="940" width="44" height="18" rx="9" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.5"/>
-  <text x="1190" y="954" class="legend">valor liberado à UI</text>
+  <rect x="160" y="1000" width="25" height="18" rx="3" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="1.65"/>
+  <text x="196" y="1014" class="legend">modo do sensor</text>
+  <rect x="485" y="1000" width="25" height="18" rx="3" fill="#FEFAF1"
+        stroke="#F9A825" stroke-width="1.65"/>
+  <text x="521" y="1014" class="legend">settling · descarte</text>
+  <rect x="815" y="1000" width="25" height="18" rx="3" fill="#EEF4FB"
+        stroke="#1565C0" stroke-width="1.65"/>
+  <text x="851" y="1014" class="legend">aquisição e filtro</text>
+  <rect x="1135" y="1000" width="44" height="18" rx="9" fill="#EDF7F5"
+        stroke="#00796B" stroke-width="1.65"/>
+  <text x="1190" y="1014" class="legend">valor liberado à UI</text>
 </svg>

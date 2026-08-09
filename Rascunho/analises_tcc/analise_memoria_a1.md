@@ -27,7 +27,7 @@
 
 A linha oficial preservada no log informa `idroid.bin binary size 0xbf770 bytes`, partição mínima de `0x100000 bytes` e `0x40890 bytes (25%) free`. Os percentuais calculados mantêm duas casas; a ferramenta apresenta a folga como 25%. A diferença de 116 bytes entre a imagem reportada por `size` e o arquivo binário decorre do preenchimento do `.bin`, explicitamente advertido pela ferramenta.
 
-Os relatórios foram arquivados em `analises_tcc/relatorios_build/2026-07-27_size.txt` e `analises_tcc/relatorios_build/2026-07-27_size_components.txt`, fora da pasta descartável de build.
+Os valores relevantes das saídas `size` e `size-components` foram consolidados nesta análise. As saídas integrais da ferramenta não são mantidas em uma pasta separada, pois repetiam dados sem o contexto e as limitações registrados aqui.
 
 ## Resumo de memória estática
 

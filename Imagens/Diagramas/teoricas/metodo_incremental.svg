@@ -3,17 +3,18 @@
      font-family="DejaVu Sans, Liberation Sans, sans-serif" role="img"
      aria-label="Fluxograma conceitual do método incremental usado no desenvolvimento. O percurso começa pelo estudo da documentação e teste isolado, passa pela separação de responsabilidades, adaptação ao contrato modular, integração e regressão. Conflitos diagnosticados orientam o retorno à etapa apropriada.">
   <style>
-    .title       { font-size: 27px; font-weight: 700; fill: #263238; }
-    .subtitle    { font-size: 14px; font-style: italic; fill: #607178; }
-    .lane        { font-size: 17px; font-weight: 700; fill: #263238; letter-spacing: 0.4px; }
-    .step-title  { font-size: 15px; font-weight: 700; fill: #263238; }
-    .step-text   { font-size: 13px; fill: #263238; }
-    .small       { font-size: 12px; fill: #607178; }
-    .number      { font-size: 15px; font-weight: 700; fill: #FFFFFF; }
-    .badge-light { font-size: 11.5px; font-weight: 700; fill: #FFFFFF; letter-spacing: 0.2px; }
-    .badge-dark  { font-size: 11.5px; font-weight: 700; fill: #263238; letter-spacing: 0.2px; }
-    .edge        { font-size: 11.5px; font-weight: 700; fill: #607178; }
-    .legend      { font-size: 12.5px; fill: #263238; }
+    .title       { font-size: 36.45px; font-weight: 700; fill: #263238; }
+    .subtitle    { font-size: 18.90px; font-style: italic; fill: #607178; }
+    .lane        { font-size: 22.95px; font-weight: 700; fill: #263238; letter-spacing: 0.4px; }
+    .step-title  { font-size: 20.25px; font-weight: 700; fill: #263238; }
+    .step-text   { font-size: 17.55px; fill: #263238; }
+    .small       { font-size: 16.20px; fill: #607178; }
+    .number      { font-size: 20.25px; font-weight: 700; fill: #FFFFFF; }
+    .number-dark { font-size: 20.25px; font-weight: 700; fill: #263238; }
+    .badge-light { font-size: 15.53px; font-weight: 700; fill: #FFFFFF; letter-spacing: 0.2px; }
+    .badge-dark  { font-size: 15.53px; font-weight: 700; fill: #263238; letter-spacing: 0.2px; }
+    .edge        { font-size: 15.53px; font-weight: 700; fill: #607178; }
+    .legend      { font-size: 16.88px; fill: #263238; }
   </style>
 
   <rect x="0" y="0" width="1600" height="1100" fill="#FFFFFF"/>
@@ -22,43 +23,43 @@
 
   <!-- Faixa 1: teste isolado -->
   <rect x="40" y="105" width="1520" height="235" rx="12" fill="#F8FAFB"
-        stroke="#B8C1C5" stroke-width="1.3"/>
+        stroke="#B8C1C5" stroke-width="1.43"/>
   <rect x="40" y="105" width="1520" height="48" rx="12" fill="#EEF4FB"/>
   <text x="800" y="136" text-anchor="middle" class="lane">A · EVIDÊNCIA DE TESTE ISOLADO</text>
 
   <g>
     <rect x="90" y="176" width="390" height="126" rx="10" fill="#FFFFFF"
-          stroke="#1565C0" stroke-width="1.8"/>
+          stroke="#1565C0" stroke-width="1.98"/>
     <circle cx="120" cy="205" r="17" fill="#1565C0"/>
     <text x="120" y="211" text-anchor="middle" class="number">1</text>
-    <text x="285" y="207" text-anchor="middle" class="step-title">ESTUDAR DATASHEET E INTERFACE</text>
+    <text x="145" y="207" text-anchor="start" class="step-title" style="font-size:17px">ESTUDAR DATASHEET E INTERFACE</text>
     <text x="285" y="239" text-anchor="middle" class="step-text">identificação · configuração · comunicação</text>
     <text x="285" y="267" text-anchor="middle" class="small">restrições e sequência de operação</text>
   </g>
 
   <g>
     <rect x="605" y="176" width="390" height="126" rx="10" fill="#FFFFFF"
-          stroke="#1565C0" stroke-width="1.8"/>
+          stroke="#1565C0" stroke-width="1.98"/>
     <circle cx="635" cy="205" r="17" fill="#1565C0"/>
     <text x="635" y="211" text-anchor="middle" class="number">2</text>
-    <text x="800" y="207" text-anchor="middle" class="step-title">IMPLEMENTAR TESTE STANDALONE</text>
+    <text x="660" y="207" text-anchor="start" class="step-title" style="font-size:16.5px">IMPLEMENTAR TESTE STANDALONE</text>
     <text x="800" y="239" text-anchor="middle" class="step-text">driver mínimo · inspeção por logs</text>
     <text x="800" y="267" text-anchor="middle" class="small">configuração e dados brutos</text>
   </g>
 
   <g>
     <rect x="1120" y="176" width="390" height="126" rx="10" fill="#FFFFFF"
-          stroke="#1565C0" stroke-width="1.8"/>
+          stroke="#1565C0" stroke-width="1.98"/>
     <circle cx="1150" cy="205" r="17" fill="#1565C0"/>
     <text x="1150" y="211" text-anchor="middle" class="number">3</text>
-    <text x="1315" y="207" text-anchor="middle" class="step-title">VERIFICAR ISOLADAMENTE</text>
+    <text x="1175" y="207" text-anchor="start" class="step-title" style="font-size:17px">VERIFICAR ISOLADAMENTE</text>
     <text x="1315" y="238" text-anchor="middle" class="step-text">aquisição + tratamento</text>
     <rect x="1212" y="257" width="206" height="26" rx="13" fill="#1565C0"/>
     <text x="1315" y="275" text-anchor="middle" class="badge-light">EVIDÊNCIA ISOLADA</text>
   </g>
 
   <!-- Avanço 1 → 2 → 3 -->
-  <g stroke="#263238" stroke-width="2.4" fill="#263238">
+  <g stroke="#263238" stroke-width="2.64" fill="#263238">
     <line x1="480" y1="239" x2="595" y2="239"/>
     <path d="M605 239 L593 232 L593 246 Z"/>
     <line x1="995" y1="239" x2="1110" y2="239"/>
@@ -67,23 +68,23 @@
 
   <!-- Faixa 2: estruturação e integração -->
   <rect x="40" y="365" width="1520" height="235" rx="12" fill="#F8FAFB"
-        stroke="#B8C1C5" stroke-width="1.3"/>
+        stroke="#B8C1C5" stroke-width="1.43"/>
   <rect x="40" y="365" width="1520" height="48" rx="12" fill="#EDF7F5"/>
   <text x="800" y="396" text-anchor="middle" class="lane">B · ESTRUTURAÇÃO E EVIDÊNCIA DE INTEGRAÇÃO</text>
 
   <g>
     <rect x="1120" y="436" width="390" height="126" rx="10" fill="#FFFFFF"
-          stroke="#00796B" stroke-width="1.8"/>
+          stroke="#00796B" stroke-width="1.98"/>
     <circle cx="1150" cy="465" r="17" fill="#00796B"/>
     <text x="1150" y="471" text-anchor="middle" class="number">4</text>
-    <text x="1315" y="467" text-anchor="middle" class="step-title">SEPARAR RESPONSABILIDADES</text>
+    <text x="1190" y="467" text-anchor="start" class="step-title" style="font-size:17px">SEPARAR RESPONSABILIDADES</text>
     <text x="1315" y="499" text-anchor="middle" class="step-text">driver · processamento · apresentação</text>
     <text x="1315" y="527" text-anchor="middle" class="small">interfaces explícitas entre camadas</text>
   </g>
 
   <g>
     <rect x="605" y="436" width="390" height="126" rx="10" fill="#FFFFFF"
-          stroke="#00796B" stroke-width="1.8"/>
+          stroke="#00796B" stroke-width="1.98"/>
     <circle cx="635" cy="465" r="17" fill="#00796B"/>
     <text x="635" y="471" text-anchor="middle" class="number">5</text>
     <text x="800" y="467" text-anchor="middle" class="step-title">ADAPTAR À PLATAFORMA</text>
@@ -93,17 +94,17 @@
 
   <g>
     <rect x="90" y="436" width="390" height="126" rx="10" fill="#FFFFFF"
-          stroke="#00796B" stroke-width="1.8"/>
+          stroke="#00796B" stroke-width="1.98"/>
     <circle cx="120" cy="465" r="17" fill="#00796B"/>
     <text x="120" y="471" text-anchor="middle" class="number">6</text>
     <text x="285" y="467" text-anchor="middle" class="step-title">INTEGRAR AO FIRMWARE</text>
     <text x="285" y="498" text-anchor="middle" class="step-text">módulo no núcleo e na interface</text>
-    <rect x="177" y="517" width="216" height="26" rx="13" fill="#00796B"/>
-    <text x="285" y="535" text-anchor="middle" class="badge-light">EVIDÊNCIA DE INTEGRAÇÃO</text>
+    <rect x="165" y="517" width="240" height="26" rx="13" fill="#00796B"/>
+    <text x="285" y="535" text-anchor="middle" class="badge-light" style="font-size:14.5px">EVIDÊNCIA DE INTEGRAÇÃO</text>
   </g>
 
   <!-- Avanço 3 ↓ 4 → 5 → 6 em percurso serpenteado -->
-  <g stroke="#263238" stroke-width="2.4" fill="#263238">
+  <g stroke="#263238" stroke-width="2.64" fill="#263238">
     <line x1="1315" y1="302" x2="1315" y2="426"/>
     <path d="M1315 436 L1308 424 L1322 424 Z"/>
     <line x1="1120" y1="499" x2="1005" y2="499"/>
@@ -114,28 +115,28 @@
 
   <!-- Faixa 3: regressão, diagnóstico e retorno -->
   <rect x="40" y="625" width="1520" height="335" rx="12" fill="#F8FAFB"
-        stroke="#B8C1C5" stroke-width="1.3"/>
+        stroke="#B8C1C5" stroke-width="1.43"/>
   <rect x="40" y="625" width="1520" height="48" rx="12" fill="#FEFAF1"/>
   <text x="800" y="656" text-anchor="middle" class="lane">C · EVIDÊNCIA DE REGRESSÃO, DIAGNÓSTICO E RETORNO</text>
 
   <g>
     <rect x="90" y="696" width="390" height="148" rx="10" fill="#FFFFFF"
-          stroke="#F9A825" stroke-width="1.9"/>
+          stroke="#F9A825" stroke-width="2.09"/>
     <circle cx="120" cy="725" r="17" fill="#F9A825"/>
-    <text x="120" y="731" text-anchor="middle" class="badge-dark">7</text>
+    <text x="120" y="731" text-anchor="middle" class="number-dark">7</text>
     <text x="285" y="727" text-anchor="middle" class="step-title">EXECUTAR REGRESSÃO</text>
     <text x="285" y="758" text-anchor="middle" class="step-text">inicialização · resposta da UI · logs</text>
     <text x="285" y="784" text-anchor="middle" class="step-text">continuidade das funções existentes</text>
-    <rect x="183" y="801" width="204" height="26" rx="13" fill="#F9A825"/>
-    <text x="285" y="819" text-anchor="middle" class="badge-dark">EVIDÊNCIA DE REGRESSÃO</text>
+    <rect x="170" y="801" width="230" height="26" rx="13" fill="#F9A825"/>
+    <text x="285" y="819" text-anchor="middle" class="badge-dark" style="font-size:14.5px">EVIDÊNCIA DE REGRESSÃO</text>
   </g>
 
   <g>
     <rect x="605" y="696" width="390" height="148" rx="10" fill="#FFFFFF"
-          stroke="#263238" stroke-width="1.8"/>
+          stroke="#263238" stroke-width="1.98"/>
     <circle cx="635" cy="725" r="17" fill="#263238"/>
     <text x="635" y="731" text-anchor="middle" class="number">8</text>
-    <text x="800" y="727" text-anchor="middle" class="step-title">DIAGNOSTICAR CONFLITOS</text>
+    <text x="665" y="727" text-anchor="start" class="step-title" style="font-size:18px">DIAGNOSTICAR CONFLITOS</text>
     <g>
       <rect x="645" y="755" width="137" height="29" rx="14" fill="#EEF1F2" stroke="#B8C1C5"/>
       <rect x="818" y="755" width="137" height="29" rx="14" fill="#EEF1F2" stroke="#B8C1C5"/>
@@ -150,9 +151,9 @@
 
   <g>
     <rect x="1120" y="696" width="390" height="200" rx="10" fill="#FEFAF1"
-          stroke="#F9A825" stroke-width="1.9"/>
+          stroke="#F9A825" stroke-width="2.09"/>
     <circle cx="1150" cy="725" r="17" fill="#F9A825"/>
-    <text x="1150" y="731" text-anchor="middle" class="badge-dark">9</text>
+    <text x="1150" y="731" text-anchor="middle" class="number-dark">9</text>
     <text x="1315" y="727" text-anchor="middle" class="step-title">RETORNAR E REPETIR</text>
     <text x="1315" y="753" text-anchor="middle" class="small">etapa indicada pelo diagnóstico</text>
 
@@ -165,7 +166,7 @@
   </g>
 
   <!-- Avanço 6 ↓ 7 → 8 → 9 -->
-  <g stroke="#263238" stroke-width="2.4" fill="#263238">
+  <g stroke="#263238" stroke-width="2.64" fill="#263238">
     <line x1="285" y1="562" x2="285" y2="686"/>
     <path d="M285 696 L278 684 L292 684 Z"/>
     <line x1="480" y1="770" x2="595" y2="770"/>
@@ -176,31 +177,31 @@
 
   <!-- Laços de retorno: as cores remetem às três evidências -->
   <path d="M1510 790 L1575 790 L1575 330 L1315 330 L1315 312"
-        fill="none" stroke="#1565C0" stroke-width="2.1" stroke-dasharray="8 6"/>
+        fill="none" stroke="#1565C0" stroke-width="2.31" stroke-dasharray="8 6"/>
   <path d="M1315 302 L1308 314 L1322 314 Z" fill="#1565C0"/>
 
   <path d="M1510 829 L1548 829 L1548 585 L1315 585 L1315 572"
-        fill="none" stroke="#00796B" stroke-width="2.1" stroke-dasharray="8 6"/>
+        fill="none" stroke="#00796B" stroke-width="2.31" stroke-dasharray="8 6"/>
   <path d="M1315 562 L1308 574 L1322 574 Z" fill="#00796B"/>
 
   <path d="M1315 896 L1315 927 L63 927 L63 770 L80 770"
-        fill="none" stroke="#F9A825" stroke-width="2.1" stroke-dasharray="8 6"/>
+        fill="none" stroke="#F9A825" stroke-width="2.31" stroke-dasharray="8 6"/>
   <path d="M90 770 L78 763 L78 777 Z" fill="#F9A825"/>
 
   <!-- Legenda -->
   <rect x="115" y="1015" width="28" height="19" rx="3" fill="#EEF4FB"
-        stroke="#1565C0" stroke-width="1.5"/>
+        stroke="#1565C0" stroke-width="1.65"/>
   <text x="155" y="1030" class="legend">teste isolado</text>
   <rect x="360" y="1015" width="28" height="19" rx="3" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.5"/>
+        stroke="#00796B" stroke-width="1.65"/>
   <text x="400" y="1030" class="legend">integração</text>
   <rect x="580" y="1015" width="28" height="19" rx="3" fill="#FEFAF1"
-        stroke="#F9A825" stroke-width="1.5"/>
+        stroke="#F9A825" stroke-width="1.65"/>
   <text x="620" y="1030" class="legend">regressão</text>
-  <line x1="790" y1="1025" x2="842" y2="1025" stroke="#263238" stroke-width="2.2"/>
+  <line x1="790" y1="1025" x2="842" y2="1025" stroke="#263238" stroke-width="2.42"/>
   <path d="M852 1025 L840 1018 L840 1032 Z" fill="#263238"/>
   <text x="865" y="1030" class="legend">avanço</text>
-  <line x1="1040" y1="1025" x2="1092" y2="1025" stroke="#607178" stroke-width="2"
+  <line x1="1040" y1="1025" x2="1092" y2="1025" stroke="#607178" stroke-width="2.20"
         stroke-dasharray="8 6"/>
   <path d="M1102 1025 L1090 1018 L1090 1032 Z" fill="#607178"/>
   <text x="1115" y="1030" class="legend">retorno à etapa apropriada</text>

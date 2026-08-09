@@ -3,16 +3,16 @@
      font-family="DejaVu Sans, Liberation Sans, sans-serif" role="img"
      aria-label="Diagrama conceitual da instrumentação efetivamente usada nos ensaios do protótipo. O protótipo aparece ao centro, ligado fisicamente à alimentação, ao computador e ao multímetro, e relacionado por linhas tracejadas aos instrumentos de comparação e observação. Os arranjos pertencem a ensaios distintos.">
   <style>
-    .title      { font-size: 28px; font-weight: 700; fill: #263238; }
-    .subtitle   { font-size: 14px; font-style: italic; fill: #607178; }
-    .card-title { font-size: 16px; font-weight: 700; fill: #263238; }
-    .card-text  { font-size: 13px; fill: #263238; }
-    .mini-title { font-size: 12.5px; font-weight: 700; fill: #263238; }
-    .small      { font-size: 11.8px; fill: #607178; }
-    .tag-light  { font-size: 10.8px; font-weight: 700; fill: #FFFFFF; letter-spacing: 0.2px; }
-    .tag-dark   { font-size: 10.8px; font-weight: 700; fill: #263238; letter-spacing: 0.2px; }
-    .edge       { font-size: 11.8px; font-weight: 700; fill: #607178; }
-    .legend     { font-size: 12.5px; fill: #263238; }
+    .title      { font-size: 37.80px; font-weight: 700; fill: #263238; }
+    .subtitle   { font-size: 18.90px; font-style: italic; fill: #607178; }
+    .card-title { font-size: 21.60px; font-weight: 700; fill: #263238; }
+    .card-text  { font-size: 17.55px; fill: #263238; }
+    .mini-title { font-size: 16.88px; font-weight: 700; fill: #263238; }
+    .small      { font-size: 15.93px; fill: #607178; }
+    .tag-light  { font-size: 14.58px; font-weight: 700; fill: #FFFFFF; letter-spacing: 0.2px; }
+    .tag-dark   { font-size: 14.58px; font-weight: 700; fill: #263238; letter-spacing: 0.2px; }
+    .edge       { font-size: 15.93px; font-weight: 700; fill: #607178; }
+    .legend     { font-size: 16.88px; fill: #263238; }
   </style>
 
   <rect x="0" y="0" width="1800" height="1180" fill="#FFFFFF"/>
@@ -22,14 +22,14 @@
   <!-- Alimentação -->
   <g>
     <rect x="70" y="120" width="370" height="170" rx="11" fill="#EEF4FB"
-          stroke="#1565C0" stroke-width="1.8"/>
+          stroke="#1565C0" stroke-width="1.98"/>
     <rect x="70" y="120" width="370" height="42" rx="11" fill="#1565C0"/>
     <text x="255" y="147" text-anchor="middle" class="tag-light">ALIMENTAÇÃO DO ENSAIO</text>
     <rect x="105" y="188" width="132" height="46" rx="8" fill="#FFFFFF"
-          stroke="#1565C0" stroke-width="1.3"/>
+          stroke="#1565C0" stroke-width="1.43"/>
     <text x="171" y="216" text-anchor="middle" class="card-title">Bateria</text>
     <rect x="273" y="188" width="132" height="46" rx="8" fill="#FFFFFF"
-          stroke="#1565C0" stroke-width="1.3"/>
+          stroke="#1565C0" stroke-width="1.43"/>
     <text x="339" y="216" text-anchor="middle" class="card-title">USB</text>
     <text x="255" y="266" text-anchor="middle" class="small">selecionados conforme o procedimento</text>
   </g>
@@ -37,14 +37,14 @@
   <!-- Computador -->
   <g>
     <rect x="655" y="105" width="490" height="190" rx="11" fill="#EEF4FB"
-          stroke="#1565C0" stroke-width="1.8"/>
+          stroke="#1565C0" stroke-width="1.98"/>
     <text x="900" y="139" text-anchor="middle" class="card-title">COMPUTADOR DE DESENVOLVIMENTO</text>
     <rect x="710" y="163" width="180" height="72" rx="8" fill="#FFFFFF"
-          stroke="#1565C0" stroke-width="1.3"/>
+          stroke="#1565C0" stroke-width="1.43"/>
     <text x="800" y="191" text-anchor="middle" class="card-text">gravação do</text>
     <text x="800" y="214" text-anchor="middle" class="card-text">firmware</text>
     <rect x="910" y="163" width="180" height="72" rx="8" fill="#FFFFFF"
-          stroke="#1565C0" stroke-width="1.3"/>
+          stroke="#1565C0" stroke-width="1.43"/>
     <text x="1000" y="191" text-anchor="middle" class="card-text">monitor serial</text>
     <text x="1000" y="214" text-anchor="middle" class="card-text">e logs</text>
     <text x="900" y="270" text-anchor="middle" class="small">conexão USB durante essas atividades</text>
@@ -53,16 +53,16 @@
   <!-- Comparadores de PPG -->
   <g>
     <rect x="1280" y="105" width="450" height="270" rx="11" fill="#F8FAFB"
-          stroke="#1565C0" stroke-width="1.8"/>
+          stroke="#1565C0" stroke-width="1.98"/>
     <text x="1505" y="138" text-anchor="middle" class="card-title">ENSAIO PPG</text>
 
     <rect x="1310" y="157" width="390" height="91" rx="8" fill="#FFFFFF"
-          stroke="#B8C1C5" stroke-width="1.3"/>
+          stroke="#B8C1C5" stroke-width="1.43"/>
     <text x="1505" y="191" text-anchor="middle" class="card-title">Oxímetro ECH</text>
     <text x="1505" y="219" text-anchor="middle" class="card-text">modelo não identificado · FC e SpO2</text>
 
     <rect x="1310" y="263" width="390" height="91" rx="8" fill="#FFFFFF"
-          stroke="#B8C1C5" stroke-width="1.3"/>
+          stroke="#B8C1C5" stroke-width="1.43"/>
     <text x="1505" y="297" text-anchor="middle" class="card-title">Amazfit Active 2</text>
     <text x="1505" y="325" text-anchor="middle" class="card-text">corroboração no PPG</text>
   </g>
@@ -70,14 +70,14 @@
   <!-- Multímetro -->
   <g>
     <rect x="70" y="405" width="430" height="225" rx="11" fill="#EDF7F5"
-          stroke="#00796B" stroke-width="1.9"/>
+          stroke="#00796B" stroke-width="2.09"/>
     <text x="285" y="443" text-anchor="middle" class="card-title">MULTÍMETRO DIGITAL</text>
     <rect x="105" y="466" width="360" height="61" rx="8" fill="#FFFFFF"
-          stroke="#B8C1C5" stroke-width="1.2"/>
+          stroke="#B8C1C5" stroke-width="1.32"/>
     <text x="285" y="490" text-anchor="middle" class="mini-title">TENSÃO DA BATERIA</text>
     <text x="285" y="513" text-anchor="middle" class="small">ligação em paralelo</text>
     <rect x="105" y="544" width="360" height="61" rx="8" fill="#FFFFFF"
-          stroke="#B8C1C5" stroke-width="1.2"/>
+          stroke="#B8C1C5" stroke-width="1.32"/>
     <text x="285" y="568" text-anchor="middle" class="mini-title">CORRENTE TOTAL</text>
     <text x="285" y="591" text-anchor="middle" class="small">ligação em série no terminal positivo</text>
   </g>
@@ -85,7 +85,7 @@
   <!-- Termo-higrômetro -->
   <g>
     <rect x="1330" y="420" width="400" height="180" rx="11" fill="#F8FAFB"
-          stroke="#1565C0" stroke-width="1.8"/>
+          stroke="#1565C0" stroke-width="1.98"/>
     <text x="1530" y="474" text-anchor="middle" class="card-title">TERMO-HIGRÔMETRO</text>
     <text x="1530" y="510" text-anchor="middle" class="card-title">MFL Embutir</text>
     <text x="1530" y="546" text-anchor="middle" class="card-text">comparação de temperatura</text>
@@ -94,14 +94,14 @@
   <!-- Lanternas para estímulo funcional -->
   <g>
     <rect x="70" y="700" width="430" height="120" rx="11" fill="#FEFAF1"
-          stroke="#F9A825" stroke-width="1.9"/>
+          stroke="#F9A825" stroke-width="2.09"/>
     <text x="285" y="744" text-anchor="middle" class="card-title">LANTERNA COMUM</text>
     <text x="285" y="781" text-anchor="middle" class="card-text">estímulo funcional do canal de luz</text>
   </g>
 
   <g>
     <rect x="70" y="850" width="430" height="120" rx="11" fill="#FEFAF1"
-          stroke="#F9A825" stroke-width="1.9"/>
+          stroke="#F9A825" stroke-width="2.09"/>
     <text x="285" y="894" text-anchor="middle" class="card-title">LANTERNA UV GENÉRICA</text>
     <text x="285" y="931" text-anchor="middle" class="card-text">estímulo funcional do canal UV</text>
   </g>
@@ -109,7 +109,7 @@
   <!-- Bússola -->
   <g>
     <rect x="1330" y="675" width="400" height="180" rx="11" fill="#F8FAFB"
-          stroke="#1565C0" stroke-width="1.8"/>
+          stroke="#1565C0" stroke-width="1.98"/>
     <text x="1530" y="748" text-anchor="middle" class="card-title">BÚSSOLA MAGNÉTICA</text>
     <text x="1530" y="790" text-anchor="middle" class="card-text">comparação de heading</text>
   </g>
@@ -117,14 +117,14 @@
   <!-- Pedômetro -->
   <g>
     <rect x="660" y="895" width="480" height="190" rx="11" fill="#F8FAFB"
-          stroke="#1565C0" stroke-width="1.8"/>
+          stroke="#1565C0" stroke-width="1.98"/>
     <text x="900" y="932" text-anchor="middle" class="card-title">ENSAIO DO PEDÔMETRO</text>
     <rect x="700" y="958" width="190" height="72" rx="8" fill="#FFFFFF"
-          stroke="#B8C1C5" stroke-width="1.3"/>
+          stroke="#B8C1C5" stroke-width="1.43"/>
     <text x="795" y="985" text-anchor="middle" class="card-text">percurso delimitado</text>
     <text x="795" y="1009" text-anchor="middle" class="card-title">100 m</text>
     <rect x="910" y="958" width="190" height="72" rx="8" fill="#FFFFFF"
-          stroke="#B8C1C5" stroke-width="1.3"/>
+          stroke="#B8C1C5" stroke-width="1.43"/>
     <text x="1005" y="985" text-anchor="middle" class="card-text">contagem manual</text>
     <text x="1005" y="1009" text-anchor="middle" class="card-text">dos passos</text>
     <text x="900" y="1061" text-anchor="middle" class="small">Amazfit Active 2: comparação secundária</text>
@@ -133,91 +133,91 @@
   <!-- Protótipo central -->
   <g>
     <rect x="650" y="385" width="500" height="420" rx="18" fill="#FFFFFF"
-          stroke="#263238" stroke-width="2.4"/>
+          stroke="#263238" stroke-width="2.64"/>
     <rect x="650" y="385" width="500" height="50" rx="18" fill="#263238"/>
     <text x="900" y="417" text-anchor="middle" class="tag-light">PROTÓTIPO</text>
 
     <!-- esquema frontal mínimo, sem reproduzir a watchface -->
-    <circle cx="805" cy="588" r="112" fill="#FFFFFF" stroke="#263238" stroke-width="2"/>
-    <circle cx="805" cy="588" r="91" fill="#EDF7F5" stroke="#00796B" stroke-width="2"/>
+    <circle cx="805" cy="588" r="112" fill="#FFFFFF" stroke="#263238" stroke-width="2.20"/>
+    <circle cx="805" cy="588" r="91" fill="#EDF7F5" stroke="#00796B" stroke-width="2.20"/>
     <text x="805" y="594" text-anchor="middle" class="card-title">DISPLAY</text>
 
     <rect x="955" y="478" width="145" height="48" rx="7" fill="#EEF4FB"
-          stroke="#1565C0" stroke-width="1.4"/>
+          stroke="#1565C0" stroke-width="1.54"/>
     <text x="1027.5" y="498" text-anchor="middle" class="small">XIAO</text>
     <text x="1027.5" y="516" text-anchor="middle" class="card-text">ESP32-C6</text>
 
     <rect x="955" y="547" width="145" height="48" rx="7" fill="#EEF4FB"
-          stroke="#1565C0" stroke-width="1.4"/>
+          stroke="#1565C0" stroke-width="1.54"/>
     <text x="1027.5" y="567" text-anchor="middle" class="small">ROUND DISPLAY</text>
     <text x="1027.5" y="585" text-anchor="middle" class="card-text">toque + RTC</text>
 
     <rect x="955" y="616" width="145" height="68" rx="7" fill="#EDF7F5"
-          stroke="#00796B" stroke-width="1.4"/>
+          stroke="#00796B" stroke-width="1.54"/>
     <text x="1027.5" y="640" text-anchor="middle" class="small">SENSORES</text>
     <text x="1027.5" y="661" text-anchor="middle" class="card-text">fios +</text>
     <text x="1027.5" y="679" text-anchor="middle" class="card-text">protoboard</text>
 
     <rect x="735" y="732" width="330" height="36" rx="18" fill="#EDF7F5"
-          stroke="#00796B" stroke-width="1.3"/>
+          stroke="#00796B" stroke-width="1.43"/>
     <text x="900" y="756" text-anchor="middle" class="card-text">montagem provisória dos ensaios</text>
   </g>
 
   <!-- Linhas sólidas: conexões físicas -->
   <path d="M440 205 L545 205 L545 470 L640 470" fill="none"
-        stroke="#263238" stroke-width="2.5"/>
+        stroke="#263238" stroke-width="2.75"/>
   <path d="M650 470 L638 463 L638 477 Z" fill="#263238"/>
   <text x="556" y="454" class="edge">alimentação</text>
 
-  <line x1="900" y1="295" x2="900" y2="375" stroke="#263238" stroke-width="2.5"/>
+  <line x1="900" y1="295" x2="900" y2="375" stroke="#263238" stroke-width="2.75"/>
   <path d="M900 385 L893 373 L907 373 Z" fill="#263238"/>
   <text x="914" y="345" class="edge">USB</text>
 
-  <line x1="500" y1="540" x2="640" y2="540" stroke="#263238" stroke-width="2.5"/>
+  <line x1="500" y1="540" x2="640" y2="540" stroke="#263238" stroke-width="2.75"/>
   <circle cx="650" cy="540" r="5" fill="#263238"/>
   <text x="570" y="526" text-anchor="middle" class="edge">medição elétrica</text>
 
   <!-- Estímulos físicos aplicados -->
   <path d="M500 760 L550 760 L550 650 L640 650" fill="none"
-        stroke="#F9A825" stroke-width="2.5"/>
+        stroke="#F9A825" stroke-width="2.75"/>
   <path d="M650 650 L638 643 L638 657 Z" fill="#F9A825"/>
   <text x="515" y="638" class="edge">estímulo de luz</text>
 
   <path d="M500 910 L585 910 L585 710 L640 710" fill="none"
-        stroke="#F9A825" stroke-width="2.5"/>
+        stroke="#F9A825" stroke-width="2.75"/>
   <path d="M650 710 L638 703 L638 717 Z" fill="#F9A825"/>
   <text x="635" y="731" text-anchor="end" class="edge">estímulo UV</text>
 
   <!-- Linhas tracejadas: comparação e observação -->
   <path d="M1280 260 L1220 260 L1220 485 L1160 485" fill="none"
-        stroke="#1565C0" stroke-width="2.2" stroke-dasharray="9 7"/>
+        stroke="#1565C0" stroke-width="2.42" stroke-dasharray="9 7"/>
   <circle cx="1150" cy="485" r="5" fill="#1565C0"/>
   <text x="1185" y="469" text-anchor="middle" class="edge">PPG</text>
 
-  <line x1="1330" y1="510" x2="1160" y2="570" stroke="#1565C0" stroke-width="2.2"
+  <line x1="1330" y1="510" x2="1160" y2="570" stroke="#1565C0" stroke-width="2.42"
         stroke-dasharray="9 7"/>
   <circle cx="1150" cy="574" r="5" fill="#1565C0"/>
   <text x="1244" y="523" text-anchor="middle" class="edge">temperatura</text>
 
-  <line x1="1330" y1="765" x2="1160" y2="690" stroke="#1565C0" stroke-width="2.2"
+  <line x1="1330" y1="765" x2="1160" y2="690" stroke="#1565C0" stroke-width="2.42"
         stroke-dasharray="9 7"/>
   <circle cx="1150" cy="686" r="5" fill="#1565C0"/>
   <text x="1248" y="743" text-anchor="middle" class="edge">heading</text>
 
-  <line x1="900" y1="895" x2="900" y2="815" stroke="#1565C0" stroke-width="2.2"
+  <line x1="900" y1="895" x2="900" y2="815" stroke="#1565C0" stroke-width="2.42"
         stroke-dasharray="9 7"/>
   <circle cx="900" cy="805" r="5" fill="#1565C0"/>
   <text x="914" y="857" class="edge">passos</text>
 
   <!-- Legenda -->
-  <line x1="175" y1="1130" x2="245" y2="1130" stroke="#263238" stroke-width="2.5"/>
+  <line x1="175" y1="1130" x2="245" y2="1130" stroke="#263238" stroke-width="2.75"/>
   <text x="260" y="1135" class="legend">conexão física / alimentação</text>
 
-  <line x1="580" y1="1130" x2="650" y2="1130" stroke="#F9A825" stroke-width="2.5"/>
+  <line x1="580" y1="1130" x2="650" y2="1130" stroke="#F9A825" stroke-width="2.75"/>
   <path d="M660 1130 L648 1123 L648 1137 Z" fill="#F9A825"/>
   <text x="675" y="1135" class="legend">estímulo aplicado</text>
 
-  <line x1="915" y1="1130" x2="985" y2="1130" stroke="#1565C0" stroke-width="2.2"
+  <line x1="915" y1="1130" x2="985" y2="1130" stroke="#1565C0" stroke-width="2.42"
         stroke-dasharray="9 7"/>
   <text x="1000" y="1135" class="legend">comparação / observação</text>
 

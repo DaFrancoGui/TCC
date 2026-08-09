@@ -1,96 +1,36 @@
-<img src="Imagens/General/ifsc-logo.png"
-     width="30%"
-     style="padding: 10px">
+<p align="center">
+  <img src="Imagens/General/ifsc-logo.png" width="30%" alt="Instituto Federal de Santa Catarina">
+</p>
 
-# Trabalho de conclusão de Curso - Relógio de Bolso com Monitoramento Biométrico e Ambiental</strong></p>
+# Plataforma vestível modular multissensor baseada no ESP32-C6
 
-## Descrição do Projeto
+Repositório do Trabalho de Conclusão de Curso de Guilherme da Costa Franco, desenvolvido no Curso de Engenharia Eletrônica do Instituto Federal de Santa Catarina — Câmpus Florianópolis, sob orientação do Prof. Me. Leandro Schwarz.
 
-Este Trabalho de Conclusão de Curso apresenta o desenvolvimento de um relógio de bolso inteligente com monitoramento biométrico e ambiental. O dispositivo integra múltiplos sensores para aquisição de dados fisiológicos e ambientais, apresentando as informações em um display gráfico circular.
+O projeto integra, em uma plataforma embarcada única, interface gráfica circular sensível ao toque, relógio de tempo real e sensores biométricos, ambientais e inerciais. A contribuição central é a organização modular do firmware, com serviços compartilhados, tarefas independentes, inicialização não fatal e contenção funcional da ausência de sensores.
 
-### Funcionalidades Principais
+## Hardware integrado
 
-O sistema oferece as seguintes capacidades de monitoramento:
+- XIAO ESP32-C6;
+- Round Display for XIAO, com GC9A01A, CHSC6X e PCF8563;
+- MAX30102 para aquisição PPG e estimativas funcionais de frequência cardíaca e SpO₂;
+- DS18B20 para temperatura;
+- LTR390 para luz ambiente e ultravioleta;
+- MPU-9250/AK8963 para pedômetro e bússola;
+- placa protótipo autoral, invólucro impresso em 3D e bateria recarregável.
 
-- **Temperatura Ambiente**: Medição através do sensor DS18B20 à prova d'água
-- **Aceleração Triaxial**: Detecção de passos, quedas e atividade física via MPU-9250
-- **Frequência Cardíaca e SpO2**: Monitoramento cardiovascular com sensor óptico MAX30102
-- **Radiação UV e Luz Ambiente**: Medição de índice UV e luminosidade com LTR390-UV
-- **Interface Gráfica**: Display circular Seeed para visualização de dados
-- **Operação Autônoma**: Bateria recarregável de 5000 mAh
+As avaliações têm alcance funcional e arquitetural. O repositório não atribui finalidade médica ao dispositivo, autonomia não medida nem precisão metrológica sem referência rastreável.
 
-### Especificações Técnicas
+## Conteúdo do repositório
 
-**Hardware:**
+- [Monografia completa](Rascunho/TCC_COMPLETO.pdf)
+- [Fonte LaTeX consolidada](Rascunho/TCC_COMPLETO.tex)
+- [Firmware integrado](Codigos/IDroid/)
+- [Testes isolados dos componentes](Codigos/Teste_de_componentes/)
+- [Ensaios e rastreabilidade](Ensaios/README.md)
+- [Problemas e soluções de integração](docs/problemas_solucoes/00_INDICE.md)
+- [Figuras, fotografias e renderizações](Imagens/)
+- [Documentação de estudo e preparação para a banca](Documentacao/)
 
-- Microcontrolador: ESP32-C6 (Seeed XIAO)
-- Display: Seeed Round Display com RTC integrado
-- Alimentação: Bateria Li-Po 1200 mAh
-- Protocolos: I2C, SPI, 1-Wire
+## Reprodutibilidade
 
-**Requisitos de Sistema:**
-
-- Aquisição contínua ou sob demanda de dados ambientais e biométricos
-- Apresentação visual em display gráfico circular
-- Autonomia compatível com uso diário
-
-### Objetivos do Projeto
-
-1. Integrar múltiplos sensores em um dispositivo wearable compacto
-2. Desenvolver firmware embarcado com gerenciamento eficiente de energia
-3. Implementar algoritmos de processamento de sinais biométricos (PPG para frequência cardíaca)
-4. Criar interface gráfica intuitiva para visualização de dados
-5. Validar autonomia e precisão das medições em condições reais de uso
-
----
-
-## Informações Acadêmicas
-
-<table>
-  <tr>
-    <td><strong>Instituição:</strong></td>
-    <td>Instituto Federal de Santa Catarina (IFSC)</td>
-  </tr>
-  <tr>
-    <td><strong>Curso:</strong></td>
-    <td>Engenharia Eletrônica</td>
-  </tr>
-  <tr>
-    <td><strong>Aluno:</strong></td>
-    <td>Guilherme da Costa Franco</td>
-  </tr>
-  <tr>
-    <td><strong>Orientador:</strong></td>
-    <td>Prof. Leandro Schwarz</td>
-  </tr>
-  <tr>
-    <td><strong>Período:</strong></td>
-    <td>2025/2026</td>
-  </tr>
-</table>
-
----
-
-<p align="center"><strong>SUMÁRIO</strong></p>
-
-### Monografia (documento principal)
-
-- [Trabalho de Conclusão de Curso](./Monografia/TCC_FINAL.pdf)
-
-### Documentação Técnica
-
-- [Justificativa da escolha de componentes](./JUSTIFICATIVA_COMPONENTES.md)
-
-### Capítulos Temáticos (aprofundamento por subsistema)
-
-- [Bússola / Magnetômetro](./Capitulos/03_CAPITULO_BUSSOLA_MAGNETOMETRO.md)
-- [Oximetria / PPG](./Capitulos/04_CAPITULO_OXIMETRIA_PPG.md)
-- [Temperatura / DS18B20](./Capitulos/05_CAPITULO_TEMPERATURA_DS18B20.md)
-- [Luz e UV / LTR390](./Capitulos/06_CAPITULO_LUZ_UV_LTR390.md)
-- [Pedômetro](./Capitulos/07_CAPITULO_PEDOMETRO.md)
-- [Round Display](./Capitulos/08_CAPITULO_ROUND_DISPLAY.md)
-
-### Código-fonte
-
-- [Firmware integrado — iDroid](./Codigos/IDroid)
-- [Testes de componentes (isolados)](./Codigos/Teste_de_componentes)
+O [caderno de ensaios](Ensaios/caderno_de_ensaios.md) relaciona procedimentos, instrumentos, arquivos de dados, scripts, figuras e limitações.

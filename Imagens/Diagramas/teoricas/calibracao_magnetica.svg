@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
-     viewBox="0 0 1500 840" width="1500" height="840"
+     viewBox="0 0 1500 920" width="1500" height="920"
      font-family="DejaVu Sans, Liberation Sans, sans-serif" role="img"
      aria-label="Figura conceitual em três planos cartesianos de mesma escala. O primeiro mostra uma nuvem circular ideal centrada na origem; o segundo, a mesma nuvem deslocada por hard-iron; o terceiro, uma nuvem deslocada, elíptica e rotacionada por hard-iron e soft-iron, além da nuvem corrigida aproximadamente circular e centrada.">
   <defs>
@@ -59,33 +59,33 @@
       <circle cx="117" cy="-22" r="4.8"/>
     </g>
     <style>
-      .title       { font-size: 25px; font-weight: 700; fill: #263238; }
-      .subtitle    { font-size: 14px; font-style: italic; fill: #607178; }
-      .panel-title { font-size: 18px; font-weight: 700; fill: #263238; }
-      .panel-sub   { font-size: 13px; fill: #607178; }
-      .axis-label  { font-size: 14px; font-style: italic; fill: #263238; }
-      .origin      { font-size: 12px; fill: #607178; }
-      .label       { font-size: 13px; font-weight: 700; fill: #263238; }
-      .small       { font-size: 12px; fill: #607178; }
-      .legend      { font-size: 12.5px; fill: #263238; }
-      .call-title  { font-size: 15px; font-weight: 700; fill: #263238; }
-      .call-text   { font-size: 13px; fill: #263238; }
-      .source      { font-size: 12px; font-style: italic; fill: #607178; }
+      .title       { font-size: 33.75px; font-weight: 700; fill: #263238; }
+      .subtitle    { font-size: 18.90px; font-style: italic; fill: #607178; }
+      .panel-title { font-size: 24.30px; font-weight: 700; fill: #263238; }
+      .panel-sub   { font-size: 17.55px; fill: #607178; }
+      .axis-label  { font-size: 18.90px; font-style: italic; fill: #263238; }
+      .origin      { font-size: 16.20px; fill: #607178; }
+      .label       { font-size: 17.55px; font-weight: 700; fill: #263238; }
+      .small       { font-size: 16.20px; fill: #607178; }
+      .legend      { font-size: 16.88px; fill: #263238; }
+      .call-title  { font-size: 20.25px; font-weight: 700; fill: #263238; }
+      .call-text   { font-size: 17.55px; fill: #263238; }
+      .source      { font-size: 16.20px; font-style: italic; fill: #607178; }
     </style>
   </defs>
 
-  <rect x="0" y="0" width="1500" height="840" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="1500" height="920" fill="#FFFFFF"/>
 
   <text x="750" y="42" text-anchor="middle" class="title">Efeitos geométricos na calibração magnética</text>
   <text x="750" y="69" text-anchor="middle" class="subtitle">representação conceitual · pontos sintéticos · mesma escala nos três planos</text>
 
   <!-- Painéis -->
-  <rect x="35" y="105" width="455" height="565" rx="9" fill="#F8FAFB"
-        stroke="#B8C1C5" stroke-width="1.3"/>
-  <rect x="522" y="105" width="455" height="565" rx="9" fill="#F8FAFB"
-        stroke="#B8C1C5" stroke-width="1.3"/>
-  <rect x="1009" y="105" width="455" height="565" rx="9" fill="#F8FAFB"
-        stroke="#B8C1C5" stroke-width="1.3"/>
+  <rect x="35" y="105" width="455" height="625" rx="9" fill="#F8FAFB"
+        stroke="#B8C1C5" stroke-width="1.43"/>
+  <rect x="522" y="105" width="455" height="625" rx="9" fill="#F8FAFB"
+        stroke="#B8C1C5" stroke-width="1.43"/>
+  <rect x="1009" y="105" width="455" height="625" rx="9" fill="#F8FAFB"
+        stroke="#B8C1C5" stroke-width="1.43"/>
 
   <text x="262.5" y="140" text-anchor="middle" class="panel-title">1  Campo ideal</text>
   <text x="262.5" y="163" text-anchor="middle" class="panel-sub">nuvem circular e centrada</text>
@@ -97,12 +97,12 @@
   <text x="1236.5" y="163" text-anchor="middle" class="panel-sub">deslocamento, deformação e correção</text>
 
   <!-- Grades quadradas de mesma escala -->
-  <g fill="#FFFFFF" stroke="#D5DDE0" stroke-width="1.2">
+  <g fill="#FFFFFF" stroke="#D5DDE0" stroke-width="1.32">
     <rect x="82" y="190" width="360" height="360"/>
     <rect x="569" y="190" width="360" height="360"/>
     <rect x="1056" y="190" width="360" height="360"/>
   </g>
-  <g stroke="#E3E9EB" stroke-width="1">
+  <g stroke="#E3E9EB" stroke-width="1.10">
     <!-- painel 1 -->
     <line x1="142" y1="190" x2="142" y2="550"/><line x1="202" y1="190" x2="202" y2="550"/>
     <line x1="322" y1="190" x2="322" y2="550"/><line x1="382" y1="190" x2="382" y2="550"/>
@@ -121,7 +121,7 @@
   </g>
 
   <!-- Eixos -->
-  <g stroke="#263238" stroke-width="1.6" fill="none">
+  <g stroke="#263238" stroke-width="1.76" fill="none">
     <line x1="92" y1="370" x2="432" y2="370"/>
     <line x1="262" y1="540" x2="262" y2="200"/>
     <line x1="579" y1="370" x2="919" y2="370"/>
@@ -146,99 +146,103 @@
   </g>
 
   <!-- 1: nuvem ideal -->
-  <circle cx="262" cy="370" r="120" fill="none" stroke="#1565C0" stroke-width="1.7"
+  <circle cx="262" cy="370" r="120" fill="none" stroke="#1565C0" stroke-width="1.87"
           stroke-dasharray="5 5" opacity="0.75"/>
-  <g transform="translate(262 370)" fill="#1565C0" stroke="#FFFFFF" stroke-width="1.5">
+  <g transform="translate(262 370)" fill="#1565C0" stroke="#FFFFFF" stroke-width="1.65">
     <use xlink:href="#cloudCircle"/>
   </g>
-  <circle cx="262" cy="370" r="6.5" fill="#FFFFFF" stroke="#263238" stroke-width="2"/>
-  <line x1="269" y1="365" x2="323" y2="330" stroke="#263238" stroke-width="1.2"/>
-  <text x="329" y="327" class="label">centro na origem</text>
+  <circle cx="262" cy="370" r="6.5" fill="#FFFFFF" stroke="#263238" stroke-width="2.20"/>
+  <line x1="269" y1="365" x2="323" y2="330" stroke="#263238" stroke-width="1.32"/>
+  <text x="320" y="327" class="label" style="font-size:16.2px">centro na origem</text>
 
   <!-- 2: translação por hard-iron -->
-  <circle cx="799" cy="329" r="120" fill="none" stroke="#F9A825" stroke-width="1.7"
+  <circle cx="799" cy="329" r="120" fill="none" stroke="#F9A825" stroke-width="1.87"
           stroke-dasharray="5 5" opacity="0.8"/>
-  <g transform="translate(799 329)" fill="#F9A825" stroke="#FFFFFF" stroke-width="1.5">
+  <g transform="translate(799 329)" fill="#F9A825" stroke="#FFFFFF" stroke-width="1.65">
     <use xlink:href="#cloudCircle"/>
   </g>
   <path d="M799 321 L807 329 L799 337 L791 329 Z"
-        fill="#FFFFFF" stroke="#263238" stroke-width="2"/>
+        fill="#FFFFFF" stroke="#263238" stroke-width="2.20"/>
 
-  <line x1="749" y1="370" x2="799" y2="370" stroke="#F9A825" stroke-width="2.1"/>
+  <line x1="749" y1="370" x2="799" y2="370" stroke="#F9A825" stroke-width="2.31"/>
   <path d="M749 370 L759 364 L759 376 Z M799 370 L789 364 L789 376 Z" fill="#F9A825"/>
-  <line x1="799" y1="370" x2="799" y2="329" stroke="#F9A825" stroke-width="2.1"/>
+  <line x1="799" y1="370" x2="799" y2="329" stroke="#F9A825" stroke-width="2.31"/>
   <path d="M799 370 L793 360 L805 360 Z M799 329 L793 339 L805 339 Z" fill="#F9A825"/>
-  <text x="774" y="390" text-anchor="middle" class="label">offset x</text>
-  <text x="811" y="352" class="label">offset y</text>
-  <line x1="804" y1="323" x2="844" y2="286" stroke="#263238" stroke-width="1.2"/>
-  <text x="849" y="282" class="label">centro estimado</text>
+  <path d="M570 572 L578 580 L570 588 L562 580 Z"
+        fill="#FFFFFF" stroke="#263238" stroke-width="1.87"/>
+  <text x="588" y="586" class="label">centro estimado</text>
+  <line x1="570" y1="620" x2="610" y2="620" stroke="#F9A825" stroke-width="2.20"/>
+  <path d="M570 620 L580 614 L580 626 Z M610 620 L600 614 L600 626 Z" fill="#F9A825"/>
+  <text x="622" y="626" class="label">offsets x e y</text>
 
   <!-- 3: elipse medida, deslocada e rotacionada -->
   <g transform="matrix(0.9135 -0.4067 0.4067 0.9135 1287 331)">
     <ellipse cx="0" cy="0" rx="123" ry="72" fill="none" stroke="#F9A825"
-             stroke-width="1.8" stroke-dasharray="5 5" opacity="0.9"/>
-    <g fill="#F9A825" stroke="#FFFFFF" stroke-width="1.5">
+             stroke-width="1.98" stroke-dasharray="5 5" opacity="0.9"/>
+    <g fill="#F9A825" stroke="#FFFFFF" stroke-width="1.65">
       <use xlink:href="#cloudEllipse"/>
     </g>
-    <line x1="-95" y1="0" x2="95" y2="0" stroke="#F9A825" stroke-width="1.8"/>
+    <line x1="-95" y1="0" x2="95" y2="0" stroke="#F9A825" stroke-width="1.98"/>
     <path d="M-95 0 L-84 -6 L-84 6 Z M95 0 L84 -6 L84 6 Z" fill="#F9A825"/>
-    <line x1="0" y1="-48" x2="0" y2="48" stroke="#F9A825" stroke-width="1.8"/>
+    <line x1="0" y1="-48" x2="0" y2="48" stroke="#F9A825" stroke-width="1.98"/>
     <path d="M0 -48 L-6 -37 L6 -37 Z M0 48 L-6 37 L6 37 Z" fill="#F9A825"/>
   </g>
   <path d="M1287 323 L1295 331 L1287 339 L1279 331 Z"
-        fill="#FFFFFF" stroke="#263238" stroke-width="2"/>
-  <line x1="1293" y1="326" x2="1342" y2="278" stroke="#263238" stroke-width="1.2"/>
-  <text x="1347" y="273" class="label">centro estimado</text>
-  <line x1="1347" y1="435" x2="1371" y2="465" stroke="#F9A825" stroke-width="1.4"/>
-  <text x="1378" y="469" text-anchor="end" class="label">escalas distintas</text>
+        fill="#FFFFFF" stroke="#263238" stroke-width="2.20"/>
+  <path d="M1070 572 L1078 580 L1070 588 L1062 580 Z"
+        fill="#FFFFFF" stroke="#263238" stroke-width="1.87"/>
+  <text x="1088" y="586" class="label">centro estimado</text>
+  <line x1="1070" y1="620" x2="1100" y2="620" stroke="#F9A825" stroke-width="2.20"/>
+  <path d="M1070 620 L1080 614 L1080 626 Z M1100 620 L1090 614 L1090 626 Z" fill="#F9A825"/>
+  <text x="1112" y="626" class="label">escalas distintas</text>
 
   <!-- Resultado corrigido, no mesmo plano -->
-  <circle cx="1236" cy="370" r="116" fill="none" stroke="#00796B" stroke-width="2.2"
+  <circle cx="1236" cy="370" r="116" fill="none" stroke="#00796B" stroke-width="2.42"
           stroke-dasharray="8 5"/>
   <g transform="translate(1236 370) scale(0.97)"
-     fill="#FFFFFF" stroke="#00796B" stroke-width="2.5">
+     fill="#FFFFFF" stroke="#00796B" stroke-width="2.75">
     <use xlink:href="#cloudCircle"/>
   </g>
-  <circle cx="1236" cy="370" r="6.5" fill="#FFFFFF" stroke="#00796B" stroke-width="2.3"/>
+  <circle cx="1236" cy="370" r="6.5" fill="#FFFFFF" stroke="#00796B" stroke-width="2.53"/>
 
   <!-- Sequência medida -> corrigida -->
-  <circle cx="1102" cy="604" r="6" fill="#F9A825"/>
-  <text x="1115" y="609" class="label">medida</text>
-  <line x1="1173" y1="604" x2="1302" y2="604" stroke="#00796B" stroke-width="2.3"/>
-  <path d="M1302 604 L1291 598 L1291 610 Z" fill="#00796B"/>
-  <text x="1237" y="593" text-anchor="middle" class="small">correção diagonal</text>
-  <circle cx="1324" cy="604" r="6" fill="#FFFFFF" stroke="#00796B" stroke-width="2.4"/>
-  <text x="1338" y="609" class="label">corrigida</text>
+  <circle cx="1102" cy="682" r="6" fill="#F9A825"/>
+  <text x="1115" y="687" class="label">medida</text>
+  <line x1="1173" y1="682" x2="1302" y2="682" stroke="#00796B" stroke-width="2.53"/>
+  <path d="M1302 682 L1291 676 L1291 688 Z" fill="#00796B"/>
+  <text x="1237" y="669" text-anchor="middle" class="small">correção diagonal</text>
+  <circle cx="1324" cy="682" r="6" fill="#FFFFFF" stroke="#00796B" stroke-width="2.64"/>
+  <text x="1338" y="687" class="label">corrigida</text>
 
   <!-- Legenda -->
-  <line x1="73" y1="633" x2="105" y2="633" stroke="#1565C0" stroke-width="3"/>
+  <line x1="73" y1="633" x2="105" y2="633" stroke="#1565C0" stroke-width="3.30"/>
   <circle cx="89" cy="633" r="4.5" fill="#1565C0"/>
   <text x="114" y="638" class="legend">ideal</text>
-  <line x1="171" y1="633" x2="203" y2="633" stroke="#F9A825" stroke-width="3"/>
+  <line x1="171" y1="633" x2="203" y2="633" stroke="#F9A825" stroke-width="3.30"/>
   <circle cx="187" cy="633" r="4.5" fill="#F9A825"/>
   <text x="212" y="638" class="legend">medida</text>
-  <line x1="288" y1="633" x2="320" y2="633" stroke="#00796B" stroke-width="3"/>
-  <circle cx="304" cy="633" r="4.5" fill="#FFFFFF" stroke="#00796B" stroke-width="2"/>
+  <line x1="288" y1="633" x2="320" y2="633" stroke="#00796B" stroke-width="3.30"/>
+  <circle cx="304" cy="633" r="4.5" fill="#FFFFFF" stroke="#00796B" stroke-width="2.20"/>
   <text x="329" y="638" class="legend">corrigida</text>
   <path d="M89 643 L96 650 L89 657 L82 650 Z"
-        fill="#FFFFFF" stroke="#263238" stroke-width="1.7"/>
+        fill="#FFFFFF" stroke="#263238" stroke-width="1.87"/>
   <text x="105" y="655" class="legend">centro estimado</text>
 
   <!-- Limitação da correção diagonal -->
-  <rect x="35" y="700" width="1430" height="112" rx="9" fill="#FFFFFF"
-        stroke="#B8C1C5" stroke-width="1.3"/>
-  <rect x="35" y="700" width="10" height="112" rx="5" fill="#F9A825"/>
-  <text x="70" y="735" class="call-title">Correção diagonal</text>
-  <text x="70" y="762" class="call-text">offsets + escalas independentes por eixo</text>
-  <line x1="465" y1="750" x2="595" y2="750" stroke="#263238" stroke-width="1.8"/>
-  <path d="M595 750 L584 744 L584 756 Z" fill="#263238"/>
-  <text x="635" y="735" class="call-title">Limitação</text>
-  <text x="635" y="762" class="call-text">não remove acoplamentos ou rotações entre eixos</text>
-  <line x1="1092" y1="750" x2="1178" y2="750" stroke="#263238" stroke-width="1.8"/>
-  <path d="M1178 750 L1167 744 L1167 756 Z" fill="#263238"/>
-  <text x="1217" y="735" class="call-title">Matriz completa</text>
-  <text x="1217" y="762" class="call-text">inclui termos cruzados</text>
-  <text x="70" y="792" class="small">modelo simplificado</text>
-  <text x="1217" y="792" class="small">modelo geral</text>
+  <rect x="35" y="760" width="1430" height="112" rx="9" fill="#FFFFFF"
+        stroke="#B8C1C5" stroke-width="1.43"/>
+  <rect x="35" y="760" width="10" height="112" rx="5" fill="#F9A825"/>
+  <text x="70" y="795" class="call-title">Correção diagonal</text>
+  <text x="70" y="822" class="call-text">offsets + escalas independentes por eixo</text>
+  <line x1="465" y1="810" x2="595" y2="810" stroke="#263238" stroke-width="1.98"/>
+  <path d="M595 810 L584 804 L584 816 Z" fill="#263238"/>
+  <text x="635" y="795" class="call-title">Limitação</text>
+  <text x="635" y="822" class="call-text">não remove acoplamentos ou rotações entre eixos</text>
+  <line x1="1092" y1="810" x2="1178" y2="810" stroke="#263238" stroke-width="1.98"/>
+  <path d="M1178 810 L1167 804 L1167 816 Z" fill="#263238"/>
+  <text x="1217" y="795" class="call-title">Matriz completa</text>
+  <text x="1217" y="822" class="call-text">inclui termos cruzados</text>
+  <text x="70" y="852" class="small">modelo simplificado</text>
+  <text x="1217" y="852" class="small">modelo geral</text>
 
 </svg>

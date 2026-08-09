@@ -3,16 +3,16 @@
      font-family="DejaVu Sans, Liberation Sans, sans-serif" role="img"
      aria-label="Fluxograma para integração de um novo sensor ao firmware. O fluxo parte dos requisitos e do teste standalone, cria driver, processamento e tela, trata recursos compartilhados, compõe explicitamente o módulo no núcleo e na interface, atualiza a configuração de compilação e termina com testes do sensor presente, ausente e regressão das funções existentes.">
   <style>
-    .title { font-size: 34px; font-weight: 700; fill: #263238; }
-    .subtitle { font-size: 18px; font-style: italic; fill: #607D84; }
-    .lane { font-size: 22px; font-weight: 700; fill: #263238; letter-spacing: .5px; }
-    .step { font-size: 19px; font-weight: 700; fill: #263238; }
-    .detail { font-size: 16px; fill: #53666D; }
-    .decision { font-size: 18px; font-weight: 700; fill: #263238; }
-    .edge { font-size: 15px; font-weight: 700; fill: #53666D; }
-    .number { font-size: 18px; font-weight: 700; fill: #FFFFFF; }
-    .number-dark { font-size: 18px; font-weight: 700; fill: #263238; }
-    .legend { font-size: 16px; fill: #263238; }
+    .title { font-size: 41px; font-weight: 700; fill: #263238; }
+    .subtitle { font-size: 21px; font-style: italic; fill: #607D84; }
+    .lane { font-size: 26px; font-weight: 700; fill: #263238; letter-spacing: .4px; }
+    .step { font-size: 20.25px; font-weight: 700; fill: #263238; }
+    .detail { font-size: 18.5px; fill: #53666D; }
+    .decision { font-size: 20.5px; font-weight: 700; fill: #263238; }
+    .edge { font-size: 17.5px; font-weight: 700; fill: #53666D; }
+    .number { font-size: 21px; font-weight: 700; fill: #FFFFFF; }
+    .number-dark { font-size: 21px; font-weight: 700; fill: #263238; }
+    .legend { font-size: 18.5px; fill: #263238; }
   </style>
 
   <defs>
@@ -35,176 +35,176 @@
   <text x="800" y="72" text-anchor="middle" class="subtitle">fluxo baseado nos pontos explícitos da implementação corrente</text>
 
   <!-- A: módulo isolado -->
-  <rect x="40" y="105" width="1520" height="260" rx="12" fill="#F8FAFB" stroke="#B8C1C5" stroke-width="1.3"/>
+  <rect x="40" y="105" width="1520" height="260" rx="12" fill="#F8FAFB" stroke="#B8C1C5" stroke-width="1.43"/>
   <rect x="40" y="105" width="1520" height="48" rx="12" fill="#EEF4FB"/>
   <text x="800" y="136" text-anchor="middle" class="lane">A · PREPARAR E VALIDAR O MÓDULO</text>
 
   <g>
-    <rect x="75" y="184" width="315" height="126" rx="10" fill="#FFFFFF" stroke="#1565C0" stroke-width="1.8"/>
+    <rect x="75" y="184" width="315" height="126" rx="10" fill="#FFFFFF" stroke="#1565C0" stroke-width="1.98"/>
     <circle cx="105" cy="213" r="17" fill="#1565C0"/>
     <text x="105" y="219" text-anchor="middle" class="number">1</text>
-    <text x="232" y="215" text-anchor="middle" class="step">DEFINIR REQUISITOS</text>
+    <text x="252" y="215" text-anchor="middle" class="step">DEFINIR REQUISITOS</text>
     <text x="232" y="246" text-anchor="middle" class="detail">interface · alimentação · pinos</text>
     <text x="232" y="272" text-anchor="middle" class="detail">endereço · período de aquisição</text>
   </g>
 
   <g>
-    <rect x="435" y="184" width="315" height="126" rx="10" fill="#FFFFFF" stroke="#1565C0" stroke-width="1.8"/>
+    <rect x="435" y="184" width="315" height="126" rx="10" fill="#FFFFFF" stroke="#1565C0" stroke-width="1.98"/>
     <circle cx="465" cy="213" r="17" fill="#1565C0"/>
     <text x="465" y="219" text-anchor="middle" class="number">2</text>
-    <text x="612" y="215" text-anchor="middle" class="step">TESTAR ISOLADAMENTE</text>
+    <text x="630" y="215" text-anchor="middle" class="step" style="font-size:19px">TESTAR ISOLADAMENTE</text>
     <text x="592" y="246" text-anchor="middle" class="detail">detecção · configuração · leitura</text>
     <text x="592" y="272" text-anchor="middle" class="detail">tratamento de erro</text>
   </g>
 
   <g>
-    <rect x="795" y="184" width="315" height="126" rx="10" fill="#FFFFFF" stroke="#1565C0" stroke-width="1.8"/>
+    <rect x="795" y="184" width="315" height="126" rx="10" fill="#FFFFFF" stroke="#1565C0" stroke-width="1.98"/>
     <circle cx="825" cy="213" r="17" fill="#1565C0"/>
     <text x="825" y="219" text-anchor="middle" class="number">3</text>
-    <text x="952" y="215" text-anchor="middle" class="step">CRIAR O MÓDULO</text>
+    <text x="972" y="215" text-anchor="middle" class="step">CRIAR O MÓDULO</text>
     <text x="952" y="246" text-anchor="middle" class="detail">driver · processamento · tela</text>
     <text x="952" y="272" text-anchor="middle" class="detail">arquivos _hw · _process · _screen</text>
   </g>
 
-  <polygon points="1330,170 1510,247 1330,324 1150,247" fill="#FFFFFF" stroke="#1565C0" stroke-width="1.9"/>
+  <polygon points="1330,170 1510,247 1330,324 1150,247" fill="#FFFFFF" stroke="#1565C0" stroke-width="2.09"/>
   <text x="1330" y="243" text-anchor="middle" class="decision">usa recurso</text>
   <text x="1330" y="263" text-anchor="middle" class="decision">compartilhado?</text>
 
-  <path d="M390 247 H423" fill="none" stroke="#263238" stroke-width="2.3"/>
+  <path d="M390 247 H423" fill="none" stroke="#263238" stroke-width="2.53"/>
   <polygon points="423,240 423,254 435,247" fill="#263238"/>
-  <path d="M750 247 H783" fill="none" stroke="#263238" stroke-width="2.3"/>
+  <path d="M750 247 H783" fill="none" stroke="#263238" stroke-width="2.53"/>
   <polygon points="783,240 783,254 795,247" fill="#263238"/>
-  <path d="M1110 247 H1138" fill="none" stroke="#263238" stroke-width="2.3"/>
+  <path d="M1110 247 H1138" fill="none" stroke="#263238" stroke-width="2.53"/>
   <polygon points="1138,240 1138,254 1150,247" fill="#263238"/>
 
   <!-- B: adaptação e composição -->
-  <rect x="40" y="395" width="1520" height="330" rx="12" fill="#F8FAFB" stroke="#B8C1C5" stroke-width="1.3"/>
+  <rect x="40" y="395" width="1520" height="330" rx="12" fill="#F8FAFB" stroke="#B8C1C5" stroke-width="1.43"/>
   <rect x="40" y="395" width="1520" height="48" rx="12" fill="#EDF7F5"/>
   <text x="800" y="426" text-anchor="middle" class="lane">B · ADAPTAR À PLATAFORMA E COMPOR NO NÚCLEO</text>
 
   <g>
-    <rect x="1010" y="472" width="450" height="72" rx="9" fill="#EDF7F5" stroke="#00796B" stroke-width="1.7"/>
+    <rect x="1010" y="472" width="450" height="72" rx="9" fill="#EDF7F5" stroke="#00796B" stroke-width="1.87"/>
     <text x="1235" y="500" text-anchor="middle" class="step">RECURSO COMPARTILHADO</text>
     <text x="1235" y="526" text-anchor="middle" class="detail">receber handles · mutex · recuperação I²C</text>
   </g>
   <g>
-    <rect x="1010" y="576" width="450" height="72" rx="9" fill="#FFFFFF" stroke="#53666D" stroke-width="1.6"/>
+    <rect x="1010" y="576" width="450" height="72" rx="9" fill="#FFFFFF" stroke="#53666D" stroke-width="1.76"/>
     <text x="1235" y="604" text-anchor="middle" class="step">TRANSPORTE PRÓPRIO</text>
     <text x="1235" y="630" text-anchor="middle" class="detail">encapsular acesso dentro do módulo</text>
   </g>
 
   <g>
-    <rect x="70" y="490" width="270" height="142" rx="10" fill="#FFFFFF" stroke="#00796B" stroke-width="1.8"/>
+    <rect x="70" y="490" width="270" height="142" rx="10" fill="#FFFFFF" stroke="#00796B" stroke-width="1.98"/>
     <circle cx="100" cy="519" r="17" fill="#00796B"/>
     <text x="100" y="525" text-anchor="middle" class="number">4</text>
-    <text x="205" y="521" text-anchor="middle" class="step">CICLO DE VIDA</text>
+    <text x="225" y="521" text-anchor="middle" class="step">CICLO DE VIDA</text>
     <text x="205" y="553" text-anchor="middle" class="detail">init · create · show</text>
     <text x="205" y="579" text-anchor="middle" class="detail">estado disponível/ausente</text>
     <text x="205" y="605" text-anchor="middle" class="detail">tarefa, quando aplicável</text>
   </g>
 
   <g>
-    <rect x="385" y="490" width="270" height="142" rx="10" fill="#FFFFFF" stroke="#00796B" stroke-width="1.8"/>
+    <rect x="385" y="490" width="270" height="142" rx="10" fill="#FFFFFF" stroke="#00796B" stroke-width="1.98"/>
     <circle cx="415" cy="519" r="17" fill="#00796B"/>
     <text x="415" y="525" text-anchor="middle" class="number">5</text>
-    <text x="540" y="521" text-anchor="middle" class="step">COMPOR NO NÚCLEO</text>
+    <text x="555" y="521" text-anchor="middle" class="step">COMPOR NO NÚCLEO</text>
     <text x="520" y="553" text-anchor="middle" class="detail">incluir cabeçalho</text>
     <text x="520" y="579" text-anchor="middle" class="detail">inicializar módulo</text>
     <text x="520" y="605" text-anchor="middle" class="detail">criar tela</text>
   </g>
 
   <g>
-    <rect x="700" y="490" width="270" height="142" rx="10" fill="#FFFFFF" stroke="#00796B" stroke-width="1.8"/>
+    <rect x="700" y="490" width="270" height="142" rx="10" fill="#FFFFFF" stroke="#00796B" stroke-width="1.98"/>
     <circle cx="730" cy="519" r="17" fill="#00796B"/>
     <text x="730" y="525" text-anchor="middle" class="number">6</text>
-    <text x="855" y="521" text-anchor="middle" class="step">LIGAR À INTERFACE</text>
+    <text x="870" y="521" text-anchor="middle" class="step" style="font-size:17.5px">LIGAR À INTERFACE</text>
     <text x="835" y="553" text-anchor="middle" class="detail">callback · item no menu</text>
     <text x="835" y="579" text-anchor="middle" class="detail">origem de retorno</text>
     <text x="835" y="605" text-anchor="middle" class="detail">registro de atualização</text>
   </g>
 
   <g>
-    <rect x="385" y="655" width="585" height="46" rx="8" fill="#EDF7F5" stroke="#00796B" stroke-width="1.7"/>
-    <circle cx="415" cy="678" r="17" fill="#00796B"/>
-    <text x="415" y="684" text-anchor="middle" class="number">7</text>
-    <text x="677" y="683" text-anchor="middle" class="step">ATUALIZAR DIRETÓRIOS DE INCLUSÃO NO CMAKE</text>
+    <rect x="385" y="655" width="585" height="46" rx="8" fill="#EDF7F5" stroke="#00796B" stroke-width="1.87"/>
+    <circle cx="410" cy="678" r="17" fill="#00796B"/>
+    <text x="410" y="684" text-anchor="middle" class="number">7</text>
+    <text x="700" y="683" text-anchor="middle" class="step" style="font-size:18px">ATUALIZAR DIRETÓRIOS DE INCLUSÃO NO CMAKE</text>
   </g>
 
   <!-- decisões para os dois transportes e convergência -->
-  <path d="M1330 324 V460" fill="none" stroke="#00796B" stroke-width="2.2"/>
+  <path d="M1330 324 V460" fill="none" stroke="#00796B" stroke-width="2.42"/>
   <polygon points="1323,460 1337,460 1330,472" fill="#00796B"/>
   <text x="1343" y="382" class="edge">sim</text>
-  <path d="M1510 247 H1530 V612 H1472" fill="none" stroke="#53666D" stroke-width="2"/>
+  <path d="M1510 247 H1530 V612 H1472" fill="none" stroke="#53666D" stroke-width="2.20"/>
   <polygon points="1472,605 1472,619 1460,612" fill="#53666D"/>
   <text x="1517" y="232" class="edge">não</text>
-  <path d="M1010 508 H990 V470 H205 V478" fill="none" stroke="#00796B" stroke-width="2.1"/>
+  <path d="M1010 508 H990 V470 H205 V478" fill="none" stroke="#00796B" stroke-width="2.31"/>
   <polygon points="198,478 212,478 205,490" fill="#00796B"/>
-  <path d="M1010 612 H990 V470" fill="none" stroke="#53666D" stroke-width="2"/>
-  <path d="M340 561 H373" fill="none" stroke="#263238" stroke-width="2.3"/>
+  <path d="M1010 612 H990 V470" fill="none" stroke="#53666D" stroke-width="2.20"/>
+  <path d="M340 561 H373" fill="none" stroke="#263238" stroke-width="2.53"/>
   <polygon points="373,554 373,568 385,561" fill="#263238"/>
-  <path d="M655 561 H688" fill="none" stroke="#263238" stroke-width="2.3"/>
+  <path d="M655 561 H688" fill="none" stroke="#263238" stroke-width="2.53"/>
   <polygon points="688,554 688,568 700,561" fill="#263238"/>
-  <path d="M835 632 V643" fill="none" stroke="#263238" stroke-width="2.3"/>
+  <path d="M835 632 V643" fill="none" stroke="#263238" stroke-width="2.53"/>
   <polygon points="828,643 842,643 835,655" fill="#263238"/>
 
   <!-- C: verificação -->
-  <rect x="40" y="755" width="1520" height="265" rx="12" fill="#F8FAFB" stroke="#B8C1C5" stroke-width="1.3"/>
+  <rect x="40" y="755" width="1520" height="265" rx="12" fill="#F8FAFB" stroke="#B8C1C5" stroke-width="1.43"/>
   <rect x="40" y="755" width="1520" height="48" rx="12" fill="#FEFAF1"/>
   <text x="800" y="786" text-anchor="middle" class="lane">C · VERIFICAR INTEGRAÇÃO E REGRESSÃO</text>
 
   <g>
-    <rect x="90" y="842" width="340" height="116" rx="10" fill="#FFFFFF" stroke="#F9A825" stroke-width="1.9"/>
+    <rect x="90" y="842" width="340" height="116" rx="10" fill="#FFFFFF" stroke="#F9A825" stroke-width="2.09"/>
     <circle cx="120" cy="871" r="17" fill="#F9A825"/>
     <text x="120" y="877" text-anchor="middle" class="number-dark">8</text>
-    <text x="280" y="873" text-anchor="middle" class="step">COMPILAR E INICIALIZAR</text>
+    <text x="300" y="873" text-anchor="middle" class="step" style="font-size:17.5px">COMPILAR E INICIALIZAR</text>
     <text x="260" y="904" text-anchor="middle" class="detail">sem erro de composição</text>
     <text x="260" y="930" text-anchor="middle" class="detail">tela e aquisição acessíveis</text>
   </g>
 
   <g>
-    <rect x="475" y="842" width="340" height="116" rx="10" fill="#FFFFFF" stroke="#F9A825" stroke-width="1.9"/>
+    <rect x="475" y="842" width="340" height="116" rx="10" fill="#FFFFFF" stroke="#F9A825" stroke-width="2.09"/>
     <circle cx="505" cy="871" r="17" fill="#F9A825"/>
     <text x="505" y="877" text-anchor="middle" class="number-dark">9</text>
-    <text x="665" y="873" text-anchor="middle" class="step">TESTAR SENSOR AUSENTE</text>
+    <text x="685" y="873" text-anchor="middle" class="step" style="font-size:17.5px">TESTAR SENSOR AUSENTE</text>
     <text x="645" y="904" text-anchor="middle" class="detail">indisponibilidade contida</text>
-    <text x="645" y="930" text-anchor="middle" class="detail">núcleo e demais módulos operantes</text>
+    <text x="645" y="930" text-anchor="middle" class="detail">núcleo e módulos operantes</text>
   </g>
 
-  <polygon points="1050,824 1225,900 1050,976 875,900" fill="#FFFFFF" stroke="#F9A825" stroke-width="1.9"/>
+  <polygon points="1050,824 1225,900 1050,976 875,900" fill="#FFFFFF" stroke="#F9A825" stroke-width="2.09"/>
   <text x="1050" y="895" text-anchor="middle" class="decision">regressão das funções</text>
   <text x="1050" y="915" text-anchor="middle" class="decision">existentes aprovada?</text>
 
-  <rect x="1300" y="850" width="220" height="100" rx="50" fill="#EDF7F5" stroke="#00796B" stroke-width="2.1"/>
+  <rect x="1300" y="850" width="220" height="100" rx="50" fill="#EDF7F5" stroke="#00796B" stroke-width="2.31"/>
   <text x="1410" y="894" text-anchor="middle" class="step">SENSOR</text>
   <text x="1410" y="919" text-anchor="middle" class="step">INTEGRADO</text>
 
-  <path d="M677 701 V735 H260 V830" fill="none" stroke="#263238" stroke-width="2.3"/>
+  <path d="M677 701 V735 H260 V830" fill="none" stroke="#263238" stroke-width="2.53"/>
   <polygon points="253,830 267,830 260,842" fill="#263238"/>
-  <path d="M430 900 H463" fill="none" stroke="#263238" stroke-width="2.3"/>
+  <path d="M430 900 H463" fill="none" stroke="#263238" stroke-width="2.53"/>
   <polygon points="463,893 463,907 475,900" fill="#263238"/>
-  <path d="M815 900 H863" fill="none" stroke="#263238" stroke-width="2.3"/>
+  <path d="M815 900 H863" fill="none" stroke="#263238" stroke-width="2.53"/>
   <polygon points="863,893 863,907 875,900" fill="#263238"/>
-  <path d="M1225 900 H1288" fill="none" stroke="#00796B" stroke-width="2.3"/>
+  <path d="M1225 900 H1288" fill="none" stroke="#00796B" stroke-width="2.53"/>
   <polygon points="1288,893 1288,907 1300,900" fill="#00796B"/>
   <text x="1252" y="888" class="edge">sim</text>
 
   <!-- retorno de diagnóstico -->
-  <path d="M1050 976 V995 H55 V561 H58" fill="none" stroke="#F9A825" stroke-width="2.2" stroke-dasharray="9 6"/>
+  <path d="M1050 976 V995 H55 V561 H58" fill="none" stroke="#F9A825" stroke-width="2.42" stroke-dasharray="9 6"/>
   <polygon points="58,553 58,569 70,561" fill="#F9A825"/>
   <text x="1070" y="995" class="edge">não · corrigir a etapa responsável</text>
 
   <!-- legenda -->
-  <line x1="40" y1="1044" x2="1560" y2="1044" stroke="#B8C1C5" stroke-width="1"/>
-  <rect x="190" y="1061" width="28" height="19" rx="3" fill="#EEF4FB" stroke="#1565C0" stroke-width="1.5"/>
+  <line x1="40" y1="1044" x2="1560" y2="1044" stroke="#B8C1C5" stroke-width="1.10"/>
+  <rect x="190" y="1061" width="28" height="19" rx="3" fill="#EEF4FB" stroke="#1565C0" stroke-width="1.65"/>
   <text x="230" y="1076" class="legend">módulo isolado</text>
-  <rect x="455" y="1061" width="28" height="19" rx="3" fill="#EDF7F5" stroke="#00796B" stroke-width="1.5"/>
+  <rect x="455" y="1061" width="28" height="19" rx="3" fill="#EDF7F5" stroke="#00796B" stroke-width="1.65"/>
   <text x="495" y="1076" class="legend">integração</text>
-  <rect x="680" y="1061" width="28" height="19" rx="3" fill="#FEFAF1" stroke="#F9A825" stroke-width="1.5"/>
+  <rect x="680" y="1061" width="28" height="19" rx="3" fill="#FEFAF1" stroke="#F9A825" stroke-width="1.65"/>
   <text x="720" y="1076" class="legend">verificação</text>
-  <line x1="920" y1="1071" x2="965" y2="1071" stroke="#263238" stroke-width="2.2"/>
+  <line x1="920" y1="1071" x2="965" y2="1071" stroke="#263238" stroke-width="2.42"/>
   <polygon points="965,1064 965,1078 977,1071" fill="#263238"/>
   <text x="990" y="1076" class="legend">avanço</text>
-  <line x1="1120" y1="1071" x2="1165" y2="1071" stroke="#F9A825" stroke-width="2.1" stroke-dasharray="9 6"/>
+  <line x1="1120" y1="1071" x2="1165" y2="1071" stroke="#F9A825" stroke-width="2.31" stroke-dasharray="9 6"/>
   <polygon points="1165,1064 1165,1078 1177,1071" fill="#F9A825"/>
   <text x="1190" y="1076" class="legend">retorno para correção</text>
 </svg>

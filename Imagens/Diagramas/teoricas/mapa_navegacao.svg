@@ -3,35 +3,35 @@
      font-family="DejaVu Sans, Liberation Sans, sans-serif" role="img"
      aria-label="Mapa conceitual da navegação executável do protótipo. A watchface abre quatro páginas sequenciais de menu: Vitais, Luz e UV, Movimento e Configurações. Cada página acessa duas telas, e a bússola conduz à tela auxiliar de calibração.">
   <style>
-    .title       { font-size: 26px; font-weight: 700; fill: #263238; }
-    .subtitle    { font-size: 14px; font-style: italic; fill: #607178; }
-    .node-title  { font-size: 14px; font-weight: 700; fill: #263238; }
-    .screen-text { font-size: 11.5px; fill: #263238; }
-    .screen-main { font-size: 14px; font-weight: 700; fill: #263238; }
-    .button      { font-size: 9.5px; font-weight: 700; fill: #FFFFFF; }
-    .arrow-label { font-size: 11px; font-weight: 700; fill: #607178; }
-    .legend      { font-size: 12.5px; fill: #263238; }
-    .badge       { font-size: 12px; font-weight: 700; fill: #00796B; }
+    .title       { font-size: 35.10px; font-weight: 700; fill: #263238; }
+    .subtitle    { font-size: 18.90px; font-style: italic; fill: #607178; }
+    .node-title  { font-size: 18.90px; font-weight: 700; fill: #263238; }
+    .screen-text { font-size: 15.53px; fill: #263238; }
+    .screen-main { font-size: 18.90px; font-weight: 700; fill: #263238; }
+    .button      { font-size: 12.83px; font-weight: 700; fill: #FFFFFF; }
+    .arrow-label { font-size: 14.85px; font-weight: 700; fill: #607178; }
+    .legend      { font-size: 16.88px; fill: #263238; }
+    .badge       { font-size: 16.20px; font-weight: 700; fill: #00796B; }
   </style>
 
   <rect x="0" y="0" width="1600" height="930" fill="#FFFFFF"/>
   <text x="800" y="42" text-anchor="middle" class="title">Mapa de navegação executável do protótipo</text>
   <text x="800" y="69" text-anchor="middle" class="subtitle">mini-wireframes conceituais · sequência confirmada diretamente nos callbacks do firmware</text>
   <rect x="1352" y="27" width="200" height="38" rx="7" fill="#EDF7F5"
-        stroke="#00796B" stroke-width="1.4"/>
+        stroke="#00796B" stroke-width="1.54"/>
   <text x="1452" y="51" text-anchor="middle" class="badge">4 páginas de menu</text>
 
   <!-- Navegação principal -->
   <rect x="45" y="115" width="190" height="215" rx="10" fill="#F8FAFB"
-        stroke="#263238" stroke-width="1.7"/>
+        stroke="#263238" stroke-width="1.87"/>
   <rect x="325" y="115" width="190" height="215" rx="10" fill="#F8FAFB"
-        stroke="#263238" stroke-width="1.7"/>
+        stroke="#263238" stroke-width="1.87"/>
   <rect x="605" y="115" width="190" height="215" rx="10" fill="#F8FAFB"
-        stroke="#263238" stroke-width="1.7"/>
+        stroke="#263238" stroke-width="1.87"/>
   <rect x="885" y="115" width="190" height="215" rx="10" fill="#F8FAFB"
-        stroke="#263238" stroke-width="1.7"/>
+        stroke="#263238" stroke-width="1.87"/>
   <rect x="1165" y="115" width="190" height="215" rx="10" fill="#F8FAFB"
-        stroke="#263238" stroke-width="1.7"/>
+        stroke="#263238" stroke-width="1.87"/>
 
   <text x="140" y="142" text-anchor="middle" class="node-title">WATCHFACE</text>
   <text x="420" y="142" text-anchor="middle" class="node-title">PÁGINA 1 · VITAIS</text>
@@ -40,7 +40,7 @@
   <text x="1260" y="142" text-anchor="middle" class="node-title">PÁGINA 4 · CONFIGS</text>
 
   <!-- Molduras circulares dos mini-wireframes -->
-  <g fill="#FFFFFF" stroke="#B8C1C5" stroke-width="1.4">
+  <g fill="#FFFFFF" stroke="#B8C1C5" stroke-width="1.54">
     <circle cx="140" cy="228" r="68"/>
     <circle cx="420" cy="228" r="68"/>
     <circle cx="700" cy="228" r="68"/>
@@ -50,16 +50,16 @@
 
   <!-- Watchface -->
   <rect x="93" y="181" width="94" height="65" rx="7" fill="#F5F3E8"
-        stroke="#263238" stroke-width="1.2"/>
+        stroke="#263238" stroke-width="1.32"/>
   <text x="140" y="209" text-anchor="middle" class="screen-main">--:--</text>
   <text x="140" y="227" text-anchor="middle" class="screen-text">data</text>
-  <line x1="103" y1="236" x2="177" y2="236" stroke="#B8C1C5" stroke-width="1"/>
+  <line x1="103" y1="236" x2="177" y2="236" stroke="#B8C1C5" stroke-width="1.10"/>
   <rect x="113" y="263" width="54" height="20" rx="4" fill="#263238"/>
   <text x="140" y="277" text-anchor="middle" class="button">MENU</text>
 
   <!-- Menu 1 -->
-  <circle cx="390" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2"/>
-  <circle cx="450" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2"/>
+  <circle cx="390" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2.20"/>
+  <circle cx="450" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2.20"/>
   <text x="390" y="224" text-anchor="middle" class="screen-main">HR</text>
   <text x="450" y="224" text-anchor="middle" class="screen-main">T</text>
   <text x="390" y="252" text-anchor="middle" class="screen-text">Coracao</text>
@@ -70,8 +70,8 @@
 
   <!-- Menu 2 -->
   <text x="640" y="226" text-anchor="middle" class="screen-main">‹</text>
-  <circle cx="670" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2"/>
-  <circle cx="730" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2"/>
+  <circle cx="670" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2.20"/>
+  <circle cx="730" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2.20"/>
   <text x="670" y="223" text-anchor="middle" class="screen-main">LUX</text>
   <text x="730" y="223" text-anchor="middle" class="screen-main">UV</text>
   <text x="670" y="252" text-anchor="middle" class="screen-text">Luz</text>
@@ -80,8 +80,8 @@
 
   <!-- Menu 3 -->
   <text x="920" y="226" text-anchor="middle" class="screen-main">‹</text>
-  <circle cx="950" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2"/>
-  <circle cx="1010" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2"/>
+  <circle cx="950" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2.20"/>
+  <circle cx="1010" cy="218" r="23" fill="#FFFFFF" stroke="#1565C0" stroke-width="2.20"/>
   <text x="950" y="223" text-anchor="middle" class="screen-main">C</text>
   <text x="1010" y="223" text-anchor="middle" class="screen-main">P</text>
   <text x="950" y="252" text-anchor="middle" class="screen-text">Bússola</text>
@@ -90,15 +90,15 @@
 
   <!-- Menu 4 -->
   <text x="1200" y="226" text-anchor="middle" class="screen-main">‹</text>
-  <circle cx="1230" cy="218" r="23" fill="#FFFFFF" stroke="#F9A825" stroke-width="2"/>
-  <circle cx="1290" cy="218" r="23" fill="#FFFFFF" stroke="#F9A825" stroke-width="2"/>
+  <circle cx="1230" cy="218" r="23" fill="#FFFFFF" stroke="#F9A825" stroke-width="2.20"/>
+  <circle cx="1290" cy="218" r="23" fill="#FFFFFF" stroke="#F9A825" stroke-width="2.20"/>
   <text x="1230" y="223" text-anchor="middle" class="screen-main">H</text>
   <text x="1290" y="223" text-anchor="middle" class="screen-main">D</text>
   <text x="1230" y="252" text-anchor="middle" class="screen-text">Hora</text>
   <text x="1290" y="252" text-anchor="middle" class="screen-text">Data</text>
 
   <!-- Setas da sequência principal -->
-  <g stroke="#263238" stroke-width="2.1" fill="#263238">
+  <g stroke="#263238" stroke-width="2.31" fill="#263238">
     <line x1="245" y1="225" x2="315" y2="225"/>
     <path d="M245 225 L256 219 L256 231 Z M315 225 L304 219 L304 231 Z"/>
     <line x1="525" y1="225" x2="595" y2="225"/>
@@ -114,7 +114,7 @@
   <text x="1120" y="208" text-anchor="middle" class="arrow-label">‹ / ›</text>
 
   <!-- Nós de módulos e telas auxiliares -->
-  <g fill="#F8FBFE" stroke="#1565C0" stroke-width="1.8">
+  <g fill="#F8FBFE" stroke="#1565C0" stroke-width="1.98">
     <rect x="285" y="435" width="130" height="170" rx="9"/>
     <rect x="425" y="435" width="130" height="170" rx="9"/>
     <rect x="565" y="435" width="130" height="170" rx="9"/>
@@ -122,7 +122,7 @@
     <rect x="845" y="435" width="130" height="170" rx="9"/>
     <rect x="985" y="435" width="130" height="170" rx="9"/>
   </g>
-  <g fill="#FEFBF3" stroke="#F9A825" stroke-width="1.8">
+  <g fill="#FEFBF3" stroke="#F9A825" stroke-width="1.98">
     <rect x="1125" y="435" width="130" height="170" rx="9"/>
     <rect x="1265" y="435" width="130" height="170" rx="9"/>
     <rect x="845" y="690" width="130" height="160" rx="9"/>
@@ -139,7 +139,7 @@
   <text x="910" y="717" text-anchor="middle" class="node-title">CALIBRAÇÃO</text>
 
   <!-- Mini-wireframes dos módulos -->
-  <g fill="#FFFFFF" stroke="#B8C1C5" stroke-width="1.2">
+  <g fill="#FFFFFF" stroke="#B8C1C5" stroke-width="1.32">
     <circle cx="350" cy="526" r="48"/><circle cx="490" cy="526" r="48"/>
     <circle cx="630" cy="526" r="48"/><circle cx="770" cy="526" r="48"/>
     <circle cx="910" cy="526" r="48"/><circle cx="1050" cy="526" r="48"/>
@@ -168,8 +168,8 @@
   <text x="770" y="560" text-anchor="middle" class="button">VOLTAR</text>
 
   <text x="910" y="489" text-anchor="middle" class="screen-text">N</text>
-  <circle cx="910" cy="523" r="25" fill="none" stroke="#263238" stroke-width="1.2"/>
-  <line x1="910" y1="499" x2="910" y2="547" stroke="#1565C0" stroke-width="2"/>
+  <circle cx="910" cy="523" r="25" fill="none" stroke="#263238" stroke-width="1.32"/>
+  <line x1="910" y1="499" x2="910" y2="547" stroke="#1565C0" stroke-width="2.20"/>
   <path d="M910 499 L905 510 L915 510 Z" fill="#1565C0"/>
   <rect x="868" y="551" width="39" height="15" rx="3" fill="#263238"/>
   <rect x="909" y="551" width="44" height="15" rx="3" fill="#263238"/>
@@ -197,7 +197,7 @@
   <text x="1350.5" y="557" text-anchor="middle" class="button">SALVAR</text>
 
   <!-- Mini-wireframe de calibração -->
-  <g fill="#FFFFFF" stroke="#F9A825" stroke-width="1.6">
+  <g fill="#FFFFFF" stroke="#F9A825" stroke-width="1.76">
     <circle cx="910" cy="735" r="4"/><circle cx="936" cy="746" r="4"/>
     <circle cx="947" cy="772" r="4"/><circle cx="936" cy="798" r="4"/>
     <circle cx="910" cy="809" r="4"/><circle cx="884" cy="798" r="4"/>
@@ -208,7 +208,7 @@
   <text x="910" y="826" text-anchor="middle" class="button">CANCELAR</text>
 
   <!-- Acesso aos módulos: ida e volta -->
-  <g stroke="#1565C0" stroke-width="2.1" fill="#1565C0">
+  <g stroke="#1565C0" stroke-width="2.31" fill="#1565C0">
     <line x1="420" y1="340" x2="350" y2="425"/>
     <path d="M350 425 L351 412 L361 420 Z"/>
     <line x1="420" y1="340" x2="490" y2="425"/>
@@ -227,7 +227,7 @@
   </g>
 
   <!-- Acesso a configurações e calibração -->
-  <g stroke="#F9A825" stroke-width="2.1" stroke-dasharray="7 5" fill="#F9A825">
+  <g stroke="#F9A825" stroke-width="2.31" stroke-dasharray="7 5" fill="#F9A825">
     <line x1="1260" y1="340" x2="1190" y2="425"/>
     <path d="M1190 425 L1191 412 L1201 420 Z"
           stroke="none"/>
@@ -242,15 +242,15 @@
   <text x="931" y="651" class="arrow-label">calibrar / retornar</text>
 
   <!-- Legenda -->
-  <line x1="180" y1="888" x2="250" y2="888" stroke="#263238" stroke-width="2.2"/>
+  <line x1="180" y1="888" x2="250" y2="888" stroke="#263238" stroke-width="2.42"/>
   <path d="M180 888 L191 882 L191 894 Z M250 888 L239 882 L239 894 Z" fill="#263238"/>
   <text x="265" y="893" class="legend">navegação principal</text>
 
-  <line x1="545" y1="888" x2="615" y2="888" stroke="#1565C0" stroke-width="2.2"/>
+  <line x1="545" y1="888" x2="615" y2="888" stroke="#1565C0" stroke-width="2.42"/>
   <path d="M545 888 L556 882 L556 894 Z M615 888 L604 882 L604 894 Z" fill="#1565C0"/>
   <text x="630" y="893" class="legend">acesso a módulo / voltar</text>
 
-  <line x1="970" y1="888" x2="1040" y2="888" stroke="#F9A825" stroke-width="2.2"
+  <line x1="970" y1="888" x2="1040" y2="888" stroke="#F9A825" stroke-width="2.42"
         stroke-dasharray="7 5"/>
   <path d="M970 888 L981 882 L981 894 Z M1040 888 L1029 882 L1029 894 Z" fill="#F9A825"/>
   <text x="1055" y="893" class="legend">tela auxiliar / retornar</text>
