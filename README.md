@@ -22,14 +22,15 @@ As avaliações têm alcance funcional e arquitetural. O repositório não atrib
 
 ## Conteúdo do repositório
 
-- [Monografia completa](Rascunho/TCC_COMPLETO.pdf)
-- [Fonte LaTeX consolidada](Rascunho/TCC_COMPLETO.tex)
+- [Monografia corrigida após a banca](Monografia/Monografia_TCC_Guilherme_da_Costa_Franco_Corrigido.pdf)
+- [Monografia apresentada à banca](Monografia/Monografia_TCC_Guilherme_da_Costa_Franco.pdf)
+- [Slides da defesa](Monografia/Defesa_TCC_Guilherme_Franco.pptx)
 - [Firmware integrado](Codigos/IDroid/)
 - [Testes isolados dos componentes](Codigos/Teste_de_componentes/)
 - [Ensaios e rastreabilidade](Ensaios/README.md)
 - [Problemas e soluções de integração](docs/problemas_solucoes/00_INDICE.md)
 - [Figuras, fotografias e renderizações](Imagens/)
-- [Documentação de estudo e preparação para a banca](Documentacao/)
+- [Esquemático e projeto do protótipo desenvolvido](/Projeto_PCB/)
 
 ## Reprodutibilidade
 
