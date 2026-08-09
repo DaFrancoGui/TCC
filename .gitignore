@@ -6,7 +6,7 @@ managed_components/
 
 # Arduino reference libraries
 docs/
-Rascunho/
+#Rascunho/
 
 # Python
 *.pyc

@@ -1,0 +1,95 @@
+\relax 
+\@writefile{toc}{\contentsline {section}{\numberline {1}Desenvolvimento e Implementa\c {c}\~ao}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Vis\~ao geral do sistema}{1}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Arquitetura de componentes da plataforma implementada\relax }}{1}{}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:arquitetura-implementada}{{1}{1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Arquitetura de hardware}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1}Barramento I$^2$C compartilhado}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.2}Interface SPI}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.3}Interface 1-Wire/RMT}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.4}Alimenta\c {c}\~ao}{3}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Divisor resistivo empregado na leitura da tens\~ao da bateria\relax }}{3}{}\protected@file@percent }
+\newlabel{fig:divisor-bateria-xiao}{{2}{3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.5}Placa prot\'otipo e inv\'olucro}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Arquitetura de software}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.1}Organiza\c {c}\~ao do firmware}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.2}Contrato uniforme de m\'odulo}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Ciclo de vida dos m\'odulos funcionais\relax }}{6}{}\protected@file@percent }
+\newlabel{fig:ciclo-vida-modulo}{{3}{6}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.3}Servi\c {c}os do n\'ucleo}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.4}Ciclo de vida dos m\'odulos}{7}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Fluxo para integra\c {c}\~ao de um novo sensor ao firmware\relax }}{7}{}\protected@file@percent }
+\newlabel{fig:integracao-novo-sensor}{{4}{7}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.5}Inicializa\c {c}\~ao n\~ao fatal}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.6}Modelo de concorr\^encia}{8}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Tarefas FreeRTOS e recursos compartilhados no n\'ucleo \'unico\relax }}{9}{}\protected@file@percent }
+\newlabel{fig:tarefas-freertos}{{5}{9}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.7}Comunica\c {c}\~ao entre tarefas e interface}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.8}Inclus\~ao de novo m\'odulo}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Robustez do barramento I$^2$C}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.1}Problema do NACK}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.2}Mutex com heran\c {c}a de prioridade}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.3}Recupera\c {c}\~ao do barramento}{10}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Transa\c {c}\~ao I$^2$C e recupera\c {c}\~ao ap\'os falha\relax }}{11}{}\protected@file@percent }
+\newlabel{fig:i2c-recuperacao}{{6}{11}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.4}Scanner no boot}{11}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.5}Redu\c {c}\~ao das transa\c {c}\~oes do touch}{11}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.6}Efeito dos logs no sistema}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5}Interface gr\'afica e rel\'ogio}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.1}Inicializa\c {c}\~ao do display}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.2}Integra\c {c}\~ao com LVGL}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.3}Corre\c {c}\~ao de cores}{13}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.4}Navega\c {c}\~ao}{13}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Mapa de navega\c {c}\~ao da interface do prot\'otipo\relax }}{13}{}\protected@file@percent }
+\newlabel{fig:mapa-navegacao}{{7}{13}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.5}Tela principal}{14}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.6}Fonte otimizada}{14}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.7}Configura\c {c}\~ao por toque}{14}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.8}RTC PCF8563}{14}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.6}M\'odulo MAX30102}{15}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.1}Configura\c {c}\~ao}{15}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.2}FIFO e aquisi\c {c}\~ao}{15}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Aquisi\c {c}\~ao e processamento implementados no m\'odulo MAX30102\relax }}{16}{}\protected@file@percent }
+\newlabel{fig:max30102-fluxo}{{8}{16}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.3}Detec\c {c}\~ao de dedo}{16}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.4}Filtragem}{16}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.5}Frequ\^encia card\'iaca}{17}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.6}Estimativa de SpO$_2$}{17}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.7}Invers\~ao dos canais em placas de conex\~ao}{17}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.8}Integra\c {c}\~ao com tarefa e tela}{17}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.7}M\'odulo DS18B20}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.7.1}Componente oficial e RMT}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.7.2}Ciclo de convers\~ao}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.7.3}CRC e formata\c {c}\~ao}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.7.4}Integra\c {c}\~ao com tarefa e tela}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.8}M\'odulo LTR390}{19}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.8.1}Configura\c {c}\~ao}{19}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.8.2}ALS e UVS}{19}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.8.3}Altern\^ancia e estabiliza\c {c}\~ao}{19}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces M\'aquina de estados implementada para o LTR390\relax }}{20}{}\protected@file@percent }
+\newlabel{fig:ltr390-estados}{{9}{20}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.8.4}Convers\~ao para lux e UVI}{20}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.8.5}Remo\c {c}\~ao do SW\_RESET}{20}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.8.6}Integra\c {c}\~ao com tarefa e tela}{21}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.9}M\'odulo de b\'ussola}{21}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.9.1}Bypass e inicializa\c {c}\~ao}{21}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.9.2}ASA e convers\~ao}{21}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.9.3}Calibra\c {c}\~ao}{21}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Calibra\c {c}\~ao magn\'etica executada no prot\'otipo\relax }}{22}{}\protected@file@percent }
+\newlabel{fig:calibracao-ondevice}{{10}{22}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.9.4}NVS}{23}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.9.5}Heading e filtro}{23}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.9.6}Integra\c {c}\~ao com tarefa e tela}{23}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.10}M\'odulo de ped\^ometro}{23}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.10.1}Tentativa com DMP}{23}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.10.2}Algoritmo pr\'oprio}{24}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.10.3}Configura\c {c}\~ao}{24}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.10.4}Magnitude, EMA, limiar e intervalo m\'inimo}{24}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Arquitetura do m\'odulo MPU-9250\relax }}{25}{}\protected@file@percent }
+\newlabel{fig:mpu9250-modulo}{{11}{25}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.10.5}Dist\^ancia estimada}{25}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.10.6}Integra\c {c}\~ao com tarefa e tela}{25}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.11}Uso de mem\'oria e otimiza\c {c}\~oes}{25}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.12}Persist\^encia}{26}{}\protected@file@percent }
+\gdef \@abspage@last{26}

@@ -1,0 +1,27 @@
+Firmware integrado iDroid — relatório ESP-IDF size
+Data da coleta: 2026-07-27
+Revisão: 3ede804-dirty (diff executável vazio; alteração local somente em comentário GPIO2 → GPIO20)
+ESP-IDF: v5.5.1
+Alvo: ESP32-C6
+Configuração: single-app, flash 2 MB, otimização debug
+Comando registrado pelo ESP-IDF: ninja size
+
+Memory Type Usage Summary
+
+Memory Type/Section | Used [bytes] | Used [%] | Remain [bytes] | Total [bytes]
+Flash Code           | 710364       |          |                |
+  .text              | 412284       |          |                |
+  .rodata            | 297824       |          |                |
+  .appdesc           | 256          |          |                |
+DIRAM                | 179360       | 39.67    | 272752         | 452112
+  .bss               | 105632       | 23.36    |                |
+  .text              | 65512        | 14.49    |                |
+  .data              | 8216         | 1.82     |                |
+LP SRAM              | 56           | 0.34     | 16328          | 16384
+  .force_slow        | 32           | 0.20     |                |
+  .rtc_reserved      | 24           | 0.15     |                |
+
+Total image size: 784124 bytes (.bin may be padded larger)
+idroid.bin binary size 0xbf770 bytes (784240 bytes)
+Smallest app partition: 0x100000 bytes (1048576 bytes)
+Free: 0x40890 bytes (264336 bytes; ESP-IDF summary: 25%)

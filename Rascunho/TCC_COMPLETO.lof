@@ -1,0 +1,37 @@
+\contentsline {figure}{\numberline {1}{\ignorespaces Rela\c {c}\~ao entre a plataforma modular e a aplica\c {c}\~ao demonstradora\relax }}{2}{figure.caption.4}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Contrato uniforme e detalhes encapsulados em m\'odulos conceituais\relax }}{9}{figure.caption.17}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Diferen\c {c}a conceitual entre atrasos relativos e refer\^encia temporal peri\'odica\relax }}{12}{figure.caption.23}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Invers\~ao de prioridade e efeito da heran\c {c}a sobre o bloqueio\relax }}{14}{figure.caption.27}%
+\contentsline {figure}{\numberline {5}{\ignorespaces Linha I$^2$C em dreno aberto e subida determinada pela rede de \emph {pull-up} e pela capacit\^ancia equivalente\relax }}{16}{figure.caption.31}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Geometria de uma \'area circular inscrita em uma matriz l\'ogica quadrada\relax }}{20}{figure.caption.38}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Configura\c {c}\~oes transmissiva e reflexiva da fotopletismografia\relax }}{24}{figure.caption.48}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Decomposi\c {c}\~ao conceitual do sinal PPG em componentes DC e AC\relax }}{25}{figure.caption.50}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Efeitos de \emph {hard iron} e \emph {soft iron} e alcance da corre\c {c}\~ao diagonal\relax }}{31}{figure.caption.65}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Detec\c {c}\~ao conceitual de passos por limiar e intervalo refrat\'ario\relax }}{33}{figure.caption.67}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Placa prot\'otipo com display e m\'odulos durante a opera\c {c}\~ao\relax }}{38}{figure.caption.84}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Renderiza\c {c}\~oes das faces da placa desenvolvida\relax }}{39}{figure.caption.85}%
+\contentsline {figure}{\numberline {13}{\ignorespaces Mapa de liga\c {c}\~oes da montagem final\relax }}{41}{figure.caption.87}%
+\contentsline {figure}{\numberline {14}{\ignorespaces M\'etodo incremental de desenvolvimento e integra\c {c}\~ao\relax }}{43}{figure.caption.93}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Instrumenta\c {c}\~ao empregada nos ensaios do prot\'otipo\relax }}{45}{figure.caption.98}%
+\contentsline {figure}{\numberline {16}{\ignorespaces Arquitetura de componentes da plataforma implementada\relax }}{51}{figure.caption.116}%
+\contentsline {figure}{\numberline {17}{\ignorespaces Divisor resistivo empregado na leitura da tens\~ao da bateria\relax }}{53}{figure.caption.122}%
+\contentsline {figure}{\numberline {18}{\ignorespaces Ciclo de vida dos m\'odulos funcionais\relax }}{55}{figure.caption.127}%
+\contentsline {figure}{\numberline {19}{\ignorespaces Fluxo para integra\c {c}\~ao de um novo sensor ao firmware\relax }}{56}{figure.caption.130}%
+\contentsline {figure}{\numberline {20}{\ignorespaces Tarefas FreeRTOS e recursos compartilhados no n\'ucleo \'unico\relax }}{57}{figure.caption.133}%
+\contentsline {figure}{\numberline {21}{\ignorespaces Transa\c {c}\~ao I$^2$C e recupera\c {c}\~ao ap\'os falha\relax }}{60}{figure.caption.140}%
+\contentsline {figure}{\numberline {22}{\ignorespaces Mapa de navega\c {c}\~ao da interface do prot\'otipo\relax }}{62}{figure.caption.149}%
+\contentsline {figure}{\numberline {23}{\ignorespaces Aquisi\c {c}\~ao e processamento implementados no m\'odulo MAX30102\relax }}{64}{figure.caption.157}%
+\contentsline {figure}{\numberline {24}{\ignorespaces M\'aquina de estados implementada para o LTR390\relax }}{68}{figure.caption.173}%
+\contentsline {figure}{\numberline {25}{\ignorespaces Calibra\c {c}\~ao magn\'etica executada no prot\'otipo\relax }}{70}{figure.caption.181}%
+\contentsline {figure}{\numberline {26}{\ignorespaces Arquitetura do m\'odulo MPU-9250\relax }}{73}{figure.caption.190}%
+\contentsline {figure}{\numberline {27}{\ignorespaces Depend\^encias identificadas por an\'alise est\'atica do firmware integrado\relax }}{78}{figure.caption.205}%
+\contentsline {figure}{\numberline {28}{\ignorespaces Linha de base do canal infravermelho entre 15 e 73 s e compara\c {c}\~ao espectral antes e depois do passa-baixa no recorte de 30 a 40 s\relax }}{82}{figure.caption.218}%
+\contentsline {figure}{\numberline {29}{\ignorespaces Frequ\^encia card\'iaca indicada pelo MAX30102 e faixa observada no ox\'imetro\relax }}{83}{figure.caption.220}%
+\contentsline {figure}{\numberline {30}{\ignorespaces Resposta do DS18B20 aos transientes de resfriamento e aquecimento\relax }}{85}{figure.caption.226}%
+\contentsline {figure}{\numberline {31}{\ignorespaces Faixa de UVI indicada pelo LTR390 e valor meteorol\'ogico de refer\^encia\relax }}{86}{figure.caption.231}%
+\contentsline {figure}{\numberline {32}{\ignorespaces Ilumin\^ancia observada e teto da configura\c {c}\~ao utilizada\relax }}{87}{figure.caption.233}%
+\contentsline {figure}{\numberline {33}{\ignorespaces Compara\c {c}\~ao magn\'etica entre o prot\'otipo e a b\'ussola de consumo\relax }}{88}{figure.caption.238}%
+\contentsline {figure}{\numberline {34}{\ignorespaces Contagem manual, prot\'otipo e Amazfit Active 2 no percurso de 100 m\relax }}{89}{figure.caption.244}%
+\contentsline {figure}{\numberline {35}{\ignorespaces Capturas da interface execut\'avel da plataforma\relax }}{90}{figure.caption.247}%
+\contentsline {figure}{\numberline {36}{\ignorespaces Sequ\^encia do ensaio de manuten\c {c}\~ao da hora com o sistema desligado\relax }}{91}{figure.caption.248}%
+\contentsline {figure}{\numberline {37}{\ignorespaces Corrente total medida nos cen\'arios funcionais da plataforma\relax }}{92}{figure.caption.250}%
