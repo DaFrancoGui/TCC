@@ -13,6 +13,7 @@ docs/*
 !docs/problemas_solucoes/**
 Rascunho/
 Apresentacao/
+Capitulos/
 
 # Python
 *.pyc
@@ -35,4 +36,4 @@ Desktop.ini
 # Logs
 *.log
 
-/Capitulos/
+
