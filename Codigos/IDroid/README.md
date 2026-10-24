@@ -28,6 +28,17 @@ No Linux/macOS, carregue o SDK com `. ~/esp/esp-idf/export.sh` antes dos comando
 
 ## Baixar a LVGL 8.3.11
 
+Com o terminal ESP-IDF ativado, instale também as versões das ferramentas Python
+usadas na validação e no CI:
+
+```sh
+python -m pip install -r tests/requirements-build.txt
+```
+
+Isso fixa o Component Manager 2.5.2 e o esp-idf-kconfig 2.5.4, além da versão do SDK.
+A imagem Docker `espressif/idf:v5.5.1` contém suas próprias ferramentas Python;
+fixar apenas essa imagem não reproduz necessariamente um ambiente local atualizado.
+
 Este projeto já fixa `lvgl/lvgl: "==8.3.11"` em `main/idf_component.yml`.
 Na pasta deste README, execute:
 
@@ -183,6 +194,13 @@ UV/ALS, falhas do RTC, gravação parcial assíncrona, retentativas sem vazament
 leitura FIFO em rajadas, overflow e lote parcialmente lido.
 
 O workflow GitHub compila o firmware normal e uma configuração de diagnóstico.
+Ambos usam um `sdkconfig` novo dentro da respectiva pasta de build, gerado dos
+defaults; o arquivo local versionado não mascara opções ausentes. O CI verifica
+também que a resolução não altera `dependencies.lock`. O CMake exige LVGL 8.3.11,
+RGB565 e troca de bytes: `LV_COLOR_16_SWAP` existe no
+[Kconfig oficial da LVGL 8.3.11](https://github.com/lvgl/lvgl/blob/v8.3.11/Kconfig),
+e um aviso de símbolo desconhecido deve levar à conferência da biblioteca carregada.
+
 O GPIO2 dessa configuração é apenas para **cobertura de compilação** da entrada
 opcional do carregador; não descreve uma ligação presente na placa.
 
