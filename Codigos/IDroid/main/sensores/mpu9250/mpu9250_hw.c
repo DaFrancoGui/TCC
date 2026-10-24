@@ -4,7 +4,7 @@
  */
 
 #include "mpu9250_hw.h"
-#include "i2c_recover.h"
+#include "i2c_shared.h"
 #include "esp_log.h"
 #include "freertos/task.h"
 
@@ -46,27 +46,18 @@ static float s_asa_x = 1.0f, s_asa_y = 1.0f, s_asa_z = 1.0f;
 /* ── Helpers I2C (genericos por device, com mutex) ── */
 static esp_err_t reg_write(i2c_master_dev_handle_t dev, uint8_t reg, uint8_t val)
 {
-    uint8_t buf[2] = {reg, val};
-    esp_err_t ret;
-    if (s_mutex) xSemaphoreTake(s_mutex, portMAX_DELAY);
-    ret = i2c_master_transmit(dev, buf, 2, AK_TIMEOUT_MS);
-    if (ret != ESP_OK) i2c_recover_bus();
-    if (s_mutex) xSemaphoreGive(s_mutex);
-    return ret;
+    uint8_t buf[2]={reg,val};
+    return i2c_shared_write(dev,s_mutex,buf,sizeof(buf),AK_TIMEOUT_MS);
 }
 
 static esp_err_t reg_read(i2c_master_dev_handle_t dev, uint8_t reg, uint8_t *data, size_t len)
 {
-    esp_err_t ret;
-    if (s_mutex) xSemaphoreTake(s_mutex, portMAX_DELAY);
-    ret = i2c_master_transmit_receive(dev, &reg, 1, data, len, AK_TIMEOUT_MS);
-    if (ret != ESP_OK) i2c_recover_bus();
-    if (s_mutex) xSemaphoreGive(s_mutex);
-    return ret;
+    return i2c_shared_read(dev,s_mutex,reg,data,len,AK_TIMEOUT_MS);
 }
 
 esp_err_t mpu9250_hw_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
 {
+    if (s_ok) return ESP_OK;
     esp_err_t ret;
     s_mutex = mutex;
 
@@ -77,31 +68,31 @@ esp_err_t mpu9250_hw_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
         .scl_speed_hz    = 100000,
     };
     ret = i2c_master_bus_add_device(bus, &mpu_cfg, &s_mpu);
-    if (ret != ESP_OK) { ESP_LOGE(TAG, "add MPU falhou"); return ret; }
+    if (ret != ESP_OK) { ESP_LOGE(TAG, "add MPU falhou"); goto fail; }
 
     /* WHO_AM_I do MPU */
     uint8_t who = 0;
     if (reg_read(s_mpu, MPU_WHO_AM_I, &who, 1) != ESP_OK) {
         ESP_LOGE(TAG, "MPU nao responde em 0x68");
-        return ESP_ERR_NOT_FOUND;
+        ret=ESP_ERR_NOT_FOUND; goto fail;
     }
     ESP_LOGI(TAG, "MPU WHO_AM_I=0x%02X", who);
-    if (who == 0x70 || who == 0x68) {
-        ESP_LOGE(TAG, "Modulo e MPU-6500 (sem magnetometro)");
-        return ESP_ERR_NOT_SUPPORTED;
+    if (who != 0x71 && who != 0x73) {
+        ESP_LOGE(TAG, "Identificacao nao suportada: 0x%02X",who);
+        ret=ESP_ERR_NOT_SUPPORTED; goto fail;
     }
 
     /* Reset, wake, desabilita I2C master, habilita bypass (expoe AK8963) */
-    reg_write(s_mpu, MPU_PWR_MGMT_1, 0x80);  vTaskDelay(pdMS_TO_TICKS(100));
-    reg_write(s_mpu, MPU_PWR_MGMT_1, 0x01);  vTaskDelay(pdMS_TO_TICKS(50));
-    reg_write(s_mpu, MPU_USER_CTRL, 0x00);   vTaskDelay(pdMS_TO_TICKS(10));
-    reg_write(s_mpu, MPU_INT_PIN_CFG, 0x22); vTaskDelay(pdMS_TO_TICKS(50));
+    ret=reg_write(s_mpu, MPU_PWR_MGMT_1, 0x80); if (ret != ESP_OK) goto fail;  vTaskDelay(pdMS_TO_TICKS(100));
+    ret=reg_write(s_mpu, MPU_PWR_MGMT_1, 0x01); if (ret != ESP_OK) goto fail;  vTaskDelay(pdMS_TO_TICKS(50));
+    ret=reg_write(s_mpu, MPU_USER_CTRL, 0x00); if (ret != ESP_OK) goto fail;   vTaskDelay(pdMS_TO_TICKS(10));
+    ret=reg_write(s_mpu, MPU_INT_PIN_CFG, 0x22); if (ret != ESP_OK) goto fail; vTaskDelay(pdMS_TO_TICKS(50));
 
     /* Acelerometro (para o pedometro): gyro off, +/-2g, DLPF 20Hz, 50 Hz */
-    reg_write(s_mpu, MPU_PWR_MGMT_2, 0x07);
-    reg_write(s_mpu, MPU_ACCEL_CONFIG, 0x00);
-    reg_write(s_mpu, MPU_ACCEL_CONFIG2, 0x04);
-    reg_write(s_mpu, MPU_SMPLRT_DIV, 19);
+    ret=reg_write(s_mpu, MPU_PWR_MGMT_2, 0x07); if (ret != ESP_OK) goto fail;
+    ret=reg_write(s_mpu, MPU_ACCEL_CONFIG, 0x00); if (ret != ESP_OK) goto fail;
+    ret=reg_write(s_mpu, MPU_ACCEL_CONFIG2, 0x04); if (ret != ESP_OK) goto fail;
+    ret=reg_write(s_mpu, MPU_SMPLRT_DIV, 19); if (ret != ESP_OK) goto fail;
 
     /* Adiciona o AK8963 (0x0C), agora visivel via bypass */
     i2c_device_config_t ak_cfg = {
@@ -110,35 +101,42 @@ esp_err_t mpu9250_hw_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
         .scl_speed_hz    = 100000,
     };
     ret = i2c_master_bus_add_device(bus, &ak_cfg, &s_ak);
-    if (ret != ESP_OK) { ESP_LOGE(TAG, "add AK8963 falhou"); return ret; }
+    if (ret != ESP_OK) { ESP_LOGE(TAG, "add AK8963 falhou"); goto fail; }
 
     uint8_t ak_who = 0;
     if (reg_read(s_ak, AK_WHO_AM_I, &ak_who, 1) != ESP_OK || ak_who != 0x48) {
         ESP_LOGE(TAG, "AK8963 nao detectado (WHO=0x%02X)", ak_who);
-        return ESP_ERR_NOT_FOUND;
+        ret=ESP_ERR_NOT_FOUND; goto fail;
     }
 
     /* AK8963: reset, le ASA no Fuse ROM, depois modo continuo 100 Hz 16-bit */
-    reg_write(s_ak, AK_CNTL2, 0x01);                vTaskDelay(pdMS_TO_TICKS(100));
-    reg_write(s_ak, AK_CNTL1, AK_MODE_FUSE_ROM);    vTaskDelay(pdMS_TO_TICKS(10));
+    ret=reg_write(s_ak, AK_CNTL2, 0x01); if (ret != ESP_OK) goto fail;                vTaskDelay(pdMS_TO_TICKS(100));
+    ret=reg_write(s_ak, AK_CNTL1, AK_MODE_FUSE_ROM); if (ret != ESP_OK) goto fail;    vTaskDelay(pdMS_TO_TICKS(10));
     uint8_t asa[3] = {128, 128, 128};
-    reg_read(s_ak, AK_ASAX, asa, 3);
+    ret=reg_read(s_ak,AK_ASAX,asa,3);
+    if (ret != ESP_OK) goto fail;
     s_asa_x = ((float)asa[0] - 128.0f) / 256.0f + 1.0f;
     s_asa_y = ((float)asa[1] - 128.0f) / 256.0f + 1.0f;
     s_asa_z = ((float)asa[2] - 128.0f) / 256.0f + 1.0f;
-    reg_write(s_ak, AK_CNTL1, AK_MODE_POWERDOWN);   vTaskDelay(pdMS_TO_TICKS(10));
-    reg_write(s_ak, AK_CNTL1, AK_MODE_CONT2 | AK_BIT_16);
+    ret=reg_write(s_ak, AK_CNTL1, AK_MODE_POWERDOWN); if (ret != ESP_OK) goto fail;   vTaskDelay(pdMS_TO_TICKS(10));
+    ret=reg_write(s_ak, AK_CNTL1, AK_MODE_CONT2 | AK_BIT_16); if (ret != ESP_OK) goto fail;
     vTaskDelay(pdMS_TO_TICKS(10));
 
     ESP_LOGI(TAG, "AK8963 ok (ASA: %.3f %.3f %.3f)", s_asa_x, s_asa_y, s_asa_z);
     s_ok = true;
     return ESP_OK;
+fail:
+    if (s_ak) { i2c_master_bus_rm_device(s_ak); s_ak=NULL; }
+    if (s_mpu) { i2c_master_bus_rm_device(s_mpu); s_mpu=NULL; }
+    s_ok=false;
+    return ret;
 }
 
 bool mpu9250_hw_ok(void) { return s_ok; }
 
 esp_err_t mpu9250_hw_read_accel(mpu9250_accel_raw_t *out)
 {
+    if (!s_ok || !out) return ESP_ERR_INVALID_STATE;
     uint8_t b[6];
     esp_err_t ret = reg_read(s_mpu, MPU_ACCEL_XOUT_H, b, 6);
     if (ret != ESP_OK) return ret;
@@ -155,6 +153,7 @@ void mpu9250_hw_get_asa(float *ax, float *ay, float *az)
 
 esp_err_t mpu9250_hw_read_mag(int16_t *mx, int16_t *my, int16_t *mz)
 {
+    if (!s_ok || !mx || !my || !mz) return ESP_ERR_INVALID_STATE;
     uint8_t st1 = 0;
     esp_err_t ret = reg_read(s_ak, AK_ST1, &st1, 1);
     if (ret != ESP_OK) return ret;

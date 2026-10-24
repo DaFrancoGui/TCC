@@ -1,0 +1,38 @@
+menu "iDroid"
+    config IDROID_RUNTIME_STATS
+        bool
+        default y
+        select FREERTOS_GENERATE_RUN_TIME_STATS
+    config IDROID_SCREENSHOT
+        bool "Enable BOOT screenshot task (diagnostic)"
+        select LV_USE_SNAPSHOT
+        default n
+        help
+            Requires LV_USE_SNAPSHOT. Allocates about 115 KB temporarily.
+    config IDROID_LCD_DOUBLE_BUFFER
+        bool "Use two DMA draw buffers (60 lines each)"
+        default n
+    config IDROID_BAT_DIVIDER_MILLI
+        int "Battery divider multiplier x1000"
+        range 1000 10000
+        default 2000
+    config IDROID_BAT_GAIN_PPM
+        int "Battery voltage calibration gain (ppm)"
+        range 800000 1200000
+        default 1000000
+    config IDROID_BAT_OFFSET_MV
+        int "Battery voltage calibration offset (mV, after divider)"
+        range -500 500
+        default 0
+    config IDROID_BAT_CHARGE_GPIO
+        int "Charger status GPIO (-1 when not wired)"
+        range -1 30
+        default -1
+        help
+            Configure only a free, physically connected charger status pin.
+            Battery voltage alone cannot determine whether it is charging.
+    config IDROID_BAT_CHARGE_ACTIVE_LEVEL
+        int "Charging active GPIO level"
+        range 0 1
+        default 0
+endmenu

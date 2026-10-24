@@ -1,6 +1,7 @@
 ﻿dependencies:
+  idf: "==5.5.1"
   # LVGL v8
-  lvgl/lvgl: ^8.3.0
+  lvgl/lvgl: "==8.3.11"
   
   # Driver oficial GC9A01
   espressif/esp_lcd_gc9a01: "^2.0.0"

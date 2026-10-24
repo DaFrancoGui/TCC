@@ -13,10 +13,16 @@
  */
 
 #include <stdio.h>
+#include <stdarg.h>
+#include <stdlib.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
-#include "esp_freertos_hooks.h"
+#include "esp_timer.h"
+#include "esp_heap_caps.h"
+#include "freertos/idf_additions.h"
+#include "sdkconfig.h"
+#include "cpu_load.h"
 #include "esp_system.h"
 #include "esp_log.h"
 #include "esp_err.h"
@@ -79,8 +85,19 @@ static lv_obj_t *scr_menu3 = NULL;   // pagina 3 (MPU-9250: Bussola)
 static lv_obj_t *scr_menu4 = NULL;   // pagina 4 (Configs: Hora, Data)
 
 // ============ Medicao de carga de CPU ============
-static volatile uint32_t idle_counter = 0;
-static bool idle_hook_cb(void) { idle_counter++; return false; }
+static int s_cpu_pct = -1;
+static portMUX_TYPE s_perf_lock = portMUX_INITIALIZER_UNLOCKED;
+
+static void perf_sample(void)
+{
+    static cpu_load_t load;
+    uint32_t idle=(uint32_t)ulTaskGetIdleRunTimeCounterForCore(0);
+    uint32_t total=(uint32_t)portGET_RUN_TIME_COUNTER_VALUE();
+    int percent=cpu_load_sample(&load,total,idle);
+    portENTER_CRITICAL(&s_perf_lock);
+    s_cpu_pct=percent;
+    portEXIT_CRITICAL(&s_perf_lock);
+}
 
 // ============ Registro de telas para o loop ============
 #define MAX_SCREENS 16
@@ -89,25 +106,43 @@ static int s_screen_count = 0;
 
 void app_register_screen(lv_obj_t *scr, void (*update_fn)(void))
 {
-    if (s_screen_count < MAX_SCREENS) {
+    if (scr && update_fn && s_screen_count < MAX_SCREENS) {
         s_screens[s_screen_count].scr    = scr;
         s_screens[s_screen_count].update = update_fn;
         s_screen_count++;
+    } else {
+        ESP_LOGE(TAG, "Registro de tela invalido ou cheio");
     }
 }
 
 void app_perf_read(int *cpu_pct, unsigned *heap_free_kb)
 {
-    static uint32_t last_idle = 0, baseline = 0;
-    uint32_t now = idle_counter, delta = now - last_idle;
-    last_idle = now;
-    if (baseline == 0 && delta > 0) baseline = delta;
-    if (delta > baseline)           baseline = delta;
-    int cpu = (baseline > 0) ? (int)(100 - (delta * 100ULL) / baseline) : 0;
-    if (cpu < 0)   cpu = 0;
-    if (cpu > 100) cpu = 100;
-    *cpu_pct      = cpu;
-    *heap_free_kb = (unsigned)(esp_get_free_heap_size() / 1024);
+    portENTER_CRITICAL(&s_perf_lock);
+    *cpu_pct = s_cpu_pct;
+    portEXIT_CRITICAL(&s_perf_lock);
+    *heap_free_kb = (unsigned)(esp_get_free_heap_size()/1024);
+}
+
+void app_label_set_text_fmt(lv_obj_t *label, const char *format, ...)
+{
+    char buffer[128];
+    va_list args, retry;
+    va_start(args,format);
+    va_copy(retry,args);
+    int length=vsnprintf(buffer,sizeof(buffer),format,args);
+    va_end(args);
+    if (length >= 0 && (size_t)length < sizeof(buffer)) {
+        app_label_set_text(label,buffer);
+    } else if (length >= 0) {
+        /* Current labels fit on the stack. Keep larger future text safe too. */
+        char *text=malloc((size_t)length+1);
+        if (text) {
+            vsnprintf(text,(size_t)length+1,format,retry);
+            app_label_set_text(label,text);
+            free(text);
+        }
+    }
+    va_end(retry);
 }
 
 void app_style_btn(lv_obj_t *btn)
@@ -153,10 +188,10 @@ static esp_err_t init_lcd(void)
     };
     ESP_RETURN_ON_ERROR(esp_lcd_new_panel_gc9a01(lcd_io, &panel_cfg, &lcd_panel), TAG, "GC9A01");
 
-    esp_lcd_panel_reset(lcd_panel);
-    esp_lcd_panel_init(lcd_panel);
-    esp_lcd_panel_invert_color(lcd_panel, true);
-    esp_lcd_panel_disp_on_off(lcd_panel, true);
+    ESP_RETURN_ON_ERROR(esp_lcd_panel_reset(lcd_panel), TAG, "LCD command");
+    ESP_RETURN_ON_ERROR(esp_lcd_panel_init(lcd_panel), TAG, "LCD command");
+    ESP_RETURN_ON_ERROR(esp_lcd_panel_invert_color(lcd_panel, true), TAG, "LCD command");
+    ESP_RETURN_ON_ERROR(esp_lcd_panel_disp_on_off(lcd_panel, true), TAG, "LCD command");
     return ESP_OK;
 }
 
@@ -186,8 +221,8 @@ static esp_err_t init_touch(void)
         .int_gpio_num = PIN_TP_INT,
         .x_max        = LCD_H_RES,
         .y_max        = LCD_V_RES,
-        .swap_xy      = false,
-        .mirror_x     = false,
+        .swap_xy      = true,
+        .mirror_x     = true,
         .mirror_y     = false,
         .i2c_mutex    = i2c_mutex,
     };
@@ -231,19 +266,25 @@ static esp_err_t init_lvgl(void)
     const lvgl_port_display_cfg_t disp_cfg = {
         .io_handle     = lcd_io,
         .panel_handle  = lcd_panel,
-        .buffer_size   = LCD_H_RES * LVGL_BUFFER_LINES * sizeof(lv_color_t),
+        .buffer_size   = LCD_H_RES * LVGL_BUFFER_LINES, // pixels, not bytes
+#if CONFIG_IDROID_LCD_DOUBLE_BUFFER
+        .double_buffer = true,
+#else
         .double_buffer = false,
+#endif
+        .flags.buff_dma = true,
         .hres = LCD_H_RES,
         .vres = LCD_V_RES,
         .rotation = { .swap_xy = true, .mirror_x = true, .mirror_y = true },
     };
     lvgl_disp = lvgl_port_add_disp(&disp_cfg);
+    ESP_RETURN_ON_FALSE(lvgl_disp, ESP_ERR_NO_MEM, TAG, "LVGL display");
 
     const lvgl_port_touch_cfg_t touch_cfg = {
         .disp   = lvgl_disp,
         .handle = touch_handle,
     };
-    lvgl_port_add_touch(&touch_cfg);
+    ESP_RETURN_ON_FALSE(lvgl_port_add_touch(&touch_cfg), ESP_ERR_NO_MEM, TAG, "LVGL touch");
     return ESP_OK;
 }
 
@@ -381,22 +422,36 @@ static void create_menu4_screen(void)
     nav_arrow(scr_menu4, LV_ALIGN_LEFT_MID, 6, "<", to_page3b_cb);
 }
 
+/* Runs under the LVGL port lock; callbacks only consume cached sensor data. */
+static void dispatch_screen(lv_timer_t *timer)
+{
+    lv_obj_t *active = lv_scr_act();
+    for (int i = 0; i < s_screen_count; i++) {
+        if (s_screens[i].scr == active) { s_screens[i].update(); break; }
+    }
+}
+
+static void log_module(const char *name, esp_err_t result)
+{
+    if (result != ESP_OK) ESP_LOGW(TAG, "%s indisponivel: %s", name, esp_err_to_name(result));
+}
+
 // ============ Main ============
 void app_main(void)
 {
     ESP_LOGI(TAG, "=== iDroid ===");
 
-    ESP_ERROR_CHECK(esp_register_freertos_idle_hook_for_cpu(idle_hook_cb, 0));
+    perf_sample();
 
     ESP_ERROR_CHECK(init_lcd());
     ESP_ERROR_CHECK(init_touch());
     i2c_scan();                                 // diagnostico: quem responde no barramento
-    ESP_ERROR_CHECK(rtc_pcf8563_init(i2c_bus, i2c_mutex));
-    max30102_module_init(i2c_bus, i2c_mutex);   // nao-fatal: watch funciona sem o sensor
-    ds18b20_module_init();                       // 1-Wire (GPIO20), nao-fatal
-    ltr390_module_init(i2c_bus, i2c_mutex);      // I2C (0x53), nao-fatal
-    mpu9250_module_init(i2c_bus, i2c_mutex);     // I2C (0x68/0x0C), nao-fatal
-    bateria_init();                              // ADC GPIO0, nao-fatal
+    log_module("RTC", rtc_pcf8563_init(i2c_bus, i2c_mutex));
+    log_module("MAX30102", max30102_module_init(i2c_bus, i2c_mutex));
+    log_module("DS18B20", ds18b20_module_init());
+    log_module("LTR390", ltr390_module_init(i2c_bus, i2c_mutex));
+    log_module("MPU9250", mpu9250_module_init(i2c_bus, i2c_mutex));
+    log_module("Bateria", bateria_init());
     ESP_ERROR_CHECK(init_lvgl());
 
     lvgl_port_lock(0);
@@ -413,21 +468,32 @@ void app_main(void)
     ltr390_uv_screen_create(scr_menu2);     // tela de UV  (volta p/ pagina 2)
     mpu9250_compass_create(scr_menu3);      // telas da bussola (volta p/ pagina 3)
     pedometer_screen_create(scr_menu3);     // tela do pedometro  (volta p/ pagina 3)
+    lv_timer_t *dispatch = lv_timer_create(dispatch_screen, 100, NULL);
+    ESP_ERROR_CHECK(dispatch ? ESP_OK : ESP_ERR_NO_MEM);
     lvgl_port_unlock();
 
+#if CONFIG_IDROID_SCREENSHOT
     screenshot_init();   // captura de tela via botao BOOT (documentacao do TCC)
 
+#endif
     ESP_LOGI(TAG, "UI pronta. Iniciando loop...");
 
-    // Loop principal: delega a atualizacao para a tela ativa
+    TickType_t wake = xTaskGetTickCount();
+    unsigned seconds = 0;
     while (1) {
-        lv_obj_t *active = lv_scr_act();
-        for (int i = 0; i < s_screen_count; i++) {
-            if (s_screens[i].scr == active) {
-                s_screens[i].update();
-                break;
-            }
+        vTaskDelayUntil(&wake, pdMS_TO_TICKS(1000));
+        perf_sample();
+        if (++seconds % 30 == 0) {
+            int cpu; unsigned heap;
+            app_perf_read(&cpu, &heap);
+            ESP_LOGI(TAG, "CPU=%d%% heap=%u KiB min=%u largest=%u stack=%u",
+                     cpu, heap, (unsigned)esp_get_minimum_free_heap_size(),
+                     (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_8BIT),
+                     (unsigned)uxTaskGetStackHighWaterMark(NULL));
+            bateria_status_t battery=bateria_get_status();
+            ESP_LOGI(TAG,"Bateria: instant=%u mV filtered=%u mV estimate=%u%% valid=%d charge_known=%d charging=%d",
+                     (unsigned)battery.instant_millivolts,(unsigned)battery.millivolts,battery.percent,
+                     sample_is_fresh(battery.sample,3000),battery.charging_known,battery.charging);
         }
-        vTaskDelay(pdMS_TO_TICKS(500));
     }
 }

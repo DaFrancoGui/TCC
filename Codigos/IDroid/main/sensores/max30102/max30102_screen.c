@@ -17,8 +17,10 @@
 #include "esp_log.h"
 #include "freertos/task.h"
 #include <string.h>
+#include "sample_status.h"
+#include "finger_detect.h"
 
-static const char *TAG = "MAX30102_SCR";
+
 
 // ============ Tela ============
 static lv_obj_t *scr_ppg        = NULL;
@@ -28,203 +30,186 @@ static lv_obj_t *lbl_fc         = NULL;
 static lv_obj_t *lbl_spo2       = NULL;
 static lv_obj_t *lbl_status     = NULL;
 
-// ============ Estado compartilhado (task <-> UI) ============
-static bool             s_available   = false;   // sensor detectado
-static bool             s_task_created = false;
-static i2c_master_bus_handle_t s_bus     = NULL; // guardados p/ re-tentar deteccao
-static SemaphoreHandle_t       s_mutex_h = NULL;
-static volatile bool    g_acq_enabled = false;
-static volatile uint8_t g_bpm    = 0;
-static volatile uint8_t g_spo2   = 0;
-static volatile bool    g_finger = false;
-
-// ============ Deteccao de dedo ============
+// State snapshots are short copies; all hardware/DSP belongs to ppg_task.
 typedef struct {
-    uint32_t baseline;
-    uint32_t baseline_count;
-    uint8_t  up_count;
-    uint8_t  down_count;
-    bool     present;
-} finger_state_t;
+    bool available, connecting, acquiring, finger;
+    uint8_t bpm, spo2;
+    uint32_t generation;
+    sample_status_t sample;
+} ppg_result_t;
+static portMUX_TYPE s_lock=portMUX_INITIALIZER_UNLOCKED;
+static ppg_result_t s_result;
+static struct { bool enabled, probe; uint32_t generation; } s_command;
+static TaskHandle_t s_task;
+static i2c_master_bus_handle_t s_bus;
+static SemaphoreHandle_t s_mutex;
 
-/* Deltas em contagens brutas do ADC: escalam com a corrente do LED
- * (CFG_LED_*_PA em max30102_hw.h). Valores para ~7,2 mA — na config
- * de ~14,2 mA eram 9000/6000. */
-#define FINGER_OFFSET_UP    4500
-#define FINGER_OFFSET_DOWN  3000
-
-static void finger_init(finger_state_t *f) { memset(f, 0, sizeof(*f)); }
-
-static bool finger_update(finger_state_t *f, uint32_t ir_raw)
+static ppg_result_t result_copy(void)
 {
-    uint32_t thr_up   = f->baseline + FINGER_OFFSET_UP;
-    uint32_t thr_down = f->baseline + FINGER_OFFSET_DOWN;
-
-    if (ir_raw > thr_up) {
-        if (f->up_count < 5) f->up_count++;
-        f->down_count = 0;
-    } else if (ir_raw < thr_down) {
-        if (f->down_count < 5) f->down_count++;
-        f->up_count = 0;
-    }
-    if (!f->present && f->up_count >= 3)   f->present = true;
-    if (f->present  && f->down_count >= 3) f->present = false;
-
-    if (!f->present) {
-        if (f->baseline_count == 0) {
-            f->baseline = ir_raw;
-        } else if (ir_raw < f->baseline + 2000) {  /* escala com FINGER_OFFSET_* */
-            f->baseline = (f->baseline * 7 + ir_raw) / 8;
-        }
-        if (f->baseline_count < 200) f->baseline_count++;
-    }
-    return f->present;
+    portENTER_CRITICAL(&s_lock);
+    ppg_result_t result=s_result;
+    portEXIT_CRITICAL(&s_lock);
+    return result;
 }
-
-// ============ Task de aquisicao ============
+static void publish(ppg_result_t result)
+{
+    portENTER_CRITICAL(&s_lock);
+    if (result.generation == s_command.generation) s_result=result;
+    portEXIT_CRITICAL(&s_lock);
+}
 static void ppg_task(void *arg)
 {
-    ppg_channel_t ch_ir = {0}, ch_red = {0};
-    heart_rate_t  hr;
-    spo2_state_t  sp;
+    bool ready=false, active=false, was_present=false;
+    uint32_t generation=0;
+    int64_t last_data=0, last_spo2=0;
+    ppg_channel_t ir_filter={0}, red_filter={0};
+    heart_rate_t hr;
+    spo2_state_t sp;
     finger_state_t finger;
-    bool was_present = false;
-    bool prev_enabled = false;
-
     hr_init(&hr); spo2_init(&sp); finger_init(&finger);
-
     while (1) {
-        if (!g_acq_enabled) {
-            if (prev_enabled) {
-                max30102_set_active(false);
-                g_bpm = 0; g_spo2 = 0; g_finger = false;
-                prev_enabled = false;
+        portENTER_CRITICAL(&s_lock);
+        bool enabled=s_command.enabled, probe=s_command.probe;
+        uint32_t requested=s_command.generation;
+        s_command.probe=false;
+        portEXIT_CRITICAL(&s_lock);
+        ppg_result_t result=result_copy();
+        result.generation=requested;
+        if (requested != generation) {
+            if (active) {
+                esp_err_t stop=max30102_set_active(false);
+                active=false;
+                if (stop != ESP_OK) { ready=false; max30102_deinit(); }
             }
-            vTaskDelay(pdMS_TO_TICKS(100));
-            continue;
-        }
-
-        if (!prev_enabled) {
-            max30102_set_active(true);   // liga SpO2 + limpa FIFO
-            ppg_filter_reset(&ch_ir); ppg_filter_reset(&ch_red);
+            generation=requested;
+            ppg_filter_reset(&ir_filter); ppg_filter_reset(&red_filter);
             hr_reset(&hr); spo2_reset(&sp); finger_init(&finger);
-            was_present = false;
-            g_bpm = 0; g_spo2 = 0; g_finger = false;
-            prev_enabled = true;
+            was_present=false; last_data=0; last_spo2=0;
+            result.bpm=0; result.spo2=0; result.finger=false; result.sample.valid=false;
+        }
+        if (probe && !ready) {
+            result.connecting=true; publish(result);
+            esp_err_t ret=max30102_init(s_bus,s_mutex);
+            ready=ret == ESP_OK;
+            result.available=ready; result.connecting=false; result.sample.error=ret;
+            publish(result);
+        }
+        if (!enabled || !ready) {
+            if (active) {
+                esp_err_t ret=max30102_set_active(false);
+                if (ret != ESP_OK) { ready=false; max30102_deinit(); }
+                active=false;
+            }
+            result.available=ready; result.acquiring=false;
+            result.bpm=0; result.spo2=0; result.finger=false; result.sample.valid=false;
+            publish(result);
             vTaskDelay(pdMS_TO_TICKS(50));
             continue;
         }
-
-        max30102_sample_t samples[32];
-        uint8_t n = 0;
-        if (max30102_read_fifo(samples, 32, &n) == ESP_OK && n > 0) {
-            for (uint8_t i = 0; i < n; i++) {
-                uint32_t ir  = samples[i].ir;
-                uint32_t red = samples[i].red;
-
-                bool present = finger_update(&finger, ir);
-                if (was_present != present) {
-                    ppg_filter_reset(&ch_ir); ppg_filter_reset(&ch_red);
-                    hr_reset(&hr); spo2_reset(&sp);
-                    if (!present) { g_bpm = 0; g_spo2 = 0; }
+        if (!active) {
+            esp_err_t ret=max30102_set_active(true);
+            if (ret != ESP_OK) {
+                ready=false; max30102_deinit(); result.available=false;
+                result.sample=(sample_status_t){.error=ret}; publish(result);
+                vTaskDelay(pdMS_TO_TICKS(100)); continue;
+            }
+            active=true;
+            last_data=esp_timer_get_time();
+        }
+        result.acquiring=true;
+        max30102_sample_t samples[32]; uint8_t count=0;
+        esp_err_t ret=max30102_read_fifo(samples,32,&count);
+        int64_t now=esp_timer_get_time();
+        if (ret != ESP_OK || (last_data && now-last_data > 200000)) {
+            ppg_filter_reset(&ir_filter); ppg_filter_reset(&red_filter);
+            hr_reset(&hr); spo2_reset(&sp); finger_init(&finger);
+            was_present=false; result.bpm=0; result.spo2=0; result.finger=false;
+            result.sample=(sample_status_t){.error=ret == ESP_OK ? ESP_ERR_TIMEOUT : ret};
+            if (ret == ESP_ERR_INVALID_STATE) last_data=now;
+            else {
+                ready=false; active=false; max30102_set_active(false); max30102_deinit(); result.available=false;
+            }
+        } else if (count) {
+            last_data=now;
+            for (unsigned i=0; i < count; i++) {
+                bool present=finger_update(&finger,samples[i].ir);
+                if (present != was_present) {
+                    ppg_filter_reset(&ir_filter); ppg_filter_reset(&red_filter);
+                    hr_reset(&hr); spo2_reset(&sp); result.bpm=0; result.spo2=0;
                 }
-                was_present = present;
-                g_finger = present;
+                was_present=present; result.finger=present;
                 if (!present) continue;
-
-                float ir_ac, ir_dc, red_ac, red_dc;
-                ppg_filter_process(&ch_ir,  ir,  &ir_ac,  &ir_dc);
-                ppg_filter_process(&ch_red, red, &red_ac, &red_dc);
-
-                uint8_t bpm = hr_process(&hr, ir_ac);
-                if (bpm > 0) g_bpm = bpm;
-
+                float ia,id,ra,rd;
+                ppg_filter_process(&ir_filter,samples[i].ir,&ia,&id);
+                ppg_filter_process(&red_filter,samples[i].red,&ra,&rd);
+                result.bpm=hr_process(&hr,ia); // propagate zero on detector timeout
                 if (hr.init_samples >= 500) {
-                    spo2_accumulate(&sp, ir_ac, ir_dc, red_ac, red_dc);
+                    spo2_accumulate(&sp,ia,id,ra,rd);
                     if (hr.beat_detected) {
-                        uint8_t s2 = spo2_on_beat(&sp);
-                        if (s2 > 0) g_spo2 = s2;
+                        uint8_t value=spo2_on_beat(&sp);
+                        result.spo2=sp.valid ? value : 0;
+                        if (sp.valid) last_spo2=now;
                     }
                 }
             }
+            if (!last_spo2 || now-last_spo2 > 3000000) result.spo2=0;
+            result.sample=(sample_status_t){.timestamp_us=now,.valid=true,.error=ESP_OK};
         }
-        // 30ms reduz a contencao no I2C compartilhado (touch fica responsivo).
-        // A 100 Hz, ~3 amostras se acumulam por ciclo; a FIFO de 32 da folga.
+        publish(result);
         vTaskDelay(pdMS_TO_TICKS(30));
     }
 }
-
-// ============ Callbacks ============
 static void toggle_cb(lv_event_t *e)
 {
-    if (!s_available) return;   // sem sensor, botao nao faz nada
-    g_acq_enabled = !g_acq_enabled;
-    lv_label_set_text(lbl_toggle, g_acq_enabled ? "PARAR" : "INICIAR");
+    portENTER_CRITICAL(&s_lock);
+    if (s_result.available) {
+        s_command.enabled=!s_command.enabled;
+        s_command.generation++;
+        s_result.sample.valid=false;
+    }
+    bool enabled=s_command.enabled;
+    portEXIT_CRITICAL(&s_lock);
+    app_label_set_text(lbl_toggle,enabled ? "PARAR" : "INICIAR");
 }
-
 static void back_cb(lv_event_t *e)
 {
-    g_acq_enabled = false;
-    lv_label_set_text(lbl_toggle, "INICIAR");
+    portENTER_CRITICAL(&s_lock);
+    s_command.enabled=false; s_command.generation++;
+    portEXIT_CRITICAL(&s_lock);
+    app_label_set_text(lbl_toggle,"INICIAR");
     if (menu_target) lv_scr_load(menu_target);
 }
-
-// ============ Atualizacao da UI ============
 static void screen_update(void)
 {
+    ppg_result_t r=result_copy();
+    portENTER_CRITICAL(&s_lock);
+    bool enabled=s_command.enabled;
+    portEXIT_CRITICAL(&s_lock);
     lvgl_port_lock(0);
-    if (!s_available) {
-        lv_label_set_text(lbl_fc,     "FC: -- bpm");
-        lv_label_set_text(lbl_spo2,   "SpO2: -- %");
-        lv_label_set_text(lbl_status, "Sensor indisponivel");
-        lvgl_port_unlock();
-        return;
-    }
-    if (!g_acq_enabled) {
-        lv_label_set_text(lbl_fc,     "FC: -- bpm");
-        lv_label_set_text(lbl_spo2,   "SpO2: -- %");
-        lv_label_set_text(lbl_status, "Parado");
-    } else if (!g_finger) {
-        lv_label_set_text(lbl_fc,     "FC: -- bpm");
-        lv_label_set_text(lbl_spo2,   "SpO2: -- %");
-        lv_label_set_text(lbl_status, "Coloque o dedo");
+    app_label_set_text(lbl_toggle,r.available && enabled ? "PARAR" : "INICIAR");
+    if (!r.available || !r.acquiring || !sample_is_fresh(r.sample,200) || !r.finger) {
+        app_label_set_text(lbl_fc,"FC: -- bpm");
+        app_label_set_text(lbl_spo2,"SpO2: -- %");
+        app_label_set_text(lbl_status,r.connecting ? "Conectando..." : !r.available ? "Sensor indisponivel" :
+                            !r.acquiring ? "Parado" : !sample_is_fresh(r.sample,200) ? "Sem leitura atual" : "Coloque o dedo");
     } else {
-        if (g_bpm > 0) lv_label_set_text_fmt(lbl_fc, "FC: %u bpm", g_bpm);
-        else           lv_label_set_text(lbl_fc, "FC: ...");
-        if (g_spo2 > 0) lv_label_set_text_fmt(lbl_spo2, "SpO2: %u %%", g_spo2);
-        else            lv_label_set_text(lbl_spo2, "SpO2: ...");
-        lv_label_set_text(lbl_status, "Medindo...");
+        if (r.bpm) app_label_set_text_fmt(lbl_fc,"FC: %u bpm",r.bpm);
+        else app_label_set_text(lbl_fc,"FC: ...");
+        if (r.spo2) app_label_set_text_fmt(lbl_spo2,"SpO2: %u %%",r.spo2);
+        else app_label_set_text(lbl_spo2,"SpO2: ...");
+        app_label_set_text(lbl_status,"Medindo...");
     }
     lvgl_port_unlock();
 }
-
-// ============ API publica ============
-
-// Tenta detectar/configurar o sensor. Cria a task de aquisicao uma unica vez.
-// Retorna true se o sensor esta pronto.
-static bool try_bringup(void)
-{
-    if (s_available) return true;
-    if (max30102_init(s_bus, s_mutex_h) != ESP_OK) {
-        ESP_LOGW(TAG, "MAX30102 indisponivel (sem ACK)");
-        return false;
-    }
-    s_available = true;
-    if (!s_task_created) {
-        // Prioridade 3: ABAIXO da task do LVGL (4), para o touch nao ser
-        // afogado pela aquisicao e o botao PARAR responder na hora.
-        xTaskCreate(ppg_task, "ppg_task", 4096, NULL, 3, NULL);
-        s_task_created = true;
-    }
-    ESP_LOGI(TAG, "MAX30102 pronto");
-    return true;
-}
-
 esp_err_t max30102_module_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
 {
-    // Falha do sensor NAO e fatal: o relogio segue funcionando sem ele.
-    s_bus = bus; s_mutex_h = mutex;
-    try_bringup();
+    if (s_task) return ESP_OK;
+    s_bus=bus; s_mutex=mutex;
+    s_command.probe=true;
+    s_result.connecting=true;
+    if (xTaskCreate(ppg_task,"ppg_task",4096,NULL,3,&s_task) != pdPASS) {
+        s_result.connecting=false; s_result.sample.error=ESP_ERR_NO_MEM; return ESP_ERR_NO_MEM;
+    }
     return ESP_OK;
 }
 
@@ -237,25 +222,25 @@ void max30102_screen_create(lv_obj_t *menu_scr)
     lv_obj_clear_flag(scr_ppg, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t *title = lv_label_create(scr_ppg);
-    lv_label_set_text(title, "MAX30102");
+    app_label_set_text(title, "MAX30102");
     lv_obj_set_style_text_color(title, lv_color_hex(0xE53935), 0);
     lv_obj_set_style_text_font(title, &lv_font_montserrat_20, 0);
     lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 26);
 
     lbl_fc = lv_label_create(scr_ppg);
-    lv_label_set_text(lbl_fc, "FC: -- bpm");
+    app_label_set_text(lbl_fc, "FC: -- bpm");
     lv_obj_set_style_text_color(lbl_fc, lv_color_hex(0x222222), 0);
     lv_obj_set_style_text_font(lbl_fc, &lv_font_montserrat_20, 0);
     lv_obj_align(lbl_fc, LV_ALIGN_CENTER, 0, -34);
 
     lbl_spo2 = lv_label_create(scr_ppg);
-    lv_label_set_text(lbl_spo2, "SpO2: -- %");
+    app_label_set_text(lbl_spo2, "SpO2: -- %");
     lv_obj_set_style_text_color(lbl_spo2, lv_color_hex(0x222222), 0);
     lv_obj_set_style_text_font(lbl_spo2, &lv_font_montserrat_20, 0);
     lv_obj_align(lbl_spo2, LV_ALIGN_CENTER, 0, -6);
 
     lbl_status = lv_label_create(scr_ppg);
-    lv_label_set_text(lbl_status, "Parado");
+    app_label_set_text(lbl_status, "Parado");
     lv_obj_set_style_text_color(lbl_status, lv_color_hex(0x777777), 0);
     lv_obj_set_style_text_font(lbl_status, &lv_font_montserrat_14, 0);
     lv_obj_align(lbl_status, LV_ALIGN_CENTER, 0, 24);
@@ -269,7 +254,7 @@ void max30102_screen_create(lv_obj_t *menu_scr)
     lv_obj_align(btn_toggle, LV_ALIGN_CENTER, 0, 58);
     lv_obj_add_event_cb(btn_toggle, toggle_cb, LV_EVENT_CLICKED, NULL);
     lbl_toggle = lv_label_create(btn_toggle);
-    lv_label_set_text(lbl_toggle, "INICIAR");
+    app_label_set_text(lbl_toggle, "INICIAR");
     lv_obj_set_style_text_color(lbl_toggle, lv_color_hex(0xFFFFFF), 0);
     lv_obj_set_style_text_font(lbl_toggle, &lv_font_montserrat_14, 0);
     lv_obj_center(lbl_toggle);
@@ -280,7 +265,7 @@ void max30102_screen_create(lv_obj_t *menu_scr)
     lv_obj_align(btn_back, LV_ALIGN_BOTTOM_MID, 0, -16);
     lv_obj_add_event_cb(btn_back, back_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_t *lbl_back = lv_label_create(btn_back);
-    lv_label_set_text(lbl_back, "VOLTAR");
+    app_label_set_text(lbl_back, "VOLTAR");
     lv_obj_set_style_text_color(lbl_back, lv_color_hex(0xDDDDDD), 0);
     lv_obj_set_style_text_font(lbl_back, &lv_font_montserrat_12, 0);
     lv_obj_center(lbl_back);
@@ -290,8 +275,12 @@ void max30102_screen_create(lv_obj_t *menu_scr)
 
 void max30102_screen_show(void)
 {
-    if (!s_available) try_bringup();   // re-tenta detectar ao abrir (util p/ protoboard)
-    g_acq_enabled = false;
-    if (lbl_toggle) lv_label_set_text(lbl_toggle, "INICIAR");
-    if (scr_ppg)    lv_scr_load(scr_ppg);
+    portENTER_CRITICAL(&s_lock);
+    s_command.enabled=false;
+    s_command.probe=true;
+    s_command.generation++;
+    s_result.sample.valid=false;
+    portEXIT_CRITICAL(&s_lock);
+    if (lbl_toggle) app_label_set_text(lbl_toggle,"INICIAR");
+    if (scr_ppg) lv_scr_load(scr_ppg);
 }

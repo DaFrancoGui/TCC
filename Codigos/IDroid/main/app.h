@@ -14,19 +14,29 @@
 #pragma once
 
 #include "lvgl.h"
+#include <string.h>
+
+static inline void app_label_set_text(lv_obj_t *label, const char *text)
+{
+    if (strcmp(lv_label_get_text(label), text) != 0) lv_label_set_text(label, text);
+}
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/* Formats once and only invalidates a label if its text actually changes. */
+void app_label_set_text_fmt(lv_obj_t *label, const char *format, ...)
+    __attribute__((format(printf,2,3)));
+
 /**
- * Registra uma tela e sua funcao de atualizacao. O loop principal chama
- * update_fn() a cada ~500 ms enquanto essa tela estiver ativa.
- * A propria update_fn deve gerenciar o lock do LVGL (lvgl_port_lock).
+ * Registra uma tela e sua funcao de atualizacao. Um timer da LVGL chama
+ * update_fn() a cada ~100 ms enquanto essa tela estiver ativa.
+ * Executa sob o lock LVGL; updates devem apenas consumir dados em cache.
  */
 void app_register_screen(lv_obj_t *scr, void (*update_fn)(void));
 
-/** Le metricas de desempenho: carga de CPU (0-100%) e heap livre (KB). */
+/** Le metricas de desempenho: carga de CPU (0-100%; -1 antes da primeira amostra) e heap livre (KB). */
 void app_perf_read(int *cpu_pct, unsigned *heap_free_kb);
 
 /** Aplica o estilo padrao de botao pequeno (fundo escuro, borda cinza). */

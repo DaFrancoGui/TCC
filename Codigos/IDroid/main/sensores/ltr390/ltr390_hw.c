@@ -3,7 +3,7 @@
  * @brief I2C driver for the LTR390-UV sensor on ESP-IDF 5.x (legacy driver/i2c.h).
  *
  * Why per-mode gain switching?
- *   ALS mode uses 3x gain — keeps the 18-bit ADC unsaturated up to ~130 klux.
+ *   ALS mode uses 3x gain — keeps the 18-bit ADC unsaturated up to ~52 klux.
  *   UVS mode uses 18x gain — maximises sensitivity for low UV irradiance indoors
  *   (UVI < 1) without saturating the ADC at outdoor UVI ≤ 11.
  *   Formula references: LTR390-UV-01 datasheet, sections 6.3 and 6.4.
@@ -17,7 +17,7 @@
  */
 
 #include "ltr390_hw.h"
-#include "i2c_recover.h"
+#include "i2c_shared.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -37,33 +37,18 @@ static ltr390_mode_t s_current_mode = LTR390_DEFAULT_MODE;
 
 static esp_err_t reg_write(uint8_t reg, uint8_t val)
 {
-    uint8_t buf[2] = {reg, val};
-    esp_err_t ret;
-    if (s_mutex) xSemaphoreTake(s_mutex, portMAX_DELAY);
-    ret = i2c_master_transmit(s_dev, buf, sizeof(buf), LTR390_I2C_TIMEOUT_MS);
-    if (ret != ESP_OK) i2c_recover_bus();
-    if (s_mutex) xSemaphoreGive(s_mutex);
-    return ret;
+    uint8_t buf[2]={reg,val};
+    return i2c_shared_write(s_dev,s_mutex,buf,sizeof(buf),LTR390_I2C_TIMEOUT_MS);
 }
 
 static esp_err_t reg_read(uint8_t reg, uint8_t *val)
 {
-    esp_err_t ret;
-    if (s_mutex) xSemaphoreTake(s_mutex, portMAX_DELAY);
-    ret = i2c_master_transmit_receive(s_dev, &reg, 1, val, 1, LTR390_I2C_TIMEOUT_MS);
-    if (ret != ESP_OK) i2c_recover_bus();
-    if (s_mutex) xSemaphoreGive(s_mutex);
-    return ret;
+    return i2c_shared_read(s_dev,s_mutex,reg,val,1,LTR390_I2C_TIMEOUT_MS);
 }
 
 static esp_err_t reg_read_burst(uint8_t reg, uint8_t *buf, size_t len)
 {
-    esp_err_t ret;
-    if (s_mutex) xSemaphoreTake(s_mutex, portMAX_DELAY);
-    ret = i2c_master_transmit_receive(s_dev, &reg, 1, buf, len, LTR390_I2C_TIMEOUT_MS);
-    if (ret != ESP_OK) i2c_recover_bus();
-    if (s_mutex) xSemaphoreGive(s_mutex);
-    return ret;
+    return i2c_shared_read(s_dev,s_mutex,reg,buf,len,LTR390_I2C_TIMEOUT_MS);
 }
 
 /* Retry wrapper — useful during power-on oscillator stabilisation */
@@ -82,6 +67,7 @@ static esp_err_t reg_read_retry(uint8_t reg, uint8_t *val, int attempts)
 
 esp_err_t ltr390_hw_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
 {
+    if (s_dev) return ESP_OK;
     esp_err_t ret;
     s_mutex = mutex;
 
@@ -94,7 +80,7 @@ esp_err_t ltr390_hw_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
     ret = i2c_master_bus_add_device(bus, &dev_cfg, &s_dev);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Falha ao adicionar LTR390: %s", esp_err_to_name(ret));
-        return ret;
+        goto fail;
     }
     ESP_LOGI(TAG, "LTR390 no barramento (addr=0x%02X, 100 kHz)", LTR390_I2C_ADDR);
 
@@ -103,11 +89,11 @@ esp_err_t ltr390_hw_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
     ret = reg_read_retry(LTR390_REG_PART_ID, &part_id, 5);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Cannot read PART_ID — sensor not responding on 0x%02X", LTR390_I2C_ADDR);
-        return ret;
+        goto fail;
     }
     if ((part_id & LTR390_PART_ID_MASK) != LTR390_PART_ID_EXPECTED) {
-        ESP_LOGW(TAG, "Unexpected PART_ID=0x%02X (expected 0x%02X..0x%02X), continuing",
-                 part_id, LTR390_PART_ID_EXPECTED, LTR390_PART_ID_EXPECTED | 0x0F);
+        ESP_LOGE(TAG,"PART_ID inesperado: 0x%02X",part_id);
+        ret=ESP_ERR_NOT_SUPPORTED; goto fail;
     } else {
         ESP_LOGI(TAG, "LTR390 detected (PART_ID=0x%02X, rev=0x%02X)",
                  (part_id >> 4) & 0x0F, part_id & 0x0F);
@@ -123,17 +109,20 @@ esp_err_t ltr390_hw_init(i2c_master_bus_handle_t bus, SemaphoreHandle_t mutex)
     ret = reg_write(LTR390_REG_MEAS_RATE, LTR390_MEAS_RATE_DEFAULT);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "MEAS_RATE write failed: %s", esp_err_to_name(ret));
-        return ret;
+        goto fail;
     }
     ESP_LOGI(TAG, "MEAS_RATE: 18-bit resolution, 100 ms rate (0x%02X)", LTR390_MEAS_RATE_DEFAULT);
 
     /* --- Enable sensor in default mode --- */
     ret = ltr390_hw_set_mode(LTR390_DEFAULT_MODE);
-    if (ret != ESP_OK) return ret;
+    if (ret != ESP_OK) goto fail;
 
     ESP_LOGI(TAG, "LTR390 ready (mode=%s)",
              LTR390_DEFAULT_MODE == LTR390_MODE_UVS ? "UVS" : "ALS");
     return ESP_OK;
+fail:
+    if (s_dev) { i2c_master_bus_rm_device(s_dev); s_dev=NULL; }
+    return ret;
 }
 
 esp_err_t ltr390_hw_set_mode(ltr390_mode_t mode)
@@ -189,6 +178,11 @@ esp_err_t ltr390_hw_read_raw(uint32_t *out_raw, bool *out_valid)
     *out_raw   = 0;
     *out_valid = false;
 
+    uint8_t status;
+    esp_err_t ready=reg_read(LTR390_REG_MAIN_STATUS,&status);
+    if (ready != ESP_OK) return ready;
+    if (!(status & LTR390_STATUS_DATA_RDY)) return ESP_OK;
+
     /* Select base register for the current mode */
     uint8_t base_reg = (s_current_mode == LTR390_MODE_UVS)
                        ? LTR390_REG_UVS_DATA_0
@@ -213,4 +207,9 @@ esp_err_t ltr390_hw_read_raw(uint32_t *out_raw, bool *out_valid)
              (unsigned long)*out_raw, (unsigned long)*out_raw,
              s_current_mode == LTR390_MODE_UVS ? "UVS" : "ALS");
     return ESP_OK;
+}
+
+void ltr390_hw_deinit(void)
+{
+    if (s_dev) { i2c_master_bus_rm_device(s_dev); s_dev=NULL; }
 }

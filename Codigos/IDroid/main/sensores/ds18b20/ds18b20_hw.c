@@ -29,6 +29,7 @@ static ds18b20_device_handle_t s_sensor = NULL;
 
 esp_err_t ds18b20_hw_init(void)
 {
+    if (s_sensor) return ESP_OK;
     esp_err_t ret;
 
     /* --- Configurar barramento 1-Wire via RMT --- */
@@ -60,10 +61,11 @@ esp_err_t ds18b20_hw_init(void)
         return ret;
     }
 
-    /* --- Configurar resolucao maxima: 12 bits = 0,0625 C/LSB, t_conv = 750 ms --- */
+    /* 11 bits: 0.125 C/LSB; managed driver waits 400 ms per conversion. */
     ret = ds18b20_set_resolution(s_sensor, DS18B20_RESOLUTION_11B);
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "Falha ao configurar resolucao 12 bits: %s", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "Falha ao configurar resolucao 11 bits: %s", esp_err_to_name(ret));
+        ds18b20_hw_deinit();
         return ret;
     }
 
@@ -73,6 +75,7 @@ esp_err_t ds18b20_hw_init(void)
 
 esp_err_t ds18b20_hw_read(float *out_temp, bool *out_valid)
 {
+    if (!out_temp || !out_valid || !s_sensor) return ESP_ERR_INVALID_ARG;
     *out_valid = false;
 
     /* Disparar conversao (sensor realiza medicao internamente) */
@@ -82,8 +85,7 @@ esp_err_t ds18b20_hw_read(float *out_temp, bool *out_valid)
         return ret;
     }
 
-    /* Aguardar conclusao da conversao (datasheet: 750 ms para 12 bits) */
-    vTaskDelay(pdMS_TO_TICKS(DS18B20_CONV_TIME_MS));
+    /* ds18b20 0.1.2 already waits 400 ms at 11 bits; do not wait twice. */
 
     /* Ler scratchpad e extrair temperatura */
     ret = ds18b20_get_temperature(s_sensor, out_temp);
@@ -101,4 +103,10 @@ esp_err_t ds18b20_hw_read(float *out_temp, bool *out_valid)
     }
 
     return ESP_OK;
+}
+
+void ds18b20_hw_deinit(void)
+{
+    if (s_sensor) { ds18b20_del_device(s_sensor); s_sensor=NULL; }
+    if (s_bus) { onewire_bus_del(s_bus); s_bus=NULL; }
 }

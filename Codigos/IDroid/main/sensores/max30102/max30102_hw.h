@@ -26,7 +26,7 @@ extern "C" {
 /* 100 kHz: barramento compartilhado em protoboard (fios longos), mais
  * tolerante a ruido. O RTC opera nessa mesma velocidade sem NACK. */
 #define MAX30102_I2C_FREQ_HZ        100000
-#define MAX30102_I2C_TIMEOUT_MS     1000
+#define MAX30102_I2C_TIMEOUT_MS     50
 
 /* ───────── Mapa de registradores (MAX30102) ───────── */
 #define REG_INT_STATUS_1    0x00
@@ -54,7 +54,7 @@ extern "C" {
 #define MAX30102_PART_ID    0x15
 
 /* ───────── Valores de configuracao do sensor ───────── */
-#define CFG_FIFO_CONFIG     0x0F   /* SMP_AVE=1, rollover on, A_FULL=15 */
+#define CFG_FIFO_CONFIG     0x0F   /* no averaging, rollover OFF, A_FULL=15 */
 #define CFG_MODE_SPO2       0x03   /* modo SpO2 (Vermelho + IR)         */
 #define CFG_SPO2_CONFIG     0x67   /* ADC 16384nA, 100 Hz, PW 411us/18b */
 /* ~7,2 mA: na placa final (sem capacitor de bulk no 3,3V) os pulsos de LED a
@@ -97,6 +97,9 @@ esp_err_t max30102_fifo_clear(void);
 
 /** Liga (modo SpO2) ou desliga (shutdown) a amostragem do sensor. */
 esp_err_t max30102_set_active(bool active);
+
+/* Releases the device after a failed initialization or link failure. */
+void max30102_deinit(void);
 
 #ifdef __cplusplus
 }

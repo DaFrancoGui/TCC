@@ -9,6 +9,8 @@
  */
 
 #include "screenshot.h"
+#include "sdkconfig.h"
+#if CONFIG_IDROID_SCREENSHOT
 #include <stdio.h>
 #include <stdint.h>
 #include "freertos/FreeRTOS.h"
@@ -63,7 +65,7 @@ static void dump_screen(void)
 {
     /* Buffer proprio no heap: o pool interno do LVGL (96 KB) nao comporta os
      * ~115 KB da tela, entao nao da para usar lv_snapshot_take() direto. */
-    lvgl_port_lock(0);
+    if (!lvgl_port_lock(100)) { ESP_LOGW(TAG,"UI ocupada; tente capturar novamente"); return; }
     lv_obj_t *scr = lv_scr_act();
     uint32_t buf_size = lv_snapshot_buf_size_needed(scr, LV_IMG_CF_TRUE_COLOR);
     uint8_t *buf = heap_caps_malloc(buf_size, MALLOC_CAP_DEFAULT);
@@ -136,10 +138,15 @@ void screenshot_init(void)
         .mode         = GPIO_MODE_INPUT,
         .pull_up_en   = GPIO_PULLUP_ENABLE,
     };
-    gpio_config(&io);
-    xTaskCreate(screenshot_task, "screenshot", 4096, NULL, 2, NULL);
+    if (gpio_config(&io) != ESP_OK || xTaskCreate(screenshot_task, "screenshot", 4096, NULL, 2, NULL) != pdPASS) {
+        ESP_LOGE(TAG,"Falha ao iniciar captura"); return;
+    }
     /* nivel do BOOT no log: solto deve ser 1; se aparecer 0, o pino nao e o
      * esperado ou esta preso */
     ESP_LOGI(TAG, "Captura pronta: aperte BOOT (GPIO%d, nivel atual=%d)",
              (int)BTN_GPIO, gpio_get_level(BTN_GPIO));
 }
+
+#else
+void screenshot_init(void) {}
+#endif
