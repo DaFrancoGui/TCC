@@ -20,6 +20,7 @@
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "sample_status.h"
 
 static const char *TAG = "DS18B20_SCR";
 
@@ -30,65 +31,79 @@ static lv_obj_t *lbl_temp     = NULL;
 static lv_obj_t *lbl_status   = NULL;
 
 // ============ Estado compartilhado (task <-> UI) ============
-static bool            s_available  = false;
-static volatile bool   g_active     = false;   // tela aberta? (le so quando sim)
-static volatile float  g_temp       = 0.0f;
-static volatile bool   g_has_reading = false;
-static volatile bool   g_valid      = false;
-
+static bool s_available;
+static bool g_active;
+static uint32_t s_generation;
+static portMUX_TYPE s_lock=portMUX_INITIALIZER_UNLOCKED;
+static struct { float temperature; bool has_reading; sample_status_t sample; } s_result;
 // ============ Task de leitura ============
 static void temp_task(void *arg)
 {
     ds18b20_state_t st;
     ds18b20_process_init(&st);
+    uint32_t previous_generation=UINT32_MAX;
+    TickType_t wake=xTaskGetTickCount();
 
     while (1) {
-        if (!g_active) {
-            vTaskDelay(pdMS_TO_TICKS(200));
-            continue;
+        portENTER_CRITICAL(&s_lock);
+        bool active=g_active;
+        uint32_t generation=s_generation;
+        portEXIT_CRITICAL(&s_lock);
+        if (!active) { vTaskDelay(pdMS_TO_TICKS(200)); wake=xTaskGetTickCount(); continue; }
+        if (generation != previous_generation) {
+            ds18b20_process_reset(&st); previous_generation=generation;
         }
-
-        float raw = 0.0f;
-        bool  valid = false;
-        if (ds18b20_hw_read(&raw, &valid) == ESP_OK) {
-            float filt = ds18b20_process_update(&st, raw, valid);
-            g_temp = valid ? filt : raw;
-            g_valid = valid;
-            g_has_reading = true;
+        float raw=0; bool valid=false;
+        esp_err_t ret=ds18b20_hw_read(&raw,&valid);
+        float filtered=ds18b20_process_update(&st,raw,ret == ESP_OK && valid);
+        portENTER_CRITICAL(&s_lock);
+        if (generation == s_generation) {
+            s_result.temperature=filtered;
+            s_result.has_reading=true;
+            s_result.sample=(sample_status_t){.timestamp_us=esp_timer_get_time(),
+                .error=ret == ESP_OK && !valid ? ESP_ERR_INVALID_RESPONSE : ret,.valid=ret == ESP_OK && valid};
         }
-        vTaskDelay(pdMS_TO_TICKS(100));
+        portEXIT_CRITICAL(&s_lock);
+        vTaskDelayUntil(&wake,pdMS_TO_TICKS(1000));
     }
 }
 
 // ============ Callback ============
 static void back_cb(lv_event_t *e)
 {
-    g_active = false;
+    portENTER_CRITICAL(&s_lock);
+    g_active=false; s_generation++;
+    portEXIT_CRITICAL(&s_lock);
     if (menu_target) lv_scr_load(menu_target);
 }
 
 // ============ Atualizacao da UI ============
 static void screen_update(void)
 {
+    portENTER_CRITICAL(&s_lock);
+    float temperature=s_result.temperature;
+    bool has_reading=s_result.has_reading;
+    sample_status_t sample=s_result.sample;
+    portEXIT_CRITICAL(&s_lock);
     lvgl_port_lock(0);
     if (!s_available) {
-        lv_label_set_text(lbl_temp,   "--.- C");
-        lv_label_set_text(lbl_status, "Sensor indisponivel");
-    } else if (!g_has_reading) {
-        lv_label_set_text(lbl_temp,   "--.- C");
-        lv_label_set_text(lbl_status, "Lendo...");
-    } else if (!g_valid) {
-        lv_label_set_text(lbl_temp,   "--.- C");
-        lv_label_set_text(lbl_status, "Fora de faixa");
+        app_label_set_text(lbl_temp,   "--.- C");
+        app_label_set_text(lbl_status, "Sensor indisponivel");
+    } else if (!has_reading) {
+        app_label_set_text(lbl_temp,   "--.- C");
+        app_label_set_text(lbl_status, "Lendo...");
+    } else if (!sample_is_fresh(sample,2500)) {
+        app_label_set_text(lbl_temp,   "--.- C");
+        app_label_set_text(lbl_status, "Leitura indisponivel");
     } else {
         // O printf do LVGL nao suporta %f; formata com inteiros (decimo de grau)
-        float t = g_temp;
+        float t = temperature;
         int neg = (t < 0);
         float a = neg ? -t : t;
         int tenths = (int)(a * 10.0f + 0.5f);   // arredonda para 0,1 C
-        lv_label_set_text_fmt(lbl_temp, "%s%d.%d C",
+        app_label_set_text_fmt(lbl_temp, "%s%d.%d C",
                               neg ? "-" : "", tenths / 10, tenths % 10);
-        lv_label_set_text(lbl_status, "Ambiente");
+        app_label_set_text(lbl_status, "Ambiente");
     }
     lvgl_port_unlock();
 }
@@ -97,13 +112,16 @@ static void screen_update(void)
 esp_err_t ds18b20_module_init(void)
 {
     // Falha do sensor NAO e fatal: o relogio segue funcionando sem ele.
-    if (ds18b20_hw_init() != ESP_OK) {
+    esp_err_t ret=ds18b20_hw_init();
+    if (ret != ESP_OK) {
         s_available = false;
         ESP_LOGW(TAG, "DS18B20 indisponivel - watch segue sem o sensor");
-        return ESP_OK;
+        return ret;
+    }
+    if (xTaskCreate(temp_task, "temp_task", 4096, NULL, 3, NULL) != pdPASS) {
+        ds18b20_hw_deinit(); return ESP_ERR_NO_MEM;
     }
     s_available = true;
-    xTaskCreate(temp_task, "temp_task", 4096, NULL, 3, NULL);
     ESP_LOGI(TAG, "DS18B20 pronto");
     return ESP_OK;
 }
@@ -117,19 +135,19 @@ void ds18b20_screen_create(lv_obj_t *menu_scr)
     lv_obj_clear_flag(scr_temp, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t *title = lv_label_create(scr_temp);
-    lv_label_set_text(title, "TEMPERATURA");
+    app_label_set_text(title, "TEMPERATURA");
     lv_obj_set_style_text_color(title, lv_color_hex(0xF57C00), 0);
     lv_obj_set_style_text_font(title, &lv_font_montserrat_20, 0);
     lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 34);
 
     lbl_temp = lv_label_create(scr_temp);
-    lv_label_set_text(lbl_temp, "--.- C");
+    app_label_set_text(lbl_temp, "--.- C");
     lv_obj_set_style_text_color(lbl_temp, lv_color_hex(0x222222), 0);
     lv_obj_set_style_text_font(lbl_temp, &lv_font_montserrat_20, 0);
     lv_obj_align(lbl_temp, LV_ALIGN_CENTER, 0, -6);
 
     lbl_status = lv_label_create(scr_temp);
-    lv_label_set_text(lbl_status, "Lendo...");
+    app_label_set_text(lbl_status, "Lendo...");
     lv_obj_set_style_text_color(lbl_status, lv_color_hex(0x777777), 0);
     lv_obj_set_style_text_font(lbl_status, &lv_font_montserrat_14, 0);
     lv_obj_align(lbl_status, LV_ALIGN_CENTER, 0, 28);
@@ -140,7 +158,7 @@ void ds18b20_screen_create(lv_obj_t *menu_scr)
     lv_obj_align(btn_back, LV_ALIGN_BOTTOM_MID, 0, -16);
     lv_obj_add_event_cb(btn_back, back_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_t *lbl_back = lv_label_create(btn_back);
-    lv_label_set_text(lbl_back, "VOLTAR");
+    app_label_set_text(lbl_back, "VOLTAR");
     lv_obj_set_style_text_color(lbl_back, lv_color_hex(0xDDDDDD), 0);
     lv_obj_set_style_text_font(lbl_back, &lv_font_montserrat_12, 0);
     lv_obj_center(lbl_back);
@@ -150,6 +168,9 @@ void ds18b20_screen_create(lv_obj_t *menu_scr)
 
 void ds18b20_screen_show(void)
 {
-    g_active = true;          // habilita a leitura continua enquanto a tela existe
+    portENTER_CRITICAL(&s_lock);
+    g_active=true; s_generation++;
+    s_result.has_reading=false; s_result.sample.valid=false;
+    portEXIT_CRITICAL(&s_lock);
     if (scr_temp) lv_scr_load(scr_temp);
 }

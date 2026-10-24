@@ -8,7 +8,7 @@
 #include <math.h>
 #include "esp_log.h"
 
-static const char *TAG = "COMPASS";
+
 
 #define PI_F                3.14159265359f
 #define HEADING_ALPHA       0.15f   /* filtro passa-baixa do heading */
@@ -37,7 +37,7 @@ static const char *TAG = "COMPASS";
 #define DECLINATION_DEG       -21.0f
 
 /* Log de diagnostico no heading (raw, uT, heading) ~1x/s. 0 desliga. */
-#define COMPASS_DEBUG_LOG     1
+#define COMPASS_DEBUG_LOG     0
 
 /* ASA de fabrica e calibracao ativa */
 static float s_asa[3] = {1.0f, 1.0f, 1.0f};
@@ -90,6 +90,7 @@ float compass_update_heading(int16_t mx, int16_t my, int16_t mz)
     while (heading >= 360.0f) heading -= 360.0f;
 
 #if COMPASS_DEBUG_LOG
+    static const char *TAG="COMPASS";
     static uint32_t dbg = 0;
     if ((dbg++ % 4) == 0) {    /* ~4x/s a 60 ms/amostra: acompanhar ao vivo */
         ESP_LOGI(TAG, "raw[%d %d %d] uT[%.1f %.1f %.1f] off[%.1f %.1f] head=%.0f",

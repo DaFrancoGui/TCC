@@ -113,6 +113,7 @@ bool ltr390_process_is_settling(const ltr390_state_t *st)
 
 float ltr390_process_update(ltr390_state_t *st, uint32_t raw, bool hw_valid)
 {
+    st->result_valid=false;
     /* --- Case 1: still settling after a mode switch --- */
     if (st->settling) {
         if (st->settle_counter > 0) {
@@ -143,6 +144,7 @@ float ltr390_process_update(ltr390_state_t *st, uint32_t raw, bool hw_valid)
         }
     }
 
+    st->result_valid=true;
     /* --- Case 3: valid reading — convert and filter --- */
     if (st->mode == LTR390_MODE_UVS) {
         float uvi_raw    = convert_uvs_to_uvi(raw);

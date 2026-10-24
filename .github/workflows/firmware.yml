@@ -1,0 +1,35 @@
+name: Firmware sanity
+on:
+  push:
+    paths: ["Codigos/IDroid/**", ".github/workflows/firmware.yml"]
+  pull_request:
+    paths: ["Codigos/IDroid/**", ".github/workflows/firmware.yml"]
+permissions:
+  contents: read
+jobs:
+  host-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 Codigos/IDroid/tests/run_host_tests.py --cc gcc
+  esp32c6:
+    runs-on: ubuntu-24.04
+    container: espressif/idf:v5.5.1
+    strategy:
+      matrix:
+        configuration: [default, diagnostics]
+    defaults:
+      run:
+        shell: bash
+        working-directory: Codigos/IDroid
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build ESP32-C6
+        run: |
+          . /opt/esp/idf/export.sh
+          if [ "${{ matrix.configuration }}" = diagnostics ]; then
+            idf.py -B build-diagnostics -D SDKCONFIG=sdkconfig.diagnostics \
+              -D 'SDKCONFIG_DEFAULTS=sdkconfig.defaults;tests/sdkconfig.diagnostics.defaults' build
+          else
+            idf.py build
+          fi
