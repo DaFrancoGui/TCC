@@ -40,6 +40,7 @@ da instalação. No VS Code com a extensão configurada, use `Ctrl+Shift+P` →
 
 ```sh
 cd Codigos/IDroid
+python -m pip install -r tests/requirements-build.txt
 idf.py reconfigure
 idf.py build
 ```
