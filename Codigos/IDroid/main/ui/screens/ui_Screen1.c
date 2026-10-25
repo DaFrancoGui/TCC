@@ -26,7 +26,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_align(ui_Image4, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Image4, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_Image4, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_img_set_zoom(ui_Image4, 256); // asset already matches 240x240; no resampling
+    lv_img_set_zoom(ui_Image4, 272);
 
     ui_uiLabelTime = lv_label_create(ui_Screen1);
     lv_obj_set_width(ui_uiLabelTime, LV_SIZE_CONTENT);   /// 1

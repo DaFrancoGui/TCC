@@ -23,7 +23,7 @@ typedef struct {
     gpio_num_t int_gpio_num;             ///< GPIO de interrupção (ou GPIO_NUM_NC)
     uint16_t x_max;                      ///< Resolução X máxima
     uint16_t y_max;                      ///< Resolução Y máxima
-    bool swap_xy;                        ///< Primeiro troca X/Y; depois espelha no referencial da tela
+    bool swap_xy;                        ///< Trocar X e Y
     bool mirror_x;                       ///< Espelhar X
     bool mirror_y;                       ///< Espelhar Y
     SemaphoreHandle_t i2c_mutex;         ///< Mutex para proteger barramento I2C compartilhado (opcional)

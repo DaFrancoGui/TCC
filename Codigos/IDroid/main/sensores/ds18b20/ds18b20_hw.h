@@ -48,18 +48,18 @@ extern "C" {
 
 /**
  * Inicializa o barramento 1-Wire via RMT e descobre o sensor DS18B20.
- * Configura 11 bits (0,125 C/LSB); o componente aguarda a conversao.
+ * Configura resolucao de 12 bits (0,0625 °C por LSB, t_conv = 750 ms).
  *
  * @return ESP_OK em caso de sucesso
  */
 esp_err_t ds18b20_hw_init(void);
 
 /**
- * Dispara conversao de temperatura e le o resultado (bloqueante, ~400 ms).
+ * Dispara conversao de temperatura e le o resultado (bloqueante, ~750 ms).
  *
  * Sequencia interna:
  *   1. Envia comando CONVERT_T (0x44) via 1-Wire
- *   2. O componente gerenciado aguarda a conversao internamente
+ *   2. Aguarda DS18B20_CONV_TIME_MS
  *   3. Envia comando READ_SCRATCHPAD (0xBE) e le 9 bytes
  *   4. Extrai temperatura dos bytes 0-1 do scratchpad
  *   5. Valida contra a faixa DS18B20_TEMP_MIN / DS18B20_TEMP_MAX
@@ -69,8 +69,6 @@ esp_err_t ds18b20_hw_init(void);
  * @return ESP_OK em caso de sucesso (mesmo que out_valid seja false)
  */
 esp_err_t ds18b20_hw_read(float *out_temp, bool *out_valid);
-
-void ds18b20_hw_deinit(void);
 
 #ifdef __cplusplus
 }

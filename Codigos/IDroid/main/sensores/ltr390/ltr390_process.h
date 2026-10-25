@@ -5,10 +5,16 @@
  *
  * Conversion formulas (LTR390-UV-01 datasheet, sections 6.3–6.4):
  *
- *   UVI = UVS_raw / (2300 * (gain / 18) * (integration_ms / 400)).
- *   At gain 18 and 100 ms: UVI = UVS_raw / 575.
- *   Lux = 0.6 * ALS_raw / (gain * integration_factor).
- *   At gain 3 and 18-bit integration: lux = ALS_raw * 0.2.
+ *   UV Index = UVS_raw / (UV_SENSITIVITY × (gain / 18) × (int_ms / 100))
+ *
+ *     UV_SENSITIVITY = 2300 counts per UV Index unit (at gain=18x, 100 ms)
+ *     gain = 18 (LTR390_GAIN_UVS), int_ms = 100 (LTR390_RES_18BIT)
+ *     → simplifies to:  UVI = UVS_raw / 2300
+ *
+ *   Illuminance = 0.6 × ALS_raw / (gain × (int_ms / 100))
+ *
+ *     gain = 3 (LTR390_GAIN_ALS), int_ms = 100 (LTR390_RES_18BIT)
+ *     → simplifies to:  lux = 0.6 × ALS_raw / 3  =  0.2 × ALS_raw
  *
  * Settling rule: after every mode switch, LTR390_SETTLING_SAMPLES readings
  * are discarded. This avoids mixing ALS residual charge with UVS data and
@@ -91,7 +97,6 @@ typedef struct {
  * ───────────────────────────────────────────── */
 
 typedef struct {
-    bool result_valid; /* only true when this update produces a usable result */
     ltr390_mode_t    mode;            /* active measurement channel           */
     uint32_t         settle_counter;  /* remaining settling samples           */
     bool             settling;        /* true while discarding post-switch data */
@@ -168,5 +173,3 @@ void ltr390_process_reset(ltr390_state_t *st);
 #ifdef __cplusplus
 }
 #endif
-
-static inline bool ltr390_process_result_valid(const ltr390_state_t *st) { return st->result_valid; }

@@ -105,7 +105,6 @@ void spo2_accumulate(spo2_state_t *st,
                      float ir_ac, float ir_dc,
                      float red_ac, float red_dc)
 {
-    if (st->beat_samples > SPO2_MAX_BEAT_LEN) return;
     /* Rastrear min/max do AC neste batimento */
     if (ir_ac  > st->ir_ac_max)  st->ir_ac_max  = ir_ac;
     if (ir_ac  < st->ir_ac_min)  st->ir_ac_min  = ir_ac;
@@ -139,14 +138,12 @@ uint8_t spo2_on_beat(spo2_state_t *st)
 
     /* ── Porta de qualidade (a): duracao do batimento ── */
     if (n < MIN_BEAT_SAMPLES || n > SPO2_MAX_BEAT_LEN) {
-        st->valid=false; st->spo2=0; st->r_count=0; st->r_idx=0;
-        return 0;
+        return st->spo2;
     }
 
     /* ── Porta de qualidade (b): amplitude AC minima ── */
     if (ir_ac_pp < MIN_AC_AMPLITUDE || red_ac_pp < MIN_AC_AMPLITUDE) {
-        st->valid=false; st->spo2=0; st->r_count=0; st->r_idx=0;
-        return 0;
+        return st->spo2;
     }
 
     /* ── Porta de qualidade (c): indice de perfusao ── */
@@ -156,8 +153,7 @@ uint8_t spo2_on_beat(spo2_state_t *st)
     float pi_ir  = ir_ac_pp  / ir_dc_avg;
     float pi_red = red_ac_pp / red_dc_avg;
     if (pi_ir < MIN_PI_RATIO || pi_red < MIN_PI_RATIO) {
-        st->valid=false; st->spo2=0; st->r_count=0; st->r_idx=0;
-        return 0;
+        return st->spo2;
     }
 
     /* ── Calcular R ── */
@@ -165,8 +161,7 @@ uint8_t spo2_on_beat(spo2_state_t *st)
 
     /* ── Porta de qualidade (d): faixa fisiologica ── */
     if (r < R_MIN || r > R_MAX) {
-        st->valid=false; st->spo2=0; st->r_count=0; st->r_idx=0;
-        return 0;
+        return st->spo2;
     }
 
     /* ── Aceitar este valor R ── */
@@ -187,5 +182,5 @@ uint8_t spo2_on_beat(spo2_state_t *st)
     st->spo2 = (uint8_t)(spo2_f + 0.5f);
     st->valid = (st->r_count >= 2);
 
-    return st->valid ? st->spo2 : 0;
+    return st->spo2;
 }

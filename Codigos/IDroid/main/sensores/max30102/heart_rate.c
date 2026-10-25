@@ -107,7 +107,6 @@ uint8_t hr_process(heart_rate_t *hr, float ir_ac)
     if (hr->bpm > 0 && hr->samples_since_peak > 300) {
         hr->bpm = 0;
         hr->interval_count = 0;
-        hr->interval_idx = 0;
         hr->thr_amplitude = 0.0f;
     }
 

@@ -12,8 +12,6 @@
 #include "app.h"
 #include "ui/ui.h"
 #include "esp_lvgl_port.h"
-#include <stdio.h>
-#include <string.h>
 
 LV_FONT_DECLARE(font_sharetechmono_32);
 
@@ -23,6 +21,9 @@ static lv_obj_t *label_perf_cpu = NULL;
 static lv_obj_t *label_bateria  = NULL;
 static lv_obj_t *btn_menu       = NULL;
 static lv_obj_t *wf_menu_scr    = NULL;   // destino do botao MENU
+
+// Valores correntes exibidos (atualizados do RTC)
+static uint8_t cur_h=0, cur_m=0, cur_s=0, cur_day=1, cur_wday=0, cur_mon=1, cur_yr=25;
 
 static const char *weekday_str[] = {"DOM","SEG","TER","QUA","QUI","SEX","SAB"};
 static const char *month_str[]   = {"","JAN","FEV","MAR","ABR","MAI","JUN",
@@ -62,7 +63,6 @@ static void create_second_ticks(lv_obj_t *parent)
         lv_obj_clear_flag(ticks[i], LV_OBJ_FLAG_SCROLLABLE);
         lv_obj_set_size(ticks[i], TICK_SZ, TICK_SZ);
         lv_obj_set_pos(ticks[i], x, y);
-        lv_obj_set_style_bg_color(ticks[i], lv_color_hex(0x888888), 0);
         lv_obj_set_style_bg_opa(ticks[i], LV_OPA_TRANSP, 0);
         lv_obj_set_style_radius(ticks[i], LV_RADIUS_CIRCLE, 0);
     }
@@ -70,13 +70,14 @@ static void create_second_ticks(lv_obj_t *parent)
 
 static void update_second_ticks(uint8_t seconds)
 {
-    static uint8_t previous;
-    if (seconds == previous) return;
     for (int i = 0; i < NUM_TICKS; i++) {
-        if ((i < seconds) != (i < previous))
-            lv_obj_set_style_bg_opa(ticks[i], i < seconds ? LV_OPA_COVER : LV_OPA_TRANSP, 0);
+        if (i < seconds) {
+            lv_obj_set_style_bg_color(ticks[i], lv_color_hex(0x888888), 0);
+            lv_obj_set_style_bg_opa(ticks[i], LV_OPA_COVER, 0);
+        } else {
+            lv_obj_set_style_bg_opa(ticks[i], LV_OPA_TRANSP, 0);
+        }
     }
-    previous=seconds;
 }
 
 // ============ Callbacks ============
@@ -137,47 +138,54 @@ void watchface_create(lv_obj_t *scr, lv_obj_t *menu_scr)
     lv_obj_align(label_bateria, LV_ALIGN_CENTER, -16, 33);
     lv_label_set_text(label_bateria, "Bateria: --%");
 
+    // Semente inicial a partir do RTC
+    rtc_read(&cur_h, &cur_m, &cur_s, &cur_day, &cur_wday, &cur_mon, &cur_yr);
+    if (cur_wday > 6)                cur_wday = 0;
+    if (cur_mon < 1 || cur_mon > 12) cur_mon = 1;
+    if (cur_yr == 0 || cur_yr > 99)  cur_yr  = 25;
+
     app_register_screen(scr, watchface_update);
 }
 
 // ============ Atualizacao periodica ============
 void watchface_update(void)
 {
-    static int64_t last;
-    if (esp_timer_get_time()-last < 250000) return;
-    last=esp_timer_get_time();
-    rtc_status_t rtc=rtc_get_status();
-    bateria_status_t battery=bateria_get_status();
-    char time_text[8], date_text[24], cpu_text[24], battery_text[48];
-    bool valid_time=sample_is_fresh(rtc.sample,2500);
-    if (valid_time) {
-        snprintf(time_text,sizeof(time_text),"%02u:%02u",rtc.time.h,rtc.time.m);
-        snprintf(date_text,sizeof(date_text),"%s %02u %s",weekday_str[rtc.time.wday],rtc.time.day,month_str[rtc.time.mon]);
-    } else {
-        snprintf(time_text,sizeof(time_text),"00:00");
-        snprintf(date_text,sizeof(date_text),"Ajuste hora/data");
+    static int iter = 0;
+
+    // Le RTC a cada 1 s (2 iteracoes de 500 ms)
+    if (iter % 2 == 0) {
+        rtc_read(&cur_h, &cur_m, &cur_s, &cur_day, &cur_wday, &cur_mon, &cur_yr);
+        if (cur_wday > 6) cur_wday = 0;
+        if (cur_mon < 1 || cur_mon > 12) cur_mon = 1;
     }
-    int cpu; unsigned heap;
-    app_perf_read(&cpu,&heap);
-    if (cpu < 0) snprintf(cpu_text,sizeof(cpu_text),"CPU: --%%");
-    else snprintf(cpu_text,sizeof(cpu_text),"CPU: %d%%",cpu);
-    if (!sample_is_fresh(battery.sample,3000)) snprintf(battery_text,sizeof(battery_text),"Bateria: indisponivel");
-    else if (battery.settling) snprintf(battery_text,sizeof(battery_text),"Bateria: lendo...");
-    else if (battery.charging_known && battery.charging) snprintf(battery_text,sizeof(battery_text),"Carregando");
-    else if (battery.low) snprintf(battery_text,sizeof(battery_text),"Bat baixa: ~%u%%",battery.percent);
-    else snprintf(battery_text,sizeof(battery_text),"Bat: ~%u%% %u.%02uV",battery.percent,
-                  (unsigned)(battery.millivolts/1000),(unsigned)((battery.millivolts%1000)/10));
-    /* No physical I/O under the graphics mutex. */
+
     lvgl_port_lock(0);
-    app_label_set_text(ui_uiLabelTime,time_text);
-    static int previous_valid=-1;
-    if (previous_valid != valid_time) {
-        lv_obj_set_style_opa(ui_uiLabelTime,valid_time ? LV_OPA_COVER : LV_OPA_30,0);
-        previous_valid=valid_time;
+    lv_label_set_text_fmt(ui_uiLabelTime, "%02d:%02d", cur_h, cur_m);
+    lv_label_set_text_fmt(label_date, "%s %02d %s",
+                          weekday_str[cur_wday], cur_day, month_str[cur_mon]);
+    update_second_ticks(cur_s);
+
+    if (iter % 2 == 0) {
+        int cpu; unsigned heap_kb;
+        app_perf_read(&cpu, &heap_kb);
+        lv_label_set_text_fmt(label_perf_cpu, "CPU: %d%%", cpu);
     }
-    app_label_set_text(label_date,date_text);
-    update_second_ticks(valid_time ? rtc.time.s : 0);
-    app_label_set_text(label_perf_cpu,cpu_text);
-    app_label_set_text(label_bateria,battery_text);
+
+    // Bateria: le a cada 500 ms (todo ciclo). O EMA e a histerese de carga
+    // ficam em bateria.c; deteccao de plug/unplug em ~500 ms.
+    {
+        uint32_t mv; uint8_t pct; bool charging;
+        if (bateria_read(&mv, &pct, &charging)) {
+            if (charging) {
+                lv_label_set_text(label_bateria, "Carregando");
+            } else {
+                lv_label_set_text_fmt(label_bateria, "Bateria: %u%%", pct);
+            }
+        } else {
+            lv_label_set_text(label_bateria, "Bateria: --%");
+        }
+    }
     lvgl_port_unlock();
+
+    iter++;
 }

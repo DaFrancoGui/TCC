@@ -34,21 +34,4 @@ As avaliações têm alcance funcional e arquitetural. O repositório não atrib
 
 ## Reprodutibilidade
 
-Para compilar, instale o **ESP-IDF 5.5.1** e abra o atalho **ESP-IDF PowerShell**
-da instalação. No VS Code com a extensão configurada, use `Ctrl+Shift+P` →
-**ESP-IDF: Open ESP-IDF Terminal**. Confira `idf.py --version` e execute:
-
-```sh
-cd Codigos/IDroid
-python -m pip install -r tests/requirements-build.txt
-idf.py reconfigure
-idf.py build
-```
-
-O Component Manager baixa automaticamente a **LVGL 8.3.11**, já fixada no manifesto,
-e as demais bibliotecas. Em um projeto novo, adicione essa versão com
-`idf.py add-dependency "lvgl/lvgl==8.3.11"`.
-O [guia do firmware](Codigos/IDroid/README.md) detalha instalação, ativação manual
-do terminal, dependências e gravação.
-
 O [caderno de ensaios](Ensaios/caderno_de_ensaios.md) relaciona procedimentos, instrumentos, arquivos de dados, scripts, figuras e limitações.

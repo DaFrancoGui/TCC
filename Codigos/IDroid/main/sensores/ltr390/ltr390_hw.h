@@ -11,7 +11,7 @@
  * period before trusting new readings. This module handles only the I2C layer;
  * settling logic lives in ltr390_process.h/.c.
  *
- * I2C: ESP-IDF master API, shared 100 kHz, I2C0.
+ * I2C: legacy ESP-IDF driver (driver/i2c.h), Fast Mode 400 kHz, I2C0.
  * Reference: LTR-390UV-01 Datasheet — Lite-On Technology Corporation
  */
 
@@ -34,7 +34,7 @@ extern "C" {
 #define LTR390_I2C_NUM          I2C_NUM_0
 #define LTR390_I2C_SDA_IO       22          /* D4 on XIAO ESP32-C6 header */
 #define LTR390_I2C_SCL_IO       23          /* D5 on XIAO ESP32-C6 header */
-#define LTR390_I2C_FREQ_HZ      100000      /* Fast Mode (400 kHz) */
+#define LTR390_I2C_FREQ_HZ      400000      /* Fast Mode (400 kHz) */
 #define LTR390_I2C_TIMEOUT_MS   100         /* per-transaction timeout */
 #define LTR390_I2C_ADDR         0x53        /* fixed I2C address (datasheet p.7) */
 
@@ -169,8 +169,6 @@ esp_err_t ltr390_hw_wait_data_ready(uint32_t timeout_ms);
  * @return ESP_OK on success
  */
 esp_err_t ltr390_hw_read_raw(uint32_t *out_raw, bool *out_valid);
-
-void ltr390_hw_deinit(void);
 
 #ifdef __cplusplus
 }

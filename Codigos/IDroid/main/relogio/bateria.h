@@ -1,19 +1,32 @@
+/**
+ * @file bateria.h
+ * @brief Leitura da bateria LiPo via ADC (GPIO0/A0, divisor 1:2 de 2x100k).
+ */
+
 #pragma once
-#include <stdbool.h>
+
 #include <stdint.h>
+#include <stdbool.h>
 #include "esp_err.h"
-#include "sample_status.h"
 
-typedef struct {
-    uint32_t millivolts;
-    uint32_t instant_millivolts;
-    uint8_t percent;
-    bool calibrated, settling, low;
-    bool charging_known, charging;
-    sample_status_t sample;
-} bateria_status_t;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/* Starts independent acquisition at 1 Hz. Errors are nonfatal to the app. */
+/** Inicializa o ADC da bateria. Nao-fatal: em erro, bateria_read retorna false. */
 esp_err_t bateria_init(void);
-/* Cached snapshot: no ADC access from UI callbacks. */
-bateria_status_t bateria_get_status(void);
+
+/**
+ * Le a tensao da bateria (media de 16 amostras + EMA) e estima a carga.
+ * @param bat_mv    tensao da bateria em mV (ja com o fator do divisor)
+ * @param pct       carga estimada 0-100%% (curva de descarga LiPo 1S)
+ * @param charging  true se a tensao indica USB/carregador ligado (o carregador
+ *                  segura o terminal acima da tensao de repouso). Heuristica por
+ *                  limiar — sem pino VBUS acessivel no XIAO.
+ * @return false se o ADC nao inicializou ou a leitura falhou
+ */
+bool bateria_read(uint32_t *bat_mv, uint8_t *pct, bool *charging);
+
+#ifdef __cplusplus
+}
+#endif

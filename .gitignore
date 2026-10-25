@@ -37,12 +37,3 @@ Desktop.ini
 *.log
 
 
-
-# Local verification tools
-.tools/
-
-# Reproduce the integrated firmware dependency resolution
-!Codigos/IDroid/dependencies.lock
-
-Codigos/IDroid/build-diagnostics/
-Codigos/IDroid/sdkconfig.diagnostics

@@ -1,38 +1,27 @@
-# Explicit sources: additions are reviewable and never depend on GLOB refresh.
+# iDroid — firmware principal
+#
+# Organizacao modular por funcionalidade:
+#   main.c            → nucleo (init de HW, navegacao, loop)
+#   relogio/          → watchface + RTC + fonte
+#   sensores/<nome>/  → cada sensor (hardware + processamento + tela)
+#   ui/               → base gerada no SquareLine Studio
+
+file(GLOB_RECURSE MODULE_SRCS
+    "relogio/*.c"
+    "sensores/*.c"
+    "ui/*.c"
+)
+
 idf_component_register(
-    SRCS
-        "i2c_recover.c"
-        "i2c_shared.c"
-        "main.c"
-        "relogio/bateria.c"
-        "relogio/battery_estimator.c"
-        "relogio/configs_screen.c"
-        "relogio/font_sharetechmono_32.c"
-        "relogio/rtc_pcf8563.c"
-        "relogio/watchface.c"
-        "screenshot.c"
-        "sensores/ds18b20/ds18b20_hw.c"
-        "sensores/ds18b20/ds18b20_process.c"
-        "sensores/ds18b20/ds18b20_screen.c"
-        "sensores/ltr390/ltr390_hw.c"
-        "sensores/ltr390/ltr390_process.c"
-        "sensores/ltr390/ltr390_screen.c"
-        "sensores/max30102/finger_detect.c"
-        "sensores/max30102/heart_rate.c"
-        "sensores/max30102/max30102_hw.c"
-        "sensores/max30102/max30102_screen.c"
-        "sensores/max30102/ppg_filter.c"
-        "sensores/max30102/spo2.c"
-        "sensores/mpu9250/compass_process.c"
-        "sensores/mpu9250/mpu9250_hw.c"
-        "sensores/mpu9250/mpu9250_screen.c"
-        "sensores/mpu9250/pedometer_process.c"
-        "sensores/mpu9250/pedometer_screen.c"
-        "ui/images/ui_img_main_240_png.c"
-        "ui/screens/ui_Screen1.c"
-        "ui/ui.c"
-        "ui/ui_helpers.c"
-    INCLUDE_DIRS "." "ui" "ui/screens" "relogio"
-        "sensores/max30102" "sensores/ds18b20" "sensores/ltr390" "sensores/mpu9250"
+    SRCS "main.c" "i2c_recover.c" "screenshot.c" ${MODULE_SRCS}
+    INCLUDE_DIRS
+        "."
+        "ui"
+        "ui/screens"
+        "relogio"
+        "sensores/max30102"
+        "sensores/ds18b20"
+        "sensores/ltr390"
+        "sensores/mpu9250"
     REQUIRES driver esp_adc esp_lcd_gc9a01 chsc6x_touch esp_lvgl_port lvgl ds18b20 onewire_bus nvs_flash
 )
